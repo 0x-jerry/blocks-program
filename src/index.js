@@ -5,7 +5,6 @@ import Gesture from './utils/Gesture'
 const draw = SVG.SVG()
 document.getElementById('app').appendChild(draw.node)
 window.draw = draw
-window.svg = Filter
 
 draw.css({
   border: '1px solid #333',
@@ -16,6 +15,7 @@ draw.css({
 })
 
 const dragFilter = new Filter()
+draw.defs().add(dragFilter)
 
 const blur = dragFilter
   .offset(0, 0)
@@ -65,12 +65,11 @@ class BlocksContainer {
 
     this.gesture.on('dragging', (e) => {
       this._group.dmove(e.movementX, e.movementY)
-      // this._group.attr('filter', dragFilter)
-      // this._group.filter(dragFilter)
+      this._group.filterWith(dragFilter)
     })
 
     this.gesture.on('dragend', () => {
-      // this._group.unfilter()
+      this._group.unfilter()
     })
   }
 
@@ -87,7 +86,6 @@ const drawGesture = new Gesture(draw.node)
 drawGesture.on('click', (e) => {
   const block = new BlocksContainer({ x: e.offsetX, y: e.offsetY })
 
-  block._group.dmove(-topGroup.x(), -topGroup.y())
   topGroup.add(block._group)
 })
 
@@ -96,4 +94,3 @@ drawGesture.on('dragging', (e) => {
 })
 
 topGroup.add(new BlocksContainer({ x: 50, y: 50 })._group)
-// topGroup.add(new BlocksContainer({ x: 100, y: 200 })._group)
