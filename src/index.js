@@ -67,7 +67,10 @@ const topGroup = draw.group()
 const drawGesture = new Gesture(draw.node)
 
 drawGesture.on('click', (e) => {
-  topGroup.add(new BlocksContainer({ x: e.offsetX, y: e.offsetY })._group)
+  const block = new BlocksContainer({ x: e.offsetX, y: e.offsetY })
+
+  block._group.dmove(-topGroup.x(), -topGroup.y())
+  topGroup.add(block._group)
 })
 
 drawGesture.on('dragging', (e) => {
