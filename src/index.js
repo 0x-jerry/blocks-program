@@ -1,16 +1,28 @@
-import SVG from 'svg.js'
+import * as SVG from '@svgdotjs/svg.js'
+import Filter from '@svgdotjs/svg.filter.js'
 import Gesture from './utils/Gesture'
 
-const draw = SVG('app')
+const draw = SVG.SVG()
+document.getElementById('app').appendChild(draw.node)
 window.draw = draw
+window.svg = Filter
 
-draw.style({
+draw.css({
   border: '1px solid #333',
   width: '80%',
   height: '600px',
   margin: '50px auto',
   display: 'block'
 })
+
+const dragFilter = new Filter()
+
+const blur = dragFilter
+  .offset(0, 0)
+  .in(dragFilter.$sourceAlpha)
+  .gaussianBlur(2)
+
+dragFilter.blend(dragFilter.$source, blur)
 
 class BlocksContainer {
   constructor(opt) {
@@ -20,12 +32,13 @@ class BlocksContainer {
     this._height = opt.height
 
     this._combinePath()
-    this._shape = draw.path(this._path)
+    this._shape = new SVG.Path({ d: this._path })
     this._shape.fill(opt.fill)
     this._shape.stroke(opt.stroke)
 
-    this._group = draw.group()
+    this._group = new SVG.G()
     this._group.add(this._shape)
+    draw.add(this._group)
 
     this.move(opt.x, opt.y)
     this._initializeEvents()
@@ -36,15 +49,15 @@ class BlocksContainer {
     const radius = this._height / 2
 
     this._path = []
-    this._path.push(['M', 0, 0])
+    this._path.push('M', 0, 0)
     // left radius
-    this._path.push(['c', -radius, 0, -radius, this._height, 0, this._height])
+    this._path.push('c', -radius, 0, -radius, this._height, 0, this._height)
     // body
-    this._path.push(['h', width])
+    this._path.push('h', width)
 
     // right radius
-    this._path.push(['c', radius, 0, radius, -this._height, 0, -this._height])
-    this._path.push(['z'])
+    this._path.push('c', radius, 0, radius, -this._height, 0, -this._height)
+    this._path.push('z')
   }
 
   _initializeEvents() {
@@ -52,6 +65,12 @@ class BlocksContainer {
 
     this.gesture.on('dragging', (e) => {
       this._group.dmove(e.movementX, e.movementY)
+      // this._group.attr('filter', dragFilter)
+      // this._group.filter(dragFilter)
+    })
+
+    this.gesture.on('dragend', () => {
+      // this._group.unfilter()
     })
   }
 
@@ -60,9 +79,8 @@ class BlocksContainer {
   }
 }
 
-const block = new BlocksContainer({ x: 50, y: 50 })
-
-const topGroup = draw.group()
+const topGroup = new SVG.G()
+draw.add(topGroup)
 
 const drawGesture = new Gesture(draw.node)
 
@@ -77,5 +95,5 @@ drawGesture.on('dragging', (e) => {
   topGroup.dmove(e.movementX, e.movementY)
 })
 
-topGroup.add(block._group)
-topGroup.add(new BlocksContainer({ x: 100, y: 200 })._group)
+topGroup.add(new BlocksContainer({ x: 50, y: 50 })._group)
+// topGroup.add(new BlocksContainer({ x: 100, y: 200 })._group)
