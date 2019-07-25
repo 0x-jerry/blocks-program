@@ -25,14 +25,20 @@ const blur = dragFilter
 dragFilter.blend(dragFilter.$source, blur)
 
 class BlocksContainer {
+  get x() {
+    return this._group.attr('x')
+  }
+
+  get y() {
+    return this._group.attr('y')
+  }
+
   constructor(opt) {
     opt = Object.assign({ x: 0, y: 0, height: 30, fill: '#eee', stroke: '#000' }, opt)
 
-    this._path = []
     this._height = opt.height
 
-    this._combinePath()
-    this._shape = new SVG.Path({ d: this._path })
+    this._shape = new SVG.Path({ d: this._combinePath() })
     this._shape.fill(opt.fill)
     this._shape.stroke(opt.stroke)
 
@@ -48,23 +54,30 @@ class BlocksContainer {
     const width = 60
     const radius = this._height / 2
 
-    this._path = []
-    this._path.push('M', 0, 0)
+    const path = []
+    path.push('M', 0, 0)
     // left radius
-    this._path.push('c', -radius, 0, -radius, this._height, 0, this._height)
+    path.push('c', -radius, 0, -radius, this._height, 0, this._height)
     // body
-    this._path.push('h', width)
+    path.push('h', width)
 
     // right radius
-    this._path.push('c', radius, 0, radius, -this._height, 0, -this._height)
-    this._path.push('z')
+    path.push('c', radius, 0, radius, -this._height, 0, -this._height)
+
+    path.push('z')
+
+    return path
+  }
+
+  _update() {
+    this._shape.attr('d', this._combinePath())
   }
 
   _initializeEvents() {
     this.gesture = new Gesture(this._shape.node)
 
     this.gesture.on('dragging', (e) => {
-      this._group.dmove(e.movementX, e.movementY)
+      this.dmove(e.movementX, e.movementY)
       this._group.filterWith(dragFilter)
     })
 
@@ -74,7 +87,11 @@ class BlocksContainer {
   }
 
   move(x, y) {
-    this._group.move(x, y)
+    this._group.translate(x, y)
+  }
+
+  dmove(dx, dy) {
+    this._group.translate(this.x + dx, this.y + dy)
   }
 }
 
@@ -93,4 +110,10 @@ drawGesture.on('dragging', (e) => {
   topGroup.dmove(e.movementX, e.movementY)
 })
 
-topGroup.add(new BlocksContainer({ x: 50, y: 50 })._group)
+const block = new BlocksContainer({ x: 50, y: 50 })
+
+setTimeout(() => {
+  block._update()
+}, 1000)
+
+topGroup.add(block._group)
