@@ -9,6 +9,10 @@
   "dependencies": {
     "fabric": "^3.3.2",
     "gsap": "^2.1.3",
+    "hammerjs": "^2.0.8",
     "svg.js": "^2.7.1"
+  },
+  "devDependencies": {
+    "parcel-bundler": "^1.12.3"
   }
 }
