@@ -1,4 +1,5 @@
 import SVG from 'svg.js'
+import Gesture from './utils/Gesture'
 
 const draw = SVG('app')
 window.draw = draw
@@ -10,49 +11,6 @@ draw.style({
   margin: '50px auto',
   display: 'block'
 })
-
-const Draggable = {
-  nodes: [],
-  _dragging: false,
-  _currentFunc: () => {},
-  _id: 0,
-  add(node, func) {
-    if (typeof func !== 'function') {
-      console.warn('no function', node)
-      return
-    }
-    const id = this._id++
-
-    this.nodes.push({
-      id,
-      node,
-      func
-    })
-
-    return id
-  },
-  init() {
-    document.addEventListener('mousedown', (e) => {
-      const find = this.nodes.find((n) => n.node === e.target)
-      if (find) {
-        this._dragging = true
-        this._currentFunc = find.func
-      }
-    })
-
-    document.addEventListener('mousemove', (e) => {
-      if (!this._dragging) {
-        return
-      }
-      this._currentFunc(e)
-    })
-
-    document.addEventListener('mouseup', (e) => {
-      this._dragging = false
-    })
-  }
-}
-Draggable.init()
 
 class BlocksContainer {
   constructor(opt) {
@@ -90,7 +48,9 @@ class BlocksContainer {
   }
 
   _initializeEvents() {
-    Draggable.add(this._shape.node, (e) => {
+    this.gesture = new Gesture(this._shape.node)
+
+    this.gesture.on('dragging', (e) => {
       this._group.dmove(e.movementX, e.movementY)
     })
   }
@@ -104,17 +64,15 @@ const block = new BlocksContainer({ x: 50, y: 50 })
 
 const topGroup = draw.group()
 
-Draggable.add(draw.node, (e) => {
+const drawGesture = new Gesture(draw.node)
+
+drawGesture.on('click', (e) => {
+  topGroup.add(new BlocksContainer({ x: e.offsetX, y: e.offsetY })._group)
+})
+
+drawGesture.on('dragging', (e) => {
   topGroup.dmove(e.movementX, e.movementY)
 })
 
 topGroup.add(block._group)
 topGroup.add(new BlocksContainer({ x: 100, y: 200 })._group)
-
-draw.on('click', (e) => {
-  if (e.target !== draw.node) {
-    return
-  }
-
-  topGroup.add(new BlocksContainer({ x: e.offsetX, y: e.offsetY })._group)
-})

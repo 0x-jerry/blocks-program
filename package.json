@@ -4,9 +4,10 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "start": "parcel index.html"
+    "start": "parcel src/index.html"
   },
   "dependencies": {
+    "events": "^3.0.0",
     "fabric": "^3.3.2",
     "gsap": "^2.1.3",
     "hammerjs": "^2.0.8",
