@@ -18,11 +18,13 @@ export class FieldText extends Field {
 
   updatePosition() {
     const pos = { x: 0, y: 5 }
-    if (!this.preField) {
+    const previousField = this.getPreviousField()
+
+    if (!previousField) {
       pos.x = 0
       pos.y = 5
     } else {
-      pos.x = this.preField.rectBox().x2
+      pos.x = previousField.rectBox().x2
       pos.y = 5
     }
 

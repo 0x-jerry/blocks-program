@@ -64,4 +64,11 @@ export class Workspace {
   dispose() {
     this.draw.remove()
   }
+
+  /**
+   * Return the data that need to save
+   */
+  toJson() {
+    
+  }
 }

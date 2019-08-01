@@ -19,6 +19,12 @@ export abstract class BlocksContainer {
    * All sub properties are only read, don't do side effect things
    */
   workspace: Workspace
+  caches = {
+    fields: {
+      width: 0,
+      height: 0
+    }
+  }
 
   constructor(workspace: Workspace, opt?: BlocksContainerOptions) {
     const defaultOpt: Required<BlocksContainerOptions> = {
@@ -69,14 +75,11 @@ export abstract class BlocksContainer {
     this.shape.attr(opt)
   }
 
-  getFieldsWidth() {
-    return this.fields.reduce((pre, cur) => {
+  updateFieldCache() {
+    this.caches.fields.width = this.fields.reduce((pre, cur) => {
       return pre + cur.rectBox().w
     }, 0)
-  }
-
-  getFieldsHeight() {
-    return Math.max(...this.fields.map((f) => f.rectBox().h), 0)
+    this.caches.fields.height = Math.max(...this.fields.map((f) => f.rectBox().h), 0)
   }
 
   addFiled(field: Field) {
@@ -85,7 +88,8 @@ export abstract class BlocksContainer {
       this.workspace.gestures.add(field.gesture)
     }
     this.group.add(field.shape)
-    this.update()
+
+    this.updateField(field)
   }
 
   removeFiled(field: Field) {
@@ -100,13 +104,11 @@ export abstract class BlocksContainer {
   updateField(field: Field) {
     const idx = this.fields.indexOf(field)
     this.fields.slice(idx).forEach((f) => f.updatePosition())
-    this.updateShape({ d: this.calcPath() })
+    this.update()
   }
 
-  update(fields: boolean = false) {
-    if (fields) {
-      this.fields.forEach((f) => f.updatePosition())
-    }
+  update() {
+    this.updateFieldCache()
     this.updateShape({ d: this.calcPath() })
   }
 
@@ -122,5 +124,12 @@ export abstract class BlocksContainer {
 
   dispose() {
     this.group.remove()
+  }
+
+  /**
+   * Return the data that need to save
+   */
+  toJson() {
+
   }
 }

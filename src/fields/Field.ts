@@ -11,16 +11,22 @@ export abstract class Field {
 
   abstract shape: SVG.Element
 
-  preField?: Field
-  nextField?: Field
-
   constructor(block: BlocksContainer) {
     this.block = block
-    this.preField = block.fields[block.fields.length - 1]
   }
 
   abstract update(): void
   abstract updatePosition(): void
+
+  getPreviousField(): Field {
+    const idx = this.block.fields.indexOf(this)
+    return this.block.fields[idx - 1]
+  }
+
+  getNextField() {
+    const idx = this.block.fields.indexOf(this)
+    return this.block.fields[idx + 1]
+  }
 
   rectBox() {
     return this.shape.bbox()
@@ -34,5 +40,12 @@ export abstract class Field {
     this.shape.transform({
       position: { x, y }
     })
+  }
+
+  /**
+   * Return the data that need to save
+   */
+  toJson() {
+
   }
 }
