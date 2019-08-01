@@ -13,6 +13,9 @@ export abstract class BlocksContainer {
   group: SVG.G
   shape: SVG.Path
   gesture: Gesture
+  /**
+   * All sub properties are only read, don't do side effect things
+   */
   workspace: Workspace
 
   constructor(workspace: Workspace, opt?: BlocksContainerOptions) {
@@ -42,7 +45,6 @@ export abstract class BlocksContainer {
   }
 
   private initializeGesture() {
-    this.workspace.gestures.add(this.gesture)
     this.gesture.on('dragging', (e: MouseEvent) => {
       this.dmove(e.movementX, e.movementY)
       const dragFilter = this.workspace.filters.dragFilter
@@ -75,7 +77,6 @@ export abstract class BlocksContainer {
   }
 
   dispose() {
-    this.workspace.gestures.remove(this.gesture)
     this.group.remove()
   }
 }

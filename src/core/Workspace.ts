@@ -36,12 +36,18 @@ export class Workspace {
 
   addBlock(block: BlocksContainer) {
     this.blocks.push(block)
+
+    this.gestures.add(block.gesture)
+
     this.group.add(block.group)
   }
 
   removeBlock(block: BlocksContainer) {
     const idx = this.blocks.indexOf(block)
     this.blocks.splice(idx, 1)
+
+    this.gestures.remove(block.gesture)
+
     block.dispose()
   }
 
