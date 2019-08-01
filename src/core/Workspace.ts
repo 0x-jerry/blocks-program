@@ -28,6 +28,7 @@ export class Workspace extends Event {
     this.group = new SVG.G()
 
     this.svgRoot = SVG.SVG()
+    this.svgRoot.addClass('blockly-workspace')
     this.svgRoot.add(this.group)
 
     this.filters = new FilterManager()

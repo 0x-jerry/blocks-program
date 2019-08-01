@@ -20,11 +20,16 @@ export abstract class BlocksContainer extends Event {
    * All sub properties are only read, don't do side effect things
    */
   workspace: Workspace
+
   caches = {
     fields: {
       width: 0,
       height: 0
     }
+  }
+
+  style = {
+    paddingTop: 5
   }
 
   constructor(workspace: Workspace, opt?: BlocksContainerOptions) {

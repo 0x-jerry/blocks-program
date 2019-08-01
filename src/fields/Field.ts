@@ -20,15 +20,15 @@ export abstract class Field {
   abstract update(): void
 
   updatePosition() {
-    const pos = { x: 0, y: 5 }
+    const pos = {
+      x: 0,
+      y: this.block.style.paddingTop
+    }
+
     const previousField = this.getPreviousField()
 
-    if (!previousField) {
-      pos.x = 0
-      pos.y = 5
-    } else {
+    if (previousField) {
       pos.x = previousField.rectBox().x2
-      pos.y = 5
     }
 
     this.shape.x(pos.x)

@@ -13,14 +13,17 @@ export class ToolWidget {
 
     this.createDom()
     this.workspace.domRoot.appendChild(this.dom)
-    this.workspace.on('dragging', () => {
+    this.workspace.gestures.on('dragging', () => {
       this.hide()
     })
   }
 
   private createDom() {
     this.dom = document.createElement('div')
+    this.dom.classList.add('blockly-tool-widget')
+
     this.dom.style.position = 'fixed'
+    this.hide()
   }
 
   setDom(el: HTMLElement) {

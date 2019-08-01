@@ -1,11 +1,12 @@
 import Event from 'events'
 
-export class GestureManager {
+export class GestureManager extends Event {
   nodes: Gesture[] = []
   currentNodes: Gesture[] = []
   isDragging = false
 
   constructor() {
+    super()
     this.initialize()
   }
 
@@ -36,6 +37,7 @@ export class GestureManager {
 
       if (this.currentNodes.length) {
         this.currentNodes.forEach((n) => n.emit('dragstart', e))
+        this.emit('dragstart',e )
       }
     })
 
@@ -43,6 +45,7 @@ export class GestureManager {
       if (this.currentNodes.length) {
         this.isDragging = true
         this.currentNodes.forEach((n) => n.emit('dragging', e))
+        this.emit('dragging',e )
       }
     })
 
@@ -50,8 +53,10 @@ export class GestureManager {
       if (this.currentNodes.length) {
         if(this.isDragging) {
           this.currentNodes.forEach((n) => n.emit('dragend', e))
+          this.emit('draggend',e )
         } else {
           this.currentNodes.forEach((n) => n.emit('click', e))
+          this.emit('click',e )
         }
       }
 

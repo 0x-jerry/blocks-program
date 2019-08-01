@@ -2,9 +2,8 @@ import { BlocksContainer } from './Container'
 
 export class BasicBlocks extends BlocksContainer {
   calcPath(...opts: any[]): string {
-    const padding = 5
     const width = this.caches.fields.width
-    const height = this.caches.fields.height + padding * 2
+    const height = this.caches.fields.height + this.style.paddingTop * 2
 
     const radius = height / 2
 

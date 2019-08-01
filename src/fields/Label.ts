@@ -9,6 +9,7 @@ export class FieldLabel extends Field {
 
   constructor(block: BlocksContainer, value: string = '') {
     const shape = new SVG.Text()
+    shape.addClass('blockly-field-text')
     shape.text(value)
 
     super(block, shape)

@@ -12,7 +12,7 @@ export class FieldText extends Field {
     const shape = new SVG.Text()
     shape.text(value)
     shape.addClass('blockly-field-text')
-  
+
     super(block, shape)
 
     this.value = value
@@ -22,19 +22,17 @@ export class FieldText extends Field {
   }
 
   initializeGesture() {
-    this.block.on('dragging', () => {
-      const widget = this.block.workspace.toolWidget
-      widget.hide()
-    })
-
     this.gesture.on('click', (e: MouseEvent) => {
-      const pos = this.shape.node.getBoundingClientRect()
+      const shapeBox = this.shape.node.getBoundingClientRect()
 
       const widget = this.block.workspace.toolWidget
 
       this.inputDom.value = this.value
+      this.inputDom.style.height = shapeBox.height + 'px'
+
       widget.setDom(this.inputDom)
-      widget.show(pos.top, pos.left)
+      widget.show(shapeBox.top, shapeBox.left)
+
       this.inputDom.focus()
       this.inputDom.select()
     })
@@ -49,9 +47,7 @@ export class FieldText extends Field {
   createInputDom() {
     this.inputDom = document.createElement('input')
     this.inputDom.style.width = this.shape.bbox().w + 'px'
-    this.inputDom.style.fontSize = '16px'
-    this.inputDom.style.margin = '0'
-    this.inputDom.style.padding = '0'
+    this.inputDom.classList.add('blockly-tool-widget_input')
 
     this.inputDom.addEventListener('input', (e) => {
       const text = (e.target as HTMLInputElement).value
