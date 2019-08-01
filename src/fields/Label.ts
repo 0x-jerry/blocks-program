@@ -8,28 +8,12 @@ export class FieldLabel extends Field {
   shape: SVG.Text
 
   constructor(block: BlocksContainer, value: string = '') {
-    super(block)
+    const shape = new SVG.Text()
+    shape.text(value)
+
+    super(block, shape)
+
     this.value = value
-
-    this.shape = new SVG.Text()
-    this.shape.text(this.value)
-    this.updatePosition()
-  }
-
-  updatePosition() {
-    const pos = { x: 0, y: 5 }
-    const previousField = this.getPreviousField()
-
-    if (!previousField) {
-      pos.x = 0
-      pos.y = 5
-    } else {
-      pos.x = previousField.rectBox().x2
-      pos.y = 5
-    }
-
-    this.shape.x(pos.x)
-    this.shape.y(pos.y)
   }
 
   setValue(value: string) {

@@ -9,14 +9,31 @@ export abstract class Field {
   block: BlocksContainer
   gesture?: Gesture
 
-  abstract shape: SVG.Element
+  shape: SVG.Element
 
-  constructor(block: BlocksContainer) {
+  constructor(block: BlocksContainer, shape: SVG.Element) {
     this.block = block
+    this.shape = shape
+    this.updatePosition()
   }
 
   abstract update(): void
-  abstract updatePosition(): void
+
+  updatePosition() {
+    const pos = { x: 0, y: 5 }
+    const previousField = this.getPreviousField()
+
+    if (!previousField) {
+      pos.x = 0
+      pos.y = 5
+    } else {
+      pos.x = previousField.rectBox().x2
+      pos.y = 5
+    }
+
+    this.shape.x(pos.x)
+    this.shape.y(pos.y)
+  }
 
   getPreviousField(): Field {
     const idx = this.block.fields.indexOf(this)
@@ -45,7 +62,5 @@ export abstract class Field {
   /**
    * Return the data that need to save
    */
-  toJson() {
-
-  }
+  toJson() {}
 }

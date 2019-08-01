@@ -1,9 +1,11 @@
 import * as SVG from '@svgdotjs/svg.js'
+import Event from 'events'
 import { FilterManager } from '../utils/SVGEffectManager'
 import { GestureManager, Gesture } from '../utils/Gesture'
 import { BlocksContainer } from '../blocks/Container'
+import { ToolWidget } from '../utils/ToolWidget'
 
-export class Workspace {
+export class Workspace extends Event {
   filters: FilterManager
   draw: SVG.Svg
   gestures: GestureManager
@@ -12,9 +14,12 @@ export class Workspace {
   group: SVG.G
   selectedBlock?: BlocksContainer
   root: HTMLElement
+  toolWidget: ToolWidget
 
   constructor(el: HTMLElement) {
+    super()
     this.root = el
+
     this.filters = new FilterManager()
     this.draw = SVG.SVG()
 
@@ -33,11 +38,19 @@ export class Workspace {
 
     el.appendChild(this.draw.node)
     this.initializeEvents()
+    this.toolWidget = new ToolWidget(this)
   }
 
   private initializeEvents() {
     this.gesture.on('dragging', (e: MouseEvent) => {
       this.group.translate(e.movementX, e.movementY)
+      this.emit('dragging', e)
+    })
+
+    this.gesture.on('click', () => {
+      if (this.gestures.currentNodes.length <= 1) {
+        this.toolWidget.hide()
+      }
     })
   }
 
@@ -70,7 +83,5 @@ export class Workspace {
   /**
    * Return the data that need to save
    */
-  toJson() {
-    
-  }
+  toJson() {}
 }

@@ -5,6 +5,7 @@ import { BasicBlocks } from './blocks/BasicBlocks'
 import { FieldLabel } from './fields/Label'
 import { UnicodeChar } from './utils/Characters'
 import { Gesture } from './utils/Gesture'
+import { FieldText } from './fields/Text';
 
 const el = document.getElementById('app')
 
@@ -33,8 +34,9 @@ const field = new FieldLabel(block, 'click me')
 field.gesture = new Gesture(field.shape.node)
 
 block.addFiled(field)
-block.addFiled(new FieldLabel(block, `${UnicodeChar.space}space`))
-block.addFiled(new FieldLabel(block, `${UnicodeChar.space}xx`))
+block.addFiled(new FieldLabel(block, `${UnicodeChar.space}space${UnicodeChar.space}`))
+
+block.addFiled(new FieldText(block, `input`))
 
 let times = 0
 field.gesture.on('click', () => {
