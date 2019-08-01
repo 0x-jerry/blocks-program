@@ -11,8 +11,10 @@ export class Workspace {
   gesture: Gesture
   group: SVG.G
   selectedBlock?: BlocksContainer
+  root: HTMLElement
 
   constructor(el: HTMLElement) {
+    this.root = el
     this.filters = new FilterManager()
     this.draw = SVG.SVG()
 
