@@ -2,7 +2,7 @@ import '@svgdotjs/svg.js'
 import '@svgdotjs/svg.filter.js'
 import { Workspace } from './core/Workspace'
 import { BasicBlocks } from './blocks/BasicBlocks'
-import { FieldText } from './fields/Text'
+import { FieldLabel } from './fields/Label'
 import { UnicodeChar } from './utils/Characters'
 import { Gesture } from './utils/Gesture'
 
@@ -29,12 +29,12 @@ ws.draw.css({
 const block = new BasicBlocks(ws, { x: 50, y: 50 })
 ws.addBlock(block)
 
-const field = new FieldText(block, 'click me')
+const field = new FieldLabel(block, 'click me')
 field.gesture = new Gesture(field.shape.node)
 
 block.addFiled(field)
-block.addFiled(new FieldText(block, `${UnicodeChar.space}space`))
-block.addFiled(new FieldText(block, `${UnicodeChar.space}xx`))
+block.addFiled(new FieldLabel(block, `${UnicodeChar.space}space`))
+block.addFiled(new FieldLabel(block, `${UnicodeChar.space}xx`))
 
 let times = 0
 field.gesture.on('click', () => {
@@ -45,7 +45,7 @@ field.gesture.on('click', () => {
 const block2 = new BasicBlocks(ws, { x: 150, y: 150 })
 ws.addBlock(block2)
 
-const field2 = new FieldText(block2, new Date().toISOString())
+const field2 = new FieldLabel(block2, new Date().toISOString())
 block2.addFiled(field2)
 
 setInterval(() => {
@@ -55,7 +55,7 @@ setInterval(() => {
 
 for (let i = 0; i < 5; i++) {
   const b = new BasicBlocks(ws, { x: 150 + i * 50, y: 150 + i * 50 })
-  const f = new FieldText(b, 'test ' + i)
+  const f = new FieldLabel(b, 'test ' + i)
   b.addFiled(f)
   ws.addBlock(b)
 }
