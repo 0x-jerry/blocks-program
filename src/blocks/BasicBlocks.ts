@@ -21,5 +21,4 @@ export class BasicBlocks extends BlocksContainer {
     return path.join(' ')
   }
 
-  dispose() {}
 }

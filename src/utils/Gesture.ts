@@ -6,7 +6,7 @@ export class GestureManager {
   isDragging = false
 
   constructor() {
-    this._initialize()
+    this.initialize()
   }
 
   add(gesture: Gesture) {
@@ -18,7 +18,7 @@ export class GestureManager {
     this.nodes.splice(idx, 1)
   }
 
-  private _initialize() {
+  private initialize() {
     document.addEventListener('mousedown', (e) => {
       this.currentNode = this.nodes.find((n) => n.node === e.target)
 

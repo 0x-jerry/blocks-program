@@ -1,6 +1,6 @@
 import * as SVG from '@svgdotjs/svg.js'
 import { Gesture } from '../utils/Gesture'
-import { Workspace } from '../Workspace'
+import { Workspace } from '../core/Workspace'
 
 export interface BlocksContainerOptions {
   x?: number
@@ -14,14 +14,6 @@ export abstract class BlocksContainer {
   shape: SVG.Path
   gesture: Gesture
   workspace: Workspace
-
-  get x() {
-    return this.group.attr('x')
-  }
-
-  get y() {
-    return this.group.attr('y')
-  }
 
   constructor(workspace: Workspace, opt?: BlocksContainerOptions) {
     const defaultOpt: Required<BlocksContainerOptions> = {
@@ -50,6 +42,7 @@ export abstract class BlocksContainer {
   }
 
   private initializeGesture() {
+    this.workspace.gestures.add(this.gesture)
     this.gesture.on('dragging', (e: MouseEvent) => {
       this.dmove(e.movementX, e.movementY)
       const dragFilter = this.workspace.filters.dragFilter
@@ -61,7 +54,7 @@ export abstract class BlocksContainer {
     })
   }
 
-  protected updateShape(opt: { fill?: string; stroke?: string; d?: string }) {
+  updateShape(opt: { fill?: string; stroke?: string; d?: string }) {
     this.shape.attr(opt)
   }
 
@@ -72,12 +65,17 @@ export abstract class BlocksContainer {
   }
 
   move(x: number, y: number) {
-    this.group.translate(x, y)
+    this.group.transform({
+      position: { x, y }
+    })
   }
 
   dmove(dx: number, dy: number) {
-    this.group.translate(this.x + dx, this.y + dy)
+    this.group.translate(dx, dy)
   }
 
-  abstract dispose(): any
+  dispose() {
+    this.workspace.gestures.remove(this.gesture)
+    this.group.remove()
+  }
 }

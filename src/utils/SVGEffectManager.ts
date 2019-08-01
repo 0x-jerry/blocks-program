@@ -2,6 +2,7 @@ import * as SVG from '@svgdotjs/svg.js'
 import Filter from '@svgdotjs/svg.filter.js'
 
 export class FilterManager {
+  filters: SVG.Filter[] = []
   dragFilter: SVG.Filter
 
   constructor() {
@@ -18,9 +19,14 @@ export class FilterManager {
       .gaussianBlur(2, 2)
 
     this.dragFilter.blend(this.dragFilter.$source, blur, null)
+    this.filters.push(this.dragFilter)
   }
 
   appendTo(defs: SVG.Defs) {
     defs.add(this.dragFilter)
+  }
+
+  dispose() {
+    this.filters.forEach((filter) => filter.remove())
   }
 }
