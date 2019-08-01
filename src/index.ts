@@ -3,8 +3,8 @@ import '@svgdotjs/svg.filter.js'
 import { Workspace } from './core/Workspace'
 import { BasicBlocks } from './blocks/BasicBlocks'
 import { FieldText } from './fields/Text'
-import { UnicodeChar } from './utils/Characters';
-import { Gesture } from './utils/Gesture';
+import { UnicodeChar } from './utils/Characters'
+import { Gesture } from './utils/Gesture'
 
 const el = document.getElementById('app')
 
@@ -38,7 +38,7 @@ block.addFiled(new FieldText(block, `${UnicodeChar.space}xx`))
 
 let times = 0
 field.gesture.on('click', () => {
-  const  newValue = 'click: ' + times++
+  const newValue = 'click: ' + times++
   field.setValue(newValue)
 })
 
@@ -52,3 +52,10 @@ setInterval(() => {
   field2.setValue(new Date().toISOString())
   block2.update()
 }, 1000)
+
+for (let i = 0; i < 5; i++) {
+  const b = new BasicBlocks(ws, { x: 150 + i * 50, y: 150 + i * 50 })
+  const f = new FieldText(b, 'test ' + i)
+  b.addFiled(f)
+  ws.addBlock(b)
+}

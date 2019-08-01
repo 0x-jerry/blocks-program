@@ -47,6 +47,10 @@ export abstract class BlocksContainer {
   }
 
   private initializeGesture() {
+    this.gesture.on('dragstart', () => {
+      this.workspace.selectBlock(this)
+    })
+
     this.gesture.on('dragging', (e: MouseEvent) => {
       this.dmove(e.movementX, e.movementY)
       const dragFilter = this.workspace.filters.dragFilter

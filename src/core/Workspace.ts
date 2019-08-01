@@ -10,6 +10,7 @@ export class Workspace {
   blocks: BlocksContainer[] = []
   gesture: Gesture
   group: SVG.G
+  selectedBlock?: BlocksContainer
 
   constructor(el: HTMLElement) {
     this.filters = new FilterManager()
@@ -36,6 +37,11 @@ export class Workspace {
     this.gesture.on('dragging', (e: MouseEvent) => {
       this.group.translate(e.movementX, e.movementY)
     })
+  }
+
+  selectBlock(block: BlocksContainer) {
+    this.group.add(block.group)
+    this.selectedBlock = block
   }
 
   addBlock(block: BlocksContainer) {
