@@ -7,36 +7,38 @@ import { ToolWidget } from '../utils/ToolWidget'
 
 export class Workspace extends Event {
   filters: FilterManager
-  draw: SVG.Svg
-  gestures: GestureManager
-  blocks: BlocksContainer[] = []
-  gesture: Gesture
+
+  domRoot: HTMLElement
+
   group: SVG.G
+  svgRoot: SVG.Svg
+
+  gesture: Gesture
+  gestures: GestureManager
+
   selectedBlock?: BlocksContainer
-  root: HTMLElement
+  blocks: BlocksContainer[] = []
+
   toolWidget: ToolWidget
 
   constructor(el: HTMLElement) {
     super()
-    this.root = el
-
-    this.filters = new FilterManager()
-    this.draw = SVG.SVG()
+    this.domRoot = el
 
     this.group = new SVG.G()
 
-    this.gesture = new Gesture(this.draw.node, {
-      includeChildren: false
-    })
+    this.svgRoot = SVG.SVG()
+    this.svgRoot.add(this.group)
 
-    this.draw.add(this.group)
+    this.filters = new FilterManager()
+    this.filters.appendTo(this.svgRoot.defs())
 
-    this.filters.appendTo(this.draw.defs())
+    this.gesture = new Gesture(this.svgRoot.node, { includeChildren: false })
 
     this.gestures = new GestureManager()
     this.gestures.add(this.gesture)
 
-    el.appendChild(this.draw.node)
+    el.appendChild(this.svgRoot.node)
     this.initializeEvents()
     this.toolWidget = new ToolWidget(this)
   }
@@ -77,7 +79,7 @@ export class Workspace extends Event {
   }
 
   dispose() {
-    this.draw.remove()
+    this.svgRoot.remove()
   }
 
   /**

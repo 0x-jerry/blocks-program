@@ -2,6 +2,7 @@ import { Workspace } from '../core/Workspace'
 
 export class ToolWidget {
   workspace: Workspace
+
   visible: boolean
 
   dom: HTMLDivElement
@@ -11,7 +12,7 @@ export class ToolWidget {
     this.visible = false
 
     this.createDom()
-    this.workspace.root.appendChild(this.dom)
+    this.workspace.domRoot.appendChild(this.dom)
     this.workspace.on('dragging', () => {
       this.hide()
     })

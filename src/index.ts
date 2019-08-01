@@ -19,7 +19,7 @@ const ws = new Workspace(el)
 // @ts-ignore
 window.ws = ws
 
-ws.draw.css({
+ws.svgRoot.css({
   border: '1px solid #333',
   width: '80%',
   height: '600px',
