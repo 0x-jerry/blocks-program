@@ -2,8 +2,10 @@ import { BlocksContainer } from './Container'
 
 export class BasicBlocks extends BlocksContainer {
   calcPath(...opts: any[]): string {
-    const width = 60
-    const height = 30
+    const padding = 5
+    const width = this.getFieldsWidth()
+    const height = this.getFieldsHeight() + padding * 2
+
     const radius = height / 2
 
     const path = []
@@ -20,5 +22,4 @@ export class BasicBlocks extends BlocksContainer {
 
     return path.join(' ')
   }
-
 }

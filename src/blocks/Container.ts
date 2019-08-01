@@ -1,6 +1,7 @@
 import * as SVG from '@svgdotjs/svg.js'
 import { Gesture } from '../utils/Gesture'
 import { Workspace } from '../core/Workspace'
+import { Field } from '../fields/Field'
 
 export interface BlocksContainerOptions {
   x?: number
@@ -10,6 +11,7 @@ export interface BlocksContainerOptions {
 }
 
 export abstract class BlocksContainer {
+  fields: Field[] = []
   group: SVG.G
   shape: SVG.Path
   gesture: Gesture
@@ -52,18 +54,42 @@ export abstract class BlocksContainer {
     })
 
     this.gesture.on('dragend', () => {
+      // @ts-ignore
       this.group.unfilter()
     })
   }
+
+  abstract calcPath(...opts: any[]): string
 
   updateShape(opt: { fill?: string; stroke?: string; d?: string }) {
     this.shape.attr(opt)
   }
 
-  abstract calcPath(...opts: any[]): string
+  getFieldsWidth() {
+    return this.fields.reduce((pre, cur) => {
+      return pre + cur.rectBox().w
+    }, 0)
+  }
+
+  getFieldsHeight() {
+    return Math.max(...this.fields.map((f) => f.rectBox().h), 0)
+  }
+
+  addFiled(filed: Field) {
+    this.fields.push(filed)
+    this.group.add(filed.shape)
+    this.update()
+  }
+
+  removeFiled(filed: Field) {
+    const idx = this.fields.indexOf(filed)
+    this.fields.splice(idx, 1)
+    filed.dispose()
+  }
 
   update() {
     this.updateShape({ d: this.calcPath() })
+    this.fields.forEach(f => f.updatePosition())
   }
 
   move(x: number, y: number) {
