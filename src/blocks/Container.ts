@@ -32,7 +32,7 @@ export abstract class BlocksContainer {
     this.workspace = workspace
     this.shape = new SVG.Path()
     this.group = new SVG.G()
-    this.gesture = new Gesture(this.shape.node)
+    this.gesture = new Gesture(this.group.node)
 
     this.group.add(this.shape)
 
@@ -75,21 +75,35 @@ export abstract class BlocksContainer {
     return Math.max(...this.fields.map((f) => f.rectBox().h), 0)
   }
 
-  addFiled(filed: Field) {
-    this.fields.push(filed)
-    this.group.add(filed.shape)
+  addFiled(field: Field) {
+    this.fields.push(field)
+    if (field.gesture) {
+      this.workspace.gestures.add(field.gesture)
+    }
+    this.group.add(field.shape)
     this.update()
   }
 
-  removeFiled(filed: Field) {
-    const idx = this.fields.indexOf(filed)
+  removeFiled(field: Field) {
+    const idx = this.fields.indexOf(field)
     this.fields.splice(idx, 1)
-    filed.dispose()
+    if (field.gesture) {
+      this.workspace.gestures.remove(field.gesture)
+    }
+    field.dispose()
   }
 
-  update() {
+  updateField(field: Field) {
+    const idx = this.fields.indexOf(field)
+    this.fields.slice(idx).forEach((f) => f.updatePosition())
     this.updateShape({ d: this.calcPath() })
-    this.fields.forEach(f => f.updatePosition())
+  }
+
+  update(fields: boolean = false) {
+    if (fields) {
+      this.fields.forEach((f) => f.updatePosition())
+    }
+    this.updateShape({ d: this.calcPath() })
   }
 
   move(x: number, y: number) {

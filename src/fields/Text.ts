@@ -34,6 +34,6 @@ export class FieldText extends Field {
 
   update() {
     this.shape.text(this.value)
-    this.updatePosition()
+    this.block.updateField(this)
   }
 }

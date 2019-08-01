@@ -2,7 +2,7 @@ import Event from 'events'
 
 export class GestureManager {
   nodes: Gesture[] = []
-  currentNode: Gesture = null
+  currentNodes: Gesture[] = []
   isDragging = false
 
   constructor() {
@@ -20,42 +20,65 @@ export class GestureManager {
 
   private initialize() {
     document.addEventListener('mousedown', (e) => {
-      this.currentNode = this.nodes.find((n) => n.node === e.target)
+      this.currentNodes = []
+      this.nodes.forEach((node) => {
+        if (node.opts.includeChildren) {
+          if (node.node.contains(e.target as Node)) {
+            this.currentNodes.push(node)
+          }
+        } else {
+          if (node.node === e.target) {
+            this.currentNodes.push(node)
+          }
+        }
+      })
+      this.nodes.find((n) => {})
 
-      if (this.currentNode) {
-        this.currentNode.emit('dragstart', e)
+      if (this.currentNodes.length) {
+        this.currentNodes.forEach((n) => n.emit('dragstart', e))
       }
     })
 
     document.addEventListener('mousemove', (e) => {
-      if (this.currentNode) {
+      if (this.currentNodes.length) {
         this.isDragging = true
-        this.currentNode.emit('dragging', e)
+        this.currentNodes.forEach((n) => n.emit('dragging', e))
       }
     })
 
     document.addEventListener('mouseup', (e) => {
-      if (this.currentNode) {
-        if (this.isDragging) {
-          this.currentNode.emit('dragend', e)
+      if (this.currentNodes.length) {
+        if(this.isDragging) {
+          this.currentNodes.forEach((n) => n.emit('dragend', e))
         } else {
-          this.currentNode.emit('click', e)
+          this.currentNodes.forEach((n) => n.emit('click', e))
         }
       }
 
       this.isDragging = false
-      this.currentNode = null
+      this.currentNodes = []
     })
   }
 }
 
 type DomElement = HTMLElement | SVGElement
 
+export interface GestureOptions {
+  includeChildren?: boolean
+}
+
 export class Gesture extends Event {
   node: DomElement
+  opts: Required<GestureOptions>
 
-  constructor(node: DomElement) {
+  constructor(node: DomElement, opt?: GestureOptions) {
     super()
     this.node = node
+
+    const defaultOpts: Required<GestureOptions> = {
+      includeChildren: true
+    }
+
+    this.opts = Object.assign({}, defaultOpts, opt)
   }
 }

@@ -3,6 +3,8 @@ import '@svgdotjs/svg.filter.js'
 import { Workspace } from './core/Workspace'
 import { BasicBlocks } from './blocks/BasicBlocks'
 import { FieldText } from './fields/Text'
+import { UnicodeChar } from './utils/Characters';
+import { Gesture } from './utils/Gesture';
 
 const el = document.getElementById('app')
 
@@ -27,12 +29,25 @@ ws.draw.css({
 const block = new BasicBlocks(ws, { x: 50, y: 50 })
 ws.addBlock(block)
 
-const filed = new FieldText(block, 'test')
+const field = new FieldText(block, 'click me')
+field.gesture = new Gesture(field.shape.node)
 
-block.addFiled(filed)
-block.addFiled(new FieldText(block, 'test2222222222-124'))
+block.addFiled(field)
+block.addFiled(new FieldText(block, `${UnicodeChar.space}space`))
 
-setTimeout(() => {
-  filed.setValue('你好')
-  block.update()
+let times = 0
+field.gesture.on('click', () => {
+  const  newValue = 'click: ' + times++
+  field.setValue(newValue)
+})
+
+const block2 = new BasicBlocks(ws, { x: 150, y: 150 })
+ws.addBlock(block2)
+
+const field2 = new FieldText(block2, new Date().toISOString())
+block2.addFiled(field2)
+
+setInterval(() => {
+  field2.setValue(new Date().toISOString())
+  block2.update()
 }, 1000)

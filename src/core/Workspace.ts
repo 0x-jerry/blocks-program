@@ -16,7 +16,11 @@ export class Workspace {
     this.draw = SVG.SVG()
 
     this.group = new SVG.G()
-    this.gesture = new Gesture(this.draw.node)
+
+    this.gesture = new Gesture(this.draw.node, {
+      includeChildren: false
+    })
+
     this.draw.add(this.group)
 
     this.filters.appendTo(this.draw.defs())

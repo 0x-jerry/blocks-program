@@ -1,11 +1,13 @@
 import * as SVG from '@svgdotjs/svg.js'
 import { BlocksContainer } from '../blocks/Container'
+import { Gesture } from '../utils/Gesture'
 
 export abstract class Field {
   /**
    * All sub properties are only read, don't do side effect things
    */
   block: BlocksContainer
+  gesture?: Gesture
 
   abstract shape: SVG.Element
 
