@@ -3,7 +3,7 @@ import * as SVG from '@svgdotjs/svg.js'
 import { BlocksContainer } from '../blocks/Container'
 
 export class FieldText extends Field {
-  value: string = ''
+  value: string
 
   shape: SVG.Text
 
@@ -17,14 +17,17 @@ export class FieldText extends Field {
   }
 
   updatePosition() {
+    const pos = { x: 0, y: 5 }
     if (!this.preField) {
-      this.shape.x(0)
-      this.shape.y(5)
+      pos.x = 0
+      pos.y = 5
     } else {
-      const x = this.preField.rectBox().x2
-      this.shape.x(x)
-      this.shape.y(5)
+      pos.x = this.preField.rectBox().x2
+      pos.y = 5
     }
+
+    this.shape.x(pos.x)
+    this.shape.y(pos.y)
   }
 
   setValue(value: string) {

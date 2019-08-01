@@ -34,6 +34,7 @@ field.gesture = new Gesture(field.shape.node)
 
 block.addFiled(field)
 block.addFiled(new FieldText(block, `${UnicodeChar.space}space`))
+block.addFiled(new FieldText(block, `${UnicodeChar.space}xx`))
 
 let times = 0
 field.gesture.on('click', () => {
