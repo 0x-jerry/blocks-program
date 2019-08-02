@@ -27,48 +27,62 @@ export class GestureManager extends Event {
   }
 
   private initialize() {
-    document.addEventListener('mousedown', (e) => {
-      this.currentNodes = []
-      this.nodes.forEach((node) => {
-        if (node.opts.includeChildren) {
-          if (node.node.contains(e.target as Node)) {
-            this.currentNodes.push(node)
-          }
-        } else {
-          if (node.node === e.target) {
-            this.currentNodes.push(node)
-          }
+    this.handleMouseDown = this.handleMouseDown.bind(this)
+    this.handleMouseMove = this.handleMouseMove.bind(this)
+    this.handleMouseUp = this.handleMouseUp.bind(this)
+
+    document.addEventListener('mousedown', this.handleMouseDown)
+    document.addEventListener('mousemove', this.handleMouseMove)
+    document.addEventListener('mouseup', this.handleMouseUp)
+  }
+
+  private handleMouseDown(e: MouseEvent) {
+    this.currentNodes = []
+    this.nodes.forEach((node) => {
+      if (node.opts.includeChildren) {
+        if (node.node.contains(e.target as Node)) {
+          this.currentNodes.push(node)
         }
-      })
-
-      if (this.currentNodes.length) {
-        this.currentNodes.forEach((n) => n.emit(GestureEvent.dragstart, e))
-        this.emit(GestureEvent.dragstart, e)
-      }
-    })
-
-    document.addEventListener('mousemove', (e) => {
-      if (this.currentNodes.length) {
-        this.isDragging = true
-        this.currentNodes.forEach((n) => n.emit(GestureEvent.dragging, e))
-        this.emit(GestureEvent.dragging, e)
-      }
-    })
-
-    document.addEventListener('mouseup', (e) => {
-      if (this.currentNodes.length) {
-        if (this.isDragging) {
-          this.currentNodes.forEach((n) => n.emit(GestureEvent.dragend, e))
-          this.emit(GestureEvent.dragend, e)
-        } else {
-          this.currentNodes.forEach((n) => n.emit(GestureEvent.click, e))
-          this.emit(GestureEvent.click, e)
+      } else {
+        if (node.node === e.target) {
+          this.currentNodes.push(node)
         }
       }
-
-      this.isDragging = false
-      this.currentNodes = []
     })
+
+    if (this.currentNodes.length) {
+      this.currentNodes.forEach((n) => n.emit(GestureEvent.dragstart, e))
+      this.emit(GestureEvent.dragstart, e)
+    }
+  }
+
+  private handleMouseMove(e: MouseEvent) {
+    if (this.currentNodes.length) {
+      this.isDragging = true
+      this.currentNodes.forEach((n) => n.emit(GestureEvent.dragging, e))
+      this.emit(GestureEvent.dragging, e)
+    }
+  }
+
+  private handleMouseUp(e: MouseEvent) {
+    if (this.currentNodes.length) {
+      if (this.isDragging) {
+        this.currentNodes.forEach((n) => n.emit(GestureEvent.dragend, e))
+        this.emit(GestureEvent.dragend, e)
+      } else {
+        this.currentNodes.forEach((n) => n.emit(GestureEvent.click, e))
+        this.emit(GestureEvent.click, e)
+      }
+    }
+
+    this.isDragging = false
+    this.currentNodes = []
+  }
+
+  dispose() {
+    document.removeEventListener('mousedown', this.handleMouseDown)
+    document.removeEventListener('mousemove', this.handleMouseMove)
+    document.removeEventListener('mouseup', this.handleMouseUp)
   }
 }
 

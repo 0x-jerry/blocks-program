@@ -78,6 +78,7 @@ export class Workspace {
 
   dispose() {
     this.svgRoot.remove()
+    this.gestures.dispose()
   }
 
   /**
