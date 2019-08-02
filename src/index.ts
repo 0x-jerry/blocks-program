@@ -52,7 +52,7 @@ block2.addFiled(field2)
 
 setInterval(() => {
   field2.setValue(new Date().toISOString())
-  block2.update()
+  block2.updateShapeWithoutCache()
 }, 1000)
 
 for (let i = 0; i < 5; i++) {

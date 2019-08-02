@@ -15,7 +15,7 @@ export class BlockFiled {
 
   updatePosition() {
     if (this.fieldBlock) {
-      this.fieldBlock.update()
+      this.fieldBlock.updateShapeWithoutCache()
     } else {
       this.field.updatePosition()
     }

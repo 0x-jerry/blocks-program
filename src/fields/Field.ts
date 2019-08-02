@@ -7,26 +7,28 @@ export abstract class Field {
   /**
    * All sub properties are only read, don't do side effect things
    */
-  block: BlockContainer
+  sourceBlock: BlockContainer
   gesture?: Gesture
 
   shape: SVG.Element
 
   constructor(block: BlockContainer, shape: SVG.Element) {
-    this.block = block
+    this.sourceBlock = block
     this.shape = shape
     this.updatePosition()
   }
 
-  abstract update(): void
+  updateSourceBlock() {
+    this.sourceBlock.updateField(this)
+  }
 
   updatePosition() {
     const pos = {
       x: 0,
-      y: this.block.style.paddingTop
+      y: this.sourceBlock.style.paddingTop
     }
 
-    const previousField = this.block.getPreviousField(this)
+    const previousField = this.sourceBlock.getPreviousField(this)
 
     if (previousField) {
       pos.x = previousField.rectBox().x2

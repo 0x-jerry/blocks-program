@@ -14,16 +14,11 @@ export class FieldLabel extends Field {
 
     super(block, shape)
 
-    this.value = value
+    this.setValue(value)
   }
 
   setValue(value: string) {
     this.value = value
-    this.update()
-  }
-
-  update() {
-    this.shape.text(this.value)
-    this.block.updateField(this)
+    this.updateSourceBlock()
   }
 }

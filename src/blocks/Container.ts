@@ -57,7 +57,7 @@ export abstract class BlockContainer extends Event {
 
     this.move(opt.x, opt.y)
     this.initializeGesture()
-    this.update()
+    this.updateShapeWithoutCache()
   }
 
   private initializeGesture() {
@@ -80,11 +80,11 @@ export abstract class BlockContainer extends Event {
 
   abstract calcPath(...opts: any[]): string
 
-  updateShape(opt: { fill?: string; stroke?: string; d?: string }) {
+  private updateShape(opt: { fill?: string; stroke?: string; d?: string }) {
     this.shape.attr(opt)
   }
 
-  updateFieldCache() {
+  private updateFieldCache() {
     this.caches.fields.width = this.fields.reduce((pre, cur) => {
       return pre + cur.rectBox().w
     }, 0)
@@ -118,10 +118,10 @@ export abstract class BlockContainer extends Event {
   updateField(field: Field) {
     const idx = this.fields.findIndex((f) => f.field === field)
     this.fields.slice(idx).forEach((f) => f.updatePosition())
-    this.update()
+    this.updateShapeWithoutCache()
   }
 
-  update() {
+  updateShapeWithoutCache() {
     this.updateFieldCache()
     this.updateShape({ d: this.calcPath() })
   }

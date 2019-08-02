@@ -25,7 +25,7 @@ export class FieldText extends Field {
     this.gesture.on('click', (e: MouseEvent) => {
       const shapeBox = this.shape.node.getBoundingClientRect()
 
-      const widget = this.block.workspace.toolWidget
+      const widget = this.sourceBlock.workspace.toolWidget
 
       this.inputDom.value = this.value
       this.inputDom.style.height = shapeBox.height + 'px'
@@ -41,7 +41,7 @@ export class FieldText extends Field {
   setValue(text: string) {
     this.value = text
     this.shape.text(text)
-    this.update()
+    this.updateSourceBlock()
   }
 
   createInputDom() {
@@ -56,9 +56,5 @@ export class FieldText extends Field {
       const fixedInputShake = 1
       this.inputDom.style.width = (this.shape.bbox().w + fixedInputShake) + 'px'
     })
-  }
-
-  update(): void {
-    this.block.updateField(this)
   }
 }
