@@ -9,11 +9,6 @@
   "dependencies": {
     "@svgdotjs/svg.filter.js": "^3.0.6",
     "@svgdotjs/svg.js": "3.0.12",
-    "@types/events": "^3.0.0",
-    "events": "^3.0.0",
-    "fabric": "^3.3.2",
-    "gsap": "^2.1.3",
-    "hammerjs": "^2.0.8",
     "lodash": "^4.17.15"
   },
   "devDependencies": {
