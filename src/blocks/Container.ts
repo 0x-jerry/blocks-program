@@ -1,6 +1,5 @@
 import * as SVG from '@svgdotjs/svg.js'
-import Event from 'events'
-import { Gesture } from '../utils/Gesture'
+import { Gesture, GestureEvent } from '../utils/Gesture'
 import { Workspace } from '../core/Workspace'
 import { Field } from '../fields/Field'
 import { BlockFiled } from './BlockField'
@@ -12,7 +11,7 @@ export interface BlocksContainerOptions {
   stroke?: string
 }
 
-export abstract class BlockContainer extends Event {
+export abstract class BlockContainer {
   fields: BlockFiled[] = []
   group: SVG.G
   shape: SVG.Path
@@ -34,7 +33,6 @@ export abstract class BlockContainer extends Event {
   }
 
   constructor(workspace: Workspace, opt?: BlocksContainerOptions) {
-    super()
     const defaultOpt: Required<BlocksContainerOptions> = {
       x: 0,
       y: 0,
@@ -65,14 +63,13 @@ export abstract class BlockContainer extends Event {
       this.workspace.selectBlock(this)
     })
 
-    this.gesture.on('dragging', (e: MouseEvent) => {
+    this.gesture.on(GestureEvent.dragging, (e: MouseEvent) => {
       this.dmove(e.movementX, e.movementY)
       const dragFilter = this.workspace.filters.dragFilter
       this.group.filterWith(dragFilter)
-      this.emit('dragging', e)
     })
 
-    this.gesture.on('dragend', () => {
+    this.gesture.on(GestureEvent.dragend, () => {
       // @ts-ignore
       this.group.unfilter()
     })

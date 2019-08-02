@@ -1,4 +1,5 @@
 import { Workspace } from '../core/Workspace'
+import { GestureEvent } from './Gesture'
 
 export class ToolWidget {
   workspace: Workspace
@@ -13,9 +14,13 @@ export class ToolWidget {
 
     this.createDom()
     this.workspace.domRoot.appendChild(this.dom)
-    this.workspace.gestures.on('dragging', () => {
-      this.hide()
-    })
+
+    this.handleDraggingEvent = this.handleDraggingEvent.bind(this)
+    this.workspace.gestures.on(GestureEvent.dragging, this.handleDraggingEvent)
+  }
+
+  private handleDraggingEvent() {
+    this.hide()
   }
 
   private createDom() {
@@ -61,5 +66,6 @@ export class ToolWidget {
 
   dispose() {
     this.dom.remove()
+    this.workspace.gestures.off(GestureEvent.dragging, this.handleDraggingEvent)
   }
 }

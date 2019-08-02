@@ -1,11 +1,10 @@
 import * as SVG from '@svgdotjs/svg.js'
-import Event from 'events'
 import { FilterManager } from '../utils/SVGEffectManager'
-import { GestureManager, Gesture } from '../utils/Gesture'
+import { GestureManager, Gesture, GestureEvent } from '../utils/Gesture'
 import { BlockContainer } from '../blocks/Container'
 import { ToolWidget } from '../utils/ToolWidget'
 
-export class Workspace extends Event {
+export class Workspace {
   filters: FilterManager
 
   domRoot: HTMLElement
@@ -22,7 +21,6 @@ export class Workspace extends Event {
   toolWidget: ToolWidget
 
   constructor(el: HTMLElement) {
-    super()
     this.domRoot = el
 
     this.group = new SVG.G()
@@ -45,9 +43,8 @@ export class Workspace extends Event {
   }
 
   private initializeEvents() {
-    this.gesture.on('dragging', (e: MouseEvent) => {
+    this.gesture.on(GestureEvent.dragging, (e: MouseEvent) => {
       this.group.translate(e.movementX, e.movementY)
-      this.emit('dragging', e)
     })
 
     this.gesture.on('click', () => {

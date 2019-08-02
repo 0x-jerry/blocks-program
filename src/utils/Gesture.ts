@@ -1,5 +1,12 @@
 import Event from 'events'
 
+export enum GestureEvent {
+  dragging = 'dragging',
+  dragstart = 'dragstart',
+  dragend = 'dragend',
+  click = 'click'
+}
+
 export class GestureManager extends Event {
   nodes: Gesture[] = []
   currentNodes: Gesture[] = []
@@ -33,30 +40,29 @@ export class GestureManager extends Event {
           }
         }
       })
-      this.nodes.find((n) => {})
 
       if (this.currentNodes.length) {
-        this.currentNodes.forEach((n) => n.emit('dragstart', e))
-        this.emit('dragstart',e )
+        this.currentNodes.forEach((n) => n.emit(GestureEvent.dragstart, e))
+        this.emit(GestureEvent.dragstart, e)
       }
     })
 
     document.addEventListener('mousemove', (e) => {
       if (this.currentNodes.length) {
         this.isDragging = true
-        this.currentNodes.forEach((n) => n.emit('dragging', e))
-        this.emit('dragging',e )
+        this.currentNodes.forEach((n) => n.emit(GestureEvent.dragging, e))
+        this.emit(GestureEvent.dragging, e)
       }
     })
 
     document.addEventListener('mouseup', (e) => {
       if (this.currentNodes.length) {
-        if(this.isDragging) {
-          this.currentNodes.forEach((n) => n.emit('dragend', e))
-          this.emit('draggend',e )
+        if (this.isDragging) {
+          this.currentNodes.forEach((n) => n.emit(GestureEvent.dragend, e))
+          this.emit(GestureEvent.dragend, e)
         } else {
-          this.currentNodes.forEach((n) => n.emit('click', e))
-          this.emit('click',e )
+          this.currentNodes.forEach((n) => n.emit(GestureEvent.click, e))
+          this.emit(GestureEvent.click, e)
         }
       }
 
