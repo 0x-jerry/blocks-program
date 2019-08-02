@@ -19,6 +19,7 @@ export class FieldLabel extends Field {
 
   setValue(value: string) {
     this.value = value
+    this.group.text(value)
     this.updateSourceBlock()
   }
 

@@ -68,7 +68,7 @@ export class GestureManager extends Event {
 
   private emitWithSelf(event: GestureEvent, ...args: any[]) {
     this.currentNodes.forEach((n) => n.emit(event, ...args))
-    this.emit(GestureEvent.dragging, ...args)
+    this.emit(event, ...args)
   }
 
   private handleContextMenu(e: MouseEvent) {
