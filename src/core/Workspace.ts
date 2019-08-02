@@ -2,7 +2,7 @@ import * as SVG from '@svgdotjs/svg.js'
 import Event from 'events'
 import { FilterManager } from '../utils/SVGEffectManager'
 import { GestureManager, Gesture } from '../utils/Gesture'
-import { BlocksContainer } from '../blocks/Container'
+import { BlockContainer } from '../blocks/Container'
 import { ToolWidget } from '../utils/ToolWidget'
 
 export class Workspace extends Event {
@@ -16,8 +16,8 @@ export class Workspace extends Event {
   gesture: Gesture
   gestures: GestureManager
 
-  selectedBlock?: BlocksContainer
-  blocks: BlocksContainer[] = []
+  selectedBlock?: BlockContainer
+  blocks: BlockContainer[] = []
 
   toolWidget: ToolWidget
 
@@ -57,12 +57,12 @@ export class Workspace extends Event {
     })
   }
 
-  selectBlock(block: BlocksContainer) {
+  selectBlock(block: BlockContainer) {
     this.group.add(block.group)
     this.selectedBlock = block
   }
 
-  addBlock(block: BlocksContainer) {
+  addBlock(block: BlockContainer) {
     this.blocks.push(block)
 
     this.gestures.add(block.gesture)
@@ -70,7 +70,7 @@ export class Workspace extends Event {
     this.group.add(block.group)
   }
 
-  removeBlock(block: BlocksContainer) {
+  removeBlock(block: BlockContainer) {
     const idx = this.blocks.indexOf(block)
     this.blocks.splice(idx, 1)
 

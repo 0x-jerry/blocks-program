@@ -2,7 +2,7 @@ import './less/style.less'
 import '@svgdotjs/svg.js'
 import '@svgdotjs/svg.filter.js'
 import { Workspace } from './core/Workspace'
-import { BasicBlocks } from './blocks/BasicBlocks'
+import { BasicBlock } from './blocks/BasicBlocks'
 import { FieldLabel } from './fields/Label'
 import { Gesture } from './utils/Gesture'
 import { FieldText } from './fields/Text'
@@ -27,7 +27,7 @@ ws.svgRoot.css({
   display: 'block'
 })
 
-const block = new BasicBlocks(ws, { x: 50, y: 50 })
+const block = new BasicBlock(ws, { x: 50, y: 50 })
 ws.addBlock(block)
 
 const field = new FieldLabel(block, 'click me')
@@ -44,7 +44,7 @@ field.gesture.on('click', () => {
   field.setValue(newValue)
 })
 
-const block2 = new BasicBlocks(ws, { x: 150, y: 150 })
+const block2 = new BasicBlock(ws, { x: 150, y: 150 })
 ws.addBlock(block2)
 
 const field2 = new FieldLabel(block2, new Date().toISOString())
@@ -56,7 +56,7 @@ setInterval(() => {
 }, 1000)
 
 for (let i = 0; i < 5; i++) {
-  const b = new BasicBlocks(ws, { x: 150 + i * 50, y: 150 + i * 50 })
+  const b = new BasicBlock(ws, { x: 150 + i * 50, y: 150 + i * 50 })
   const f = new FieldLabel(b, 'test ' + i)
   b.addFiled(f)
   ws.addBlock(b)

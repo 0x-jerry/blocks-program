@@ -1,17 +1,18 @@
 import * as SVG from '@svgdotjs/svg.js'
-import { BlocksContainer } from '../blocks/Container'
+import { BlockContainer } from '../blocks/Container'
 import { Gesture } from '../utils/Gesture'
+import { BlockFiled } from '../blocks/BlockField';
 
 export abstract class Field {
   /**
    * All sub properties are only read, don't do side effect things
    */
-  block: BlocksContainer
+  block: BlockContainer
   gesture?: Gesture
 
   shape: SVG.Element
 
-  constructor(block: BlocksContainer, shape: SVG.Element) {
+  constructor(block: BlockContainer, shape: SVG.Element) {
     this.block = block
     this.shape = shape
     this.updatePosition()
@@ -25,7 +26,7 @@ export abstract class Field {
       y: this.block.style.paddingTop
     }
 
-    const previousField = this.getPreviousField()
+    const previousField = this.block.getPreviousField(this)
 
     if (previousField) {
       pos.x = previousField.rectBox().x2
@@ -33,16 +34,6 @@ export abstract class Field {
 
     this.shape.x(pos.x)
     this.shape.y(pos.y)
-  }
-
-  getPreviousField(): Field {
-    const idx = this.block.fields.indexOf(this)
-    return this.block.fields[idx - 1]
-  }
-
-  getNextField() {
-    const idx = this.block.fields.indexOf(this)
-    return this.block.fields[idx + 1]
   }
 
   rectBox() {

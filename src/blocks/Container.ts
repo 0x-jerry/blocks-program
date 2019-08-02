@@ -3,6 +3,7 @@ import Event from 'events'
 import { Gesture } from '../utils/Gesture'
 import { Workspace } from '../core/Workspace'
 import { Field } from '../fields/Field'
+import { BlockFiled } from './BlockField'
 
 export interface BlocksContainerOptions {
   x?: number
@@ -11,8 +12,8 @@ export interface BlocksContainerOptions {
   stroke?: string
 }
 
-export abstract class BlocksContainer extends Event {
-  fields: Field[] = []
+export abstract class BlockContainer extends Event {
+  fields: BlockFiled[] = []
   group: SVG.G
   shape: SVG.Path
   gesture: Gesture
@@ -91,7 +92,7 @@ export abstract class BlocksContainer extends Event {
   }
 
   addFiled(field: Field) {
-    this.fields.push(field)
+    this.fields.push(new BlockFiled(this, field))
     if (field.gesture) {
       this.workspace.gestures.add(field.gesture)
     }
@@ -100,8 +101,13 @@ export abstract class BlocksContainer extends Event {
     this.updateField(field)
   }
 
+  getPreviousField(filed: Field) {
+    const idx = this.fields.findIndex((f) => f.field === filed)
+    return this.fields[idx - 1]
+  }
+
   removeFiled(field: Field) {
-    const idx = this.fields.indexOf(field)
+    const idx = this.fields.findIndex((f) => f.field === field)
     this.fields.splice(idx, 1)
     if (field.gesture) {
       this.workspace.gestures.remove(field.gesture)
@@ -110,8 +116,8 @@ export abstract class BlocksContainer extends Event {
   }
 
   updateField(field: Field) {
-    const idx = this.fields.indexOf(field)
-    this.fields.slice(idx).forEach((f) => f.updatePosition())
+    const idx = this.fields.findIndex((f) => f.field === field)
+    this.fields.slice(idx).forEach((f) => f.update())
     this.update()
   }
 
@@ -128,6 +134,10 @@ export abstract class BlocksContainer extends Event {
 
   dmove(dx: number, dy: number) {
     this.group.translate(dx, dy)
+  }
+
+  rectBox() {
+    return this.group.bbox()
   }
 
   dispose() {

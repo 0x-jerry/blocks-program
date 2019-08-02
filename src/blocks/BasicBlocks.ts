@@ -1,6 +1,6 @@
-import { BlocksContainer } from './Container'
+import { BlockContainer } from './Container'
 
-export class BasicBlocks extends BlocksContainer {
+export class BasicBlock extends BlockContainer {
   calcPath(...opts: any[]): string {
     const width = this.caches.fields.width
     const height = this.caches.fields.height + this.style.paddingTop * 2
