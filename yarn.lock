@@ -777,6 +777,11 @@
   resolved "https://registry.npmjs.org/@svgdotjs/svg.js/-/svg.js-3.0.12.tgz#ef9f743576daaa458d56f4a253680b22c91d3527"
   integrity sha512-2oaomFz21tW5L+LwCVchIr+LiTsNeKH3RguryLr4QpRdilc2Rw1R8T7MyOC1GwyRCZr0Jejx7k72PnHWooSpIg==
 
+"@types/events@^3.0.0":
+  version "3.0.0"
+  resolved "https://registry.npmjs.org/@types/events/-/events-3.0.0.tgz#2862f3f58a9a7f7c3e78d79f130dd4d71c25c2a7"
+  integrity sha512-EaObqwIvayI5a8dCzhFrjKzVwKLxjoG9T6Ppd5CEo07LRKfQ8Yokw54r5+Wq7FaBQ+yXRvQAYPrHwya1/UFt9g==
+
 "@types/q@^1.5.1":
   version "1.5.2"
   resolved "https://registry.npmjs.org/@types/q/-/q-1.5.2.tgz#690a1475b84f2a884fd07cd797c00f5f31356ea8"

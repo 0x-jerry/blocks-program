@@ -1,4 +1,4 @@
-import Event from 'events'
+import { EventEmitter } from "events";
 
 export enum GestureEvent {
   dragging = 'dragging',
@@ -8,7 +8,7 @@ export enum GestureEvent {
   contextmenu = 'contextmenu'
 }
 
-export class GestureManager extends Event {
+export class GestureManager extends EventEmitter {
   nodes: Gesture[] = []
   currentNodes: Gesture[] = []
   isDragging = false
@@ -135,7 +135,7 @@ export interface GestureOptions {
   includeChildren?: boolean
 }
 
-export class Gesture extends Event {
+export class Gesture extends EventEmitter {
   node: DomElement
   opts: Required<GestureOptions>
 
