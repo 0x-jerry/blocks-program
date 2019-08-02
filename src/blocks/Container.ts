@@ -96,7 +96,7 @@ export abstract class BlockContainer extends Event {
     if (field.gesture) {
       this.workspace.gestures.add(field.gesture)
     }
-    this.group.add(field.shape)
+    this.group.add(field.group)
 
     this.updateField(field)
   }

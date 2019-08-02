@@ -5,7 +5,7 @@ import { BlockContainer } from '../blocks/Container'
 export class FieldLabel extends Field {
   value: string
 
-  shape: SVG.Text
+  group: SVG.Text
 
   constructor(block: BlockContainer, value: string = '') {
     const shape = new SVG.Text()
@@ -20,5 +20,9 @@ export class FieldLabel extends Field {
   setValue(value: string) {
     this.value = value
     this.updateSourceBlock()
+  }
+
+  getValue() {
+    return this.value
   }
 }

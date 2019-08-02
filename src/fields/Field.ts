@@ -1,7 +1,6 @@
 import * as SVG from '@svgdotjs/svg.js'
 import { BlockContainer } from '../blocks/Container'
 import { Gesture } from '../utils/Gesture'
-import { BlockFiled } from '../blocks/BlockField';
 
 export abstract class Field {
   /**
@@ -10,11 +9,11 @@ export abstract class Field {
   sourceBlock: BlockContainer
   gesture?: Gesture
 
-  shape: SVG.Element
+  group: SVG.Element
 
-  constructor(block: BlockContainer, shape: SVG.Element) {
+  constructor(block: BlockContainer, group: SVG.Element) {
     this.sourceBlock = block
-    this.shape = shape
+    this.group = group
     this.updatePosition()
   }
 
@@ -34,23 +33,26 @@ export abstract class Field {
       pos.x = previousField.rectBox().x2
     }
 
-    this.shape.x(pos.x)
-    this.shape.y(pos.y)
+    this.group.x(pos.x)
+    this.group.y(pos.y)
   }
 
   rectBox() {
-    return this.shape.bbox()
+    return this.group.bbox()
   }
 
   dispose() {
-    this.shape.remove()
+    this.group.remove()
   }
 
   move(x: number, y: number) {
-    this.shape.transform({
+    this.group.transform({
       position: { x, y }
     })
   }
+
+  abstract setValue(...args: any[]): void
+  abstract getValue(): string
 
   /**
    * Return the data that need to save

@@ -31,7 +31,7 @@ const block = new BasicBlock(ws, { x: 50, y: 50 })
 ws.addBlock(block)
 
 const field = new FieldLabel(block, 'click me')
-field.gesture = new Gesture(field.shape.node)
+field.gesture = new Gesture(field.group.node)
 
 block.addFiled(field)
 block.addFiled(new FieldLabel(block, ' space '))

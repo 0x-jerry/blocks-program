@@ -4,26 +4,33 @@ import { BlockContainer } from '../blocks/Container'
 import { Gesture } from '../utils/Gesture'
 
 export class FieldText extends Field {
+  group: SVG.G
   shape: SVG.Text
   value: string
   inputDom: HTMLInputElement
 
   constructor(block: BlockContainer, value: string = '') {
+    const group = new SVG.G()
+    super(block, group)
+
+    this.group = group
+
     const shape = new SVG.Text()
     shape.text(value)
     shape.addClass('blockly-field-text')
+    this.shape = shape
 
-    super(block, shape)
+    this.group.add(this.shape)
 
     this.value = value
-    this.gesture = new Gesture(this.shape.node)
+    this.gesture = new Gesture(this.group.node)
     this.createInputDom()
     this.initializeGesture()
   }
 
-  initializeGesture() {
+  private initializeGesture() {
     this.gesture.on('click', (e: MouseEvent) => {
-      const shapeBox = this.shape.node.getBoundingClientRect()
+      const shapeBox = this.group.node.getBoundingClientRect()
 
       const widget = this.sourceBlock.workspace.toolWidget
 
@@ -44,9 +51,13 @@ export class FieldText extends Field {
     this.updateSourceBlock()
   }
 
-  createInputDom() {
+  getValue(): string {
+    return this.value
+  }
+
+  private createInputDom() {
     this.inputDom = document.createElement('input')
-    this.inputDom.style.width = this.shape.bbox().w + 'px'
+    this.inputDom.style.width = this.rectBox().w + 'px'
     this.inputDom.classList.add('blockly-tool-widget_input')
 
     this.inputDom.addEventListener('input', (e) => {
@@ -54,7 +65,7 @@ export class FieldText extends Field {
       this.setValue(text)
 
       const fixedInputShake = 1
-      this.inputDom.style.width = (this.shape.bbox().w + fixedInputShake) + 'px'
+      this.inputDom.style.width = this.rectBox().w + fixedInputShake + 'px'
     })
   }
 }
