@@ -53,7 +53,8 @@ export class FieldText extends Field {
       const text = (e.target as HTMLInputElement).value
       this.setValue(text)
 
-      this.inputDom.style.width = this.shape.bbox().w + 'px'
+      const fixedInputShake = 1
+      this.inputDom.style.width = (this.shape.bbox().w + fixedInputShake) + 'px'
     })
   }
 
