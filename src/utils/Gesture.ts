@@ -4,7 +4,8 @@ export enum GestureEvent {
   dragging = 'dragging',
   dragstart = 'dragstart',
   dragend = 'dragend',
-  click = 'click'
+  click = 'click',
+  contextmenu = 'contextmenu'
 }
 
 export class GestureManager extends Event {
@@ -30,48 +31,89 @@ export class GestureManager extends Event {
     this.handleMouseDown = this.handleMouseDown.bind(this)
     this.handleMouseMove = this.handleMouseMove.bind(this)
     this.handleMouseUp = this.handleMouseUp.bind(this)
+    this.handleContextMenu = this.handleContextMenu.bind(this)
 
     document.addEventListener('mousedown', this.handleMouseDown)
     document.addEventListener('mousemove', this.handleMouseMove)
     document.addEventListener('mouseup', this.handleMouseUp)
+    document.addEventListener('contextmenu', this.handleContextMenu)
   }
 
-  private handleMouseDown(e: MouseEvent) {
-    this.currentNodes = []
+  private checkButton(e: MouseEvent, button: 'left' | 'middle' | 'right') {
+    const map = {
+      left: 0,
+      middle: 1,
+      right: 2
+    }
+
+    return e.button === map[button]
+  }
+
+  private checkCurrentNodes(target: Node) {
+    const currentNodes: Gesture[] = []
     this.nodes.forEach((node) => {
       if (node.opts.includeChildren) {
-        if (node.node.contains(e.target as Node)) {
-          this.currentNodes.push(node)
+        if (node.node.contains(target as Node)) {
+          currentNodes.push(node)
         }
       } else {
-        if (node.node === e.target) {
-          this.currentNodes.push(node)
+        if (node.node === target) {
+          currentNodes.push(node)
         }
       }
     })
 
+    return currentNodes
+  }
+
+  private emitWithSelf(event: GestureEvent, ...args: any[]) {
+    this.currentNodes.forEach((n) => n.emit(event, ...args))
+    this.emit(GestureEvent.dragging, ...args)
+  }
+
+  private handleContextMenu(e: MouseEvent) {
+    this.currentNodes = this.checkCurrentNodes(e.target as Node)
+
     if (this.currentNodes.length) {
-      this.currentNodes.forEach((n) => n.emit(GestureEvent.dragstart, e))
-      this.emit(GestureEvent.dragstart, e)
+      e.preventDefault()
+      this.emitWithSelf(GestureEvent.contextmenu, e)
+      this.currentNodes = []
+    }
+  }
+
+  private handleMouseDown(e: MouseEvent) {
+    if (!this.checkButton(e, 'left')) {
+      return
+    }
+
+    this.currentNodes = this.checkCurrentNodes(e.target as Node)
+
+    if (this.currentNodes.length) {
+      this.emitWithSelf(GestureEvent.dragstart, e)
     }
   }
 
   private handleMouseMove(e: MouseEvent) {
+    if (!this.checkButton(e, 'left')) {
+      return
+    }
+
     if (this.currentNodes.length) {
       this.isDragging = true
-      this.currentNodes.forEach((n) => n.emit(GestureEvent.dragging, e))
-      this.emit(GestureEvent.dragging, e)
+      this.emitWithSelf(GestureEvent.dragging, e)
     }
   }
 
   private handleMouseUp(e: MouseEvent) {
+    if (!this.checkButton(e, 'left')) {
+      return
+    }
+
     if (this.currentNodes.length) {
       if (this.isDragging) {
-        this.currentNodes.forEach((n) => n.emit(GestureEvent.dragend, e))
-        this.emit(GestureEvent.dragend, e)
+        this.emitWithSelf(GestureEvent.dragend, e)
       } else {
-        this.currentNodes.forEach((n) => n.emit(GestureEvent.click, e))
-        this.emit(GestureEvent.click, e)
+        this.emitWithSelf(GestureEvent.click, e)
       }
     }
 
@@ -83,6 +125,7 @@ export class GestureManager extends Event {
     document.removeEventListener('mousedown', this.handleMouseDown)
     document.removeEventListener('mousemove', this.handleMouseMove)
     document.removeEventListener('mouseup', this.handleMouseUp)
+    document.removeEventListener('contextmenu', this.handleContextMenu)
   }
 }
 
