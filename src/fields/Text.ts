@@ -1,6 +1,6 @@
 import * as SVG from '@svgdotjs/svg.js'
 import { Field } from './Field'
-import { BlocksContainer } from '../blocks/Container'
+import { BlockContainer } from '../blocks/Container'
 import { Gesture } from '../utils/Gesture'
 
 export class FieldText extends Field {
@@ -8,7 +8,7 @@ export class FieldText extends Field {
   value: string
   inputDom: HTMLInputElement
 
-  constructor(block: BlocksContainer, value: string = '') {
+  constructor(block: BlockContainer, value: string = '') {
     const shape = new SVG.Text()
     shape.text(value)
     shape.addClass('blockly-field-text')

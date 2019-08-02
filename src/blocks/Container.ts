@@ -117,7 +117,7 @@ export abstract class BlockContainer extends Event {
 
   updateField(field: Field) {
     const idx = this.fields.findIndex((f) => f.field === field)
-    this.fields.slice(idx).forEach((f) => f.update())
+    this.fields.slice(idx).forEach((f) => f.updatePosition())
     this.update()
   }
 

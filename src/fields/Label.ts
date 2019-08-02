@@ -1,13 +1,13 @@
 import { Field } from './Field'
 import * as SVG from '@svgdotjs/svg.js'
-import { BlocksContainer } from '../blocks/Container'
+import { BlockContainer } from '../blocks/Container'
 
 export class FieldLabel extends Field {
   value: string
 
   shape: SVG.Text
 
-  constructor(block: BlocksContainer, value: string = '') {
+  constructor(block: BlockContainer, value: string = '') {
     const shape = new SVG.Text()
     shape.addClass('blockly-field-text')
     shape.text(value)

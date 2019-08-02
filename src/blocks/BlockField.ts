@@ -13,11 +13,11 @@ export class BlockFiled {
     this.fieldBlock = null
   }
 
-  update() {
+  updatePosition() {
     if (this.fieldBlock) {
       this.fieldBlock.update()
     } else {
-      this.field.update()
+      this.field.updatePosition()
     }
   }
 
