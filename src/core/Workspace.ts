@@ -47,7 +47,7 @@ export class Workspace {
       this.group.translate(e.movementX, e.movementY)
     })
 
-    this.gesture.on('click', () => {
+    this.gesture.on(GestureEvent.click, () => {
       if (this.gestures.currentNodes.length <= 1) {
         this.toolWidget.hide()
       }

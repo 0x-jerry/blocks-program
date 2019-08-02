@@ -4,7 +4,7 @@ import '@svgdotjs/svg.filter.js'
 import { Workspace } from './core/Workspace'
 import { BasicBlock } from './blocks/BasicBlocks'
 import { FieldLabel } from './fields/Label'
-import { Gesture } from './utils/Gesture'
+import { Gesture, GestureEvent } from './utils/Gesture'
 import { FieldText } from './fields/Text'
 
 const el = document.getElementById('app')
@@ -39,7 +39,7 @@ block.addFiled(new FieldLabel(block, ' space '))
 block.addFiled(new FieldText(block, 'click to input'))
 
 let times = 0
-field.gesture.on('click', () => {
+field.gesture.on(GestureEvent.click, () => {
   const newValue = 'click: ' + times++
   field.setValue(newValue)
 })

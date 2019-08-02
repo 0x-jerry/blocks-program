@@ -1,7 +1,7 @@
 import * as SVG from '@svgdotjs/svg.js'
 import { Field } from './Field'
 import { BlockContainer } from '../blocks/Container'
-import { Gesture } from '../utils/Gesture'
+import { Gesture, GestureEvent } from '../utils/Gesture'
 
 export class FieldText extends Field {
   group: SVG.G
@@ -29,7 +29,7 @@ export class FieldText extends Field {
   }
 
   private initializeGesture() {
-    this.gesture.on('click', (e: MouseEvent) => {
+    this.gesture.on(GestureEvent.click, (e: MouseEvent) => {
       const shapeBox = this.group.node.getBoundingClientRect()
 
       const widget = this.sourceBlock.workspace.toolWidget
