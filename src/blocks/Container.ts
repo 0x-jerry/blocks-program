@@ -12,6 +12,13 @@ export interface BlocksContainerOptions {
 }
 
 export abstract class BlockContainer {
+  static defaultOpt: Required<BlocksContainerOptions> = {
+    x: 0,
+    y: 0,
+    fill: '#eee',
+    stroke: '#000'
+  }
+
   fields: BlockFiled[] = []
   group: SVG.G
   shape: SVG.Path
@@ -33,14 +40,7 @@ export abstract class BlockContainer {
   }
 
   constructor(workspace: Workspace, opt?: BlocksContainerOptions) {
-    const defaultOpt: Required<BlocksContainerOptions> = {
-      x: 0,
-      y: 0,
-      fill: '#eee',
-      stroke: '#000'
-    }
-
-    opt = Object.assign({}, defaultOpt, opt)
+    opt = Object.assign({}, BlockContainer.defaultOpt, opt)
     this.workspace = workspace
     this.shape = new SVG.Path()
     this.group = new SVG.G()

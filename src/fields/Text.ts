@@ -3,7 +3,7 @@ import { Field } from './Field'
 import { BlockContainer } from '../blocks/Container'
 import { Gesture, GestureEvent } from '../utils/Gesture'
 
-export class FieldText extends Field {
+export class FieldText extends Field<string> {
   group: SVG.G
   shape: SVG.Text
   value: string

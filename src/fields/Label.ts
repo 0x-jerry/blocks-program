@@ -2,9 +2,7 @@ import { Field } from './Field'
 import * as SVG from '@svgdotjs/svg.js'
 import { BlockContainer } from '../blocks/Container'
 
-export class FieldLabel extends Field {
-  value: string
-
+export class FieldLabel extends Field<string> {
   group: SVG.Text
 
   constructor(block: BlockContainer, value: string = '') {

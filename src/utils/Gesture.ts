@@ -1,4 +1,4 @@
-import { EventEmitter } from "events";
+import { EventEmitter } from 'events'
 
 export enum GestureEvent {
   dragging = 'dragging',
@@ -136,6 +136,10 @@ export interface GestureOptions {
 }
 
 export class Gesture extends EventEmitter {
+  static defaultOpts: Required<GestureOptions> = {
+    includeChildren: true
+  }
+
   node: DomElement
   opts: Required<GestureOptions>
 
@@ -143,10 +147,6 @@ export class Gesture extends EventEmitter {
     super()
     this.node = node
 
-    const defaultOpts: Required<GestureOptions> = {
-      includeChildren: true
-    }
-
-    this.opts = Object.assign({}, defaultOpts, opt)
+    this.opts = Object.assign({}, Gesture.defaultOpts, opt)
   }
 }

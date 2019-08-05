@@ -2,7 +2,7 @@ import * as SVG from '@svgdotjs/svg.js'
 import { BlockContainer } from '../blocks/Container'
 import { Gesture } from '../utils/Gesture'
 
-export abstract class Field {
+export abstract class Field<T = any> {
   /**
    * All sub properties are only read, don't do side effect things
    */
@@ -10,11 +10,11 @@ export abstract class Field {
   gesture?: Gesture
 
   group: SVG.Element
+  value: T
 
   constructor(block: BlockContainer, group: SVG.Element) {
     this.sourceBlock = block
     this.group = group
-    this.updatePosition()
   }
 
   updateSourceBlock() {
@@ -51,8 +51,8 @@ export abstract class Field {
     })
   }
 
-  abstract setValue(...args: any[]): void
-  abstract getValue(): string
+  abstract setValue(value: T): void
+  abstract getValue(): T
 
   /**
    * Return the data that need to save
