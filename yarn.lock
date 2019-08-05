@@ -765,18 +765,6 @@
     "@parcel/utils" "^1.11.0"
     physical-cpu-count "^2.0.0"
 
-"@svgdotjs/svg.filter.js@^3.0.6":
-  version "3.0.6"
-  resolved "https://registry.npmjs.org/@svgdotjs/svg.filter.js/-/svg.filter.js-3.0.6.tgz#98d986639ec4c746f81d388941c345ed90904208"
-  integrity sha512-OiMpWSKsXzVSYff8qI/YS7NMjpi7A2zEi/Fe9WSI9QMTRF3m/I+h04sTL1juJ6izQ4MfFPnK901qTsUteReq9w==
-  dependencies:
-    "@svgdotjs/svg.js" "3.0.12"
-
-"@svgdotjs/svg.js@3.0.12":
-  version "3.0.12"
-  resolved "https://registry.npmjs.org/@svgdotjs/svg.js/-/svg.js-3.0.12.tgz#ef9f743576daaa458d56f4a253680b22c91d3527"
-  integrity sha512-2oaomFz21tW5L+LwCVchIr+LiTsNeKH3RguryLr4QpRdilc2Rw1R8T7MyOC1GwyRCZr0Jejx7k72PnHWooSpIg==
-
 "@types/events@^3.0.0":
   version "3.0.0"
   resolved "https://registry.npmjs.org/@types/events/-/events-3.0.0.tgz#2862f3f58a9a7f7c3e78d79f130dd4d71c25c2a7"

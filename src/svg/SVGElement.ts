@@ -1,6 +1,6 @@
 import { parseNumber } from './utils'
 
-export class SVGElement<T extends keyof SVGElementTagNameMap = any> {
+export class SElement<T extends keyof SVGElementTagNameMap = any> {
   static ns = 'http://www.w3.org/2000/svg'
 
   dom: SVGElementTagNameMap[T]
@@ -18,7 +18,11 @@ export class SVGElement<T extends keyof SVGElementTagNameMap = any> {
     for (const key in obj) {
       if (obj.hasOwnProperty(key)) {
         const value = obj[key]
-        this.dom.setAttribute(key, value)
+        if (value === null) {
+          this.dom.removeAttribute(key)
+        } else {
+          this.dom.setAttribute(key, value)
+        }
       }
     }
   }
@@ -41,12 +45,35 @@ export class SVGElement<T extends keyof SVGElementTagNameMap = any> {
   }
 
   dmove(dx: number, dy: number) {
-    const x = (this.attr('x') as number) + dx
-    const y = (this.attr('x') as number) + dy
-    this.move(x, y)
+    if (this.dom instanceof SVGGElement) {
+      const baseVal = this.dom.transform.baseVal
+      if (baseVal.numberOfItems) {
+        const x = baseVal.getItem(0).matrix.e + dx
+        const y = baseVal.getItem(0).matrix.f + dy
+        this.move(x, y)
+      } else {
+        this.move(dx, dy)
+      }
+    } else {
+      const x = (this.attr('x') as number) + dx
+      const y = (this.attr('x') as number) + dy
+      this.move(x, y)
+    }
   }
 
-  add(node: SVGElement) {
+  add(node: SElement) {
     this.dom.appendChild(node.dom)
+  }
+
+  dispose() {
+    this.dom.remove()
+  }
+
+  addClass(...classes: string[]) {
+    this.dom.classList.add(...classes)
+  }
+
+  removeClasses(...classes: string[]) {
+    this.dom.classList.remove(...classes)
   }
 }

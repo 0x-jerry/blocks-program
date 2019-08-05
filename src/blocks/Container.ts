@@ -1,8 +1,8 @@
-import * as SVG from '@svgdotjs/svg.js'
 import { Gesture, GestureEvent } from '../utils/Gesture'
 import { Workspace } from '../core/Workspace'
 import { Field } from '../fields/Field'
 import { BlockFiled } from './BlockField'
+import { SElement } from '../svg/SVGElement'
 
 export interface BlocksContainerOptions {
   x?: number
@@ -20,8 +20,8 @@ export abstract class BlockContainer {
   }
 
   fields: BlockFiled[] = []
-  group: SVG.G
-  shape: SVG.Path
+  group: SElement<'g'>
+  shape: SElement<'path'>
   gesture: Gesture
   /**
    * All sub properties are only read, don't do side effect things
@@ -42,9 +42,9 @@ export abstract class BlockContainer {
   constructor(workspace: Workspace, opt?: BlocksContainerOptions) {
     opt = Object.assign({}, BlockContainer.defaultOpt, opt)
     this.workspace = workspace
-    this.shape = new SVG.Path()
-    this.group = new SVG.G()
-    this.gesture = new Gesture(this.group.node)
+    this.shape = new SElement('path')
+    this.group = new SElement('g')
+    this.gesture = new Gesture(this.group.dom)
 
     this.group.add(this.shape)
 
@@ -66,12 +66,12 @@ export abstract class BlockContainer {
     this.gesture.on(GestureEvent.dragging, (e: MouseEvent) => {
       this.dmove(e.movementX, e.movementY)
       const dragFilter = this.workspace.filters.dragFilter
-      this.group.filterWith(dragFilter)
+
+      this.group.attr({ filter: `url(#${dragFilter.id})` })
     })
 
     this.gesture.on(GestureEvent.dragend, () => {
-      // @ts-ignore
-      this.group.unfilter()
+      this.group.attr({ filter: null })
     })
   }
 
@@ -83,9 +83,10 @@ export abstract class BlockContainer {
 
   private updateFieldCache() {
     this.caches.fields.width = this.fields.reduce((pre, cur) => {
-      return pre + cur.rectBox().w
+      return pre + cur.rectBox().width
     }, 0)
-    this.caches.fields.height = Math.max(...this.fields.map((f) => f.rectBox().h), 0)
+
+    this.caches.fields.height = Math.max(...this.fields.map((f) => f.rectBox().height), 0)
   }
 
   addFiled(field: Field) {
@@ -95,7 +96,9 @@ export abstract class BlockContainer {
     }
     this.group.add(field.group)
 
-    this.updateField(field)
+    Promise.resolve().then(() => {
+      this.updateField(field)
+    })
   }
 
   getPreviousField(filed: Field) {
@@ -113,9 +116,12 @@ export abstract class BlockContainer {
   }
 
   updateField(field: Field) {
+    this.updateShapeWithoutCache()
+
     const idx = this.fields.findIndex((f) => f.field === field)
     this.fields.slice(idx).forEach((f) => f.updatePosition())
-    this.updateShapeWithoutCache()
+
+    this.updateShape({ d: this.calcPath() })
   }
 
   updateShapeWithoutCache() {
@@ -124,13 +130,11 @@ export abstract class BlockContainer {
   }
 
   move(x: number, y: number) {
-    this.group.transform({
-      position: { x, y }
-    })
+    this.group.move(x, y)
   }
 
   dmove(dx: number, dy: number) {
-    this.group.translate(dx, dy)
+    this.group.dmove(dx, dy)
   }
 
   rectBox() {
@@ -138,7 +142,7 @@ export abstract class BlockContainer {
   }
 
   dispose() {
-    this.group.remove()
+    this.group.dispose()
   }
 
   /**

@@ -1,16 +1,17 @@
-import * as SVG from '@svgdotjs/svg.js'
 import { FilterManager } from '../utils/SVGEffectManager'
 import { GestureManager, Gesture, GestureEvent } from '../utils/Gesture'
 import { BlockContainer } from '../blocks/Container'
 import { ToolWidget } from '../utils/ToolWidget'
+import { SElement } from '../svg/SVGElement';
+import { SVG } from '../svg/SVG';
 
 export class Workspace {
   filters: FilterManager
 
   domRoot: HTMLElement
 
-  group: SVG.G
-  svgRoot: SVG.Svg
+  group: SElement<'g'>
+  svgRoot: SVG
 
   gesture: Gesture
   gestures: GestureManager
@@ -23,28 +24,28 @@ export class Workspace {
   constructor(el: HTMLElement) {
     this.domRoot = el
 
-    this.group = new SVG.G()
+    this.group = new SElement('g')
 
-    this.svgRoot = SVG.SVG()
+    this.svgRoot = new SVG()
     this.svgRoot.addClass('blockly-workspace')
     this.svgRoot.add(this.group)
 
     this.filters = new FilterManager()
-    this.filters.appendTo(this.svgRoot.defs())
+    this.filters.appendTo(this.svgRoot.defs)
 
-    this.gesture = new Gesture(this.svgRoot.node, { includeChildren: false })
+    this.gesture = new Gesture(this.svgRoot.dom, { includeChildren: false })
 
     this.gestures = new GestureManager()
     this.gestures.add(this.gesture)
 
-    el.appendChild(this.svgRoot.node)
+    el.appendChild(this.svgRoot.dom)
     this.initializeEvents()
     this.toolWidget = new ToolWidget(this)
   }
 
   private initializeEvents() {
     this.gesture.on(GestureEvent.dragging, (e: MouseEvent) => {
-      this.group.translate(e.movementX, e.movementY)
+      this.group.dmove(e.movementX, e.movementY)
     })
 
     this.gesture.on(GestureEvent.click, () => {
@@ -77,7 +78,7 @@ export class Workspace {
   }
 
   dispose() {
-    this.svgRoot.remove()
+    this.svgRoot.dispose()
     this.gestures.dispose()
   }
 

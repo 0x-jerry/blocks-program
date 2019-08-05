@@ -1,32 +1,49 @@
-import * as SVG from '@svgdotjs/svg.js'
-import Filter from '@svgdotjs/svg.filter.js'
+import { SFilter } from '../svg/SVGFilter'
+import { SElement } from '../svg/SVGElement'
 
 export class FilterManager {
-  filters: SVG.Filter[] = []
-  dragFilter: SVG.Filter
+  filters: SFilter[] = []
+  dragFilter: SFilter
 
   constructor() {
     this.buildDragFilter()
   }
 
   buildDragFilter() {
-    // @ts-ignore
-    this.dragFilter = new Filter()
+    this.dragFilter = new SFilter('filter')
+    const offset = new SFilter('feOffset')
+    offset.attr({
+      dx: 0,
+      dy: 0,
+      in: 'SourceAlpha',
+      result: offset.id
+    })
 
-    const blur = this.dragFilter
-      .offset(0, 0)
-      .in(this.dragFilter.$sourceAlpha)
-      .gaussianBlur(2, 2)
+    const blur = new SFilter('feGaussianBlur')
 
-    this.dragFilter.blend(this.dragFilter.$source, blur, null)
-    this.filters.push(this.dragFilter)
+    blur.attr({
+      in: offset.id,
+      result: blur.id,
+      stdDeviation: '2 2'
+    })
+
+    const blend = new SFilter('feBlend')
+    blend.attr({
+      result: blend.id,
+      in: 'SourceGraphic',
+      in2: blur.id
+    })
+
+    this.dragFilter.add(offset)
+    this.dragFilter.add(blur)
+    this.dragFilter.add(blend)
   }
 
-  appendTo(defs: SVG.Defs) {
+  appendTo(defs: SElement) {
     defs.add(this.dragFilter)
   }
 
   dispose() {
-    this.filters.forEach((filter) => filter.remove())
+    this.filters.forEach((filter) => filter.dispose())
   }
 }

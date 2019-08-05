@@ -1,6 +1,6 @@
-import * as SVG from '@svgdotjs/svg.js'
 import { BlockContainer } from '../blocks/Container'
 import { Gesture } from '../utils/Gesture'
+import { SElement } from '../svg/SVGElement'
 
 export abstract class Field<T = any> {
   /**
@@ -9,13 +9,16 @@ export abstract class Field<T = any> {
   sourceBlock: BlockContainer
   gesture?: Gesture
 
-  group: SVG.Element
+  group: SElement
   value: T
 
-  constructor(block: BlockContainer, group: SVG.Element) {
+  constructor(block: BlockContainer, group: SElement) {
     this.sourceBlock = block
     this.group = group
   }
+
+  abstract setValue(value: T): void
+  abstract getValue(): T
 
   updateSourceBlock() {
     this.sourceBlock.updateField(this)
@@ -24,38 +27,32 @@ export abstract class Field<T = any> {
   updatePosition() {
     const pos = {
       x: 0,
-      y: this.sourceBlock.style.paddingTop
+      y: this.rectBox().height 
     }
 
-    const previousField = this.sourceBlock.getPreviousField(this)
+    const idx = this.sourceBlock.fields.findIndex((f) => f.field === this)
 
-    if (previousField) {
-      pos.x = previousField.rectBox().x2
+    if (idx >= 0) {
+      pos.x = this.sourceBlock.fields.slice(0, idx).reduce((pre, cur) => pre + cur.rectBox().width, 0)
     }
 
-    this.group.x(pos.x)
-    this.group.y(pos.y)
+    this.move(pos.x, pos.y)
   }
 
   rectBox() {
     return this.group.bbox()
   }
 
-  dispose() {
-    this.group.remove()
-  }
-
   move(x: number, y: number) {
-    this.group.transform({
-      position: { x, y }
-    })
+    this.group.move(x, y)
   }
-
-  abstract setValue(value: T): void
-  abstract getValue(): T
 
   /**
    * Return the data that need to save
    */
   toJson() {}
+
+  dispose() {
+    this.group.dispose()
+  }
 }

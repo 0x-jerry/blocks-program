@@ -1,14 +1,14 @@
 import { Field } from './Field'
-import * as SVG from '@svgdotjs/svg.js'
 import { BlockContainer } from '../blocks/Container'
+import { SElement } from '../svg/SVGElement'
 
 export class FieldLabel extends Field<string> {
-  group: SVG.Text
+  group: SElement<'text'>
 
   constructor(block: BlockContainer, value: string = '') {
-    const shape = new SVG.Text()
+    const shape = new SElement('text')
     shape.addClass('blockly-field-text')
-    shape.text(value)
+    shape.dom.textContent = value
 
     super(block, shape)
 
@@ -17,7 +17,7 @@ export class FieldLabel extends Field<string> {
 
   setValue(value: string) {
     this.value = value
-    this.group.text(value)
+    this.group.dom.textContent = value
     this.updateSourceBlock()
   }
 
