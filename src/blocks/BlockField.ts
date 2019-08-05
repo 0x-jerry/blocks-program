@@ -17,7 +17,18 @@ export class BlockFiled {
     if (this.fieldBlock) {
       this.fieldBlock.updateShapeWithoutCache()
     } else {
-      this.field.updatePosition()
+      const pos = {
+        x: 0,
+        y: this.sourceBlock.style.paddingTop
+      }
+
+      const idx = this.sourceBlock.fields.findIndex((f) => f.field === this.field)
+
+      if (idx >= 0) {
+        pos.x = this.sourceBlock.fields.slice(0, idx).reduce((pre, cur) => pre + cur.rectBox().width, 0)
+      }
+
+      this.field.updatePosition(pos.x, pos.y)
     }
   }
 

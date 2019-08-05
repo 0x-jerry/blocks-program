@@ -24,16 +24,14 @@ export abstract class Field<T = any> {
     this.sourceBlock.updateField(this)
   }
 
-  updatePosition() {
+  updatePosition(startX: number, startY: number) {
+    const textBaseLineGap = 4
+
+    const height = this.rectBox().height - textBaseLineGap
+
     const pos = {
-      x: 0,
-      y: this.rectBox().height 
-    }
-
-    const idx = this.sourceBlock.fields.findIndex((f) => f.field === this)
-
-    if (idx >= 0) {
-      pos.x = this.sourceBlock.fields.slice(0, idx).reduce((pre, cur) => pre + cur.rectBox().width, 0)
+      x: startX,
+      y: startY + height
     }
 
     this.move(pos.x, pos.y)
