@@ -17,7 +17,7 @@ export class FieldText extends Field<string> {
 
     const shape = new SElement('text')
     shape.dom.textContent = value
-    shape.addClass('blockly-field-text')
+    shape.addClasses('blockly-field-text')
     this.shape = shape
 
     this.group.add(this.shape)

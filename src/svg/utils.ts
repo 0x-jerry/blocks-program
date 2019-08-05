@@ -1,4 +1,4 @@
-export function parseNumber(numerical: string): number {
+export function parsePixelOrNumber(numerical: string): number {
   if (typeof numerical !== 'string') {
     console.warn(numerical, 'may not a numerical')
     return NaN

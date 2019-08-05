@@ -27,7 +27,7 @@ export class Workspace {
     this.group = new SElement('g')
 
     this.svgRoot = new SVG()
-    this.svgRoot.addClass('blockly-workspace')
+    this.svgRoot.addClasses('blockly-workspace')
     this.svgRoot.add(this.group)
 
     this.filters = new FilterManager()

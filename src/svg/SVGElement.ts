@@ -1,20 +1,27 @@
-import { parseNumber } from './utils'
+import { parsePixelOrNumber } from './utils'
 
 export class SElement<T extends keyof SVGElementTagNameMap = any> {
   static ns = 'http://www.w3.org/2000/svg'
 
   dom: SVGElementTagNameMap[T]
 
+  x: number
+  y: number
+
   constructor(type: T) {
     this.dom = document.createElementNS('http://www.w3.org/2000/svg', type)
+    this.x = 0
+    this.y = 0
   }
 
   attr(obj: object | string) {
     if (typeof obj === 'string') {
       const attr = this.dom.getAttribute(obj)
-      const mayNumber = parseNumber(attr)
+      const mayNumber = parsePixelOrNumber(attr)
+
       return Number.isNaN(mayNumber) ? attr : mayNumber
     }
+
     for (const key in obj) {
       if (obj.hasOwnProperty(key)) {
         const value = obj[key]
@@ -35,6 +42,9 @@ export class SElement<T extends keyof SVGElementTagNameMap = any> {
   }
 
   move(x: number, y: number) {
+    this.x = x
+    this.y = y
+
     if (this.dom instanceof SVGGElement) {
       this.attr({
         transform: `translate(${x}, ${y})`
@@ -45,20 +55,7 @@ export class SElement<T extends keyof SVGElementTagNameMap = any> {
   }
 
   dmove(dx: number, dy: number) {
-    if (this.dom instanceof SVGGElement) {
-      const baseVal = this.dom.transform.baseVal
-      if (baseVal.numberOfItems) {
-        const x = baseVal.getItem(0).matrix.e + dx
-        const y = baseVal.getItem(0).matrix.f + dy
-        this.move(x, y)
-      } else {
-        this.move(dx, dy)
-      }
-    } else {
-      const x = (this.attr('x') as number) + dx
-      const y = (this.attr('x') as number) + dy
-      this.move(x, y)
-    }
+    this.move(this.x + dx, this.y + dy)
   }
 
   add(node: SElement) {
@@ -69,7 +66,7 @@ export class SElement<T extends keyof SVGElementTagNameMap = any> {
     this.dom.remove()
   }
 
-  addClass(...classes: string[]) {
+  addClasses(...classes: string[]) {
     this.dom.classList.add(...classes)
   }
 

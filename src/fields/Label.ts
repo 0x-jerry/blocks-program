@@ -7,7 +7,7 @@ export class FieldLabel extends Field<string> {
 
   constructor(block: BlockContainer, value: string = '') {
     const shape = new SElement('text')
-    shape.addClass('blockly-field-text')
+    shape.addClasses('blockly-field-text')
     shape.dom.textContent = value
 
     super(block, shape)
