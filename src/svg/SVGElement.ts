@@ -1,17 +1,17 @@
 import { parsePixelOrNumber } from './utils'
+import { TransformMatrix } from './TransformMatrix'
 
 export class SElement<T extends keyof SVGElementTagNameMap> {
   static ns = 'http://www.w3.org/2000/svg'
 
   dom: SVGElementTagNameMap[T]
 
-  x: number
-  y: number
+  private transform: TransformMatrix
 
   constructor(type: T) {
     this.dom = document.createElementNS('http://www.w3.org/2000/svg', type)
-    this.x = 0
-    this.y = 0
+
+    this.transform = new TransformMatrix(this)
   }
 
   attr(obj: object | string) {
@@ -42,20 +42,11 @@ export class SElement<T extends keyof SVGElementTagNameMap> {
   }
 
   move(x: number, y: number) {
-    this.x = x
-    this.y = y
-
-    if (this.dom instanceof SVGGElement) {
-      this.attr({
-        transform: `translate(${x}, ${y})`
-      })
-    } else {
-      this.attr({ x, y })
-    }
+    this.transform.move(x, y)
   }
 
   dmove(dx: number, dy: number) {
-    this.move(this.x + dx, this.y + dy)
+    this.move(this.transform.x + dx, this.transform.y + dy)
   }
 
   add(node: SElement<any>) {
