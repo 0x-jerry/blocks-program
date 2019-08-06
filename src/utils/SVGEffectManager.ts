@@ -2,8 +2,8 @@ import { SFilter } from '../svg/SVGFilter'
 import { SElement } from '../svg/SVGElement'
 
 export class FilterManager {
-  filters: SFilter[] = []
-  dragFilter: SFilter
+  filters: SFilter<'filter'>[] = []
+  dragFilter: SFilter<'filter'>
 
   constructor() {
     this.buildDragFilter()
@@ -39,7 +39,7 @@ export class FilterManager {
     this.dragFilter.add(blend)
   }
 
-  appendTo(defs: SElement) {
+  appendTo(defs: SElement<any>) {
     defs.add(this.dragFilter)
   }
 
