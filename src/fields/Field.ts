@@ -26,12 +26,16 @@ export abstract class Field<T = any> {
 
   updatePosition(startX: number, startY: number) {
     const textBaseLineGap = 4
+    const box = this.rectBox()
 
-    const height = this.rectBox().height - textBaseLineGap
+    const originY = box.height - textBaseLineGap
+
+    const totalHeight = this.sourceBlock.caches.fields.height
+    const offsetY = (totalHeight - box.height) / 2
 
     const pos = {
       x: startX,
-      y: startY + height
+      y: startY + originY + offsetY
     }
 
     this.move(pos.x, pos.y)

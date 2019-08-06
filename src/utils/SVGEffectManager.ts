@@ -34,9 +34,7 @@ export class FilterManager {
       in2: blur.id
     })
 
-    this.dragFilter.add(offset)
-    this.dragFilter.add(blur)
-    this.dragFilter.add(blend)
+    this.dragFilter.add(offset, blur, blend)
   }
 
   appendTo(defs: SElement<any>) {

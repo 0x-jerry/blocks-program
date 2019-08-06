@@ -49,8 +49,10 @@ export class SElement<T extends keyof SVGElementTagNameMap> {
     this.move(this.transform.x + dx, this.transform.y + dy)
   }
 
-  add(node: SElement<any>) {
-    this.dom.appendChild(node.dom)
+  add(...nodes: SElement<any>[]) {
+    nodes.forEach((node) => {
+      this.dom.appendChild(node.dom)
+    })
   }
 
   dispose() {
