@@ -9,10 +9,10 @@ export abstract class Field<T = any> {
   sourceBlock: BlockContainer
   gesture?: Gesture
 
-  group: SElement
+  group: SElement<any>
   value: T
 
-  constructor(block: BlockContainer, group: SElement) {
+  constructor(block: BlockContainer, group: SElement<any>) {
     this.sourceBlock = block
     this.group = group
   }

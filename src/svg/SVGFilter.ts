@@ -1,12 +1,12 @@
 import { SElement } from './SVGElement'
-import { uid } from './utils'
+import { uuid } from './utils'
 
-export class SFilter<T extends keyof SVGElementTagNameMap = 'filter'> extends SElement<T> {
+export class SFilter<T extends keyof SVGElementTagNameMap> extends SElement<T> {
   readonly id: string
 
   constructor(type: T) {
     super(type)
-    this.id = uid()
+    this.id = uuid.next()
     this.attr({ id: this.id })
   }
 }

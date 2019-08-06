@@ -3,7 +3,7 @@ export function parsePixelOrNumber(numerical: string): number {
     console.warn(numerical, 'may not a numerical')
     return NaN
   }
-  
+
   const numberReg = /^[\d\.]+(px)?$/
 
   if (numerical.match(numberReg)) {
@@ -14,7 +14,10 @@ export function parsePixelOrNumber(numerical: string): number {
   return NaN
 }
 
-let uuid = 0
-export function uid() {
-  return `blockly-` + uuid++
+export const uuid = {
+  _prefix: 'blockly-',
+  _uid: 0,
+  next() {
+    return uuid._prefix + uuid._uid++
+  }
 }

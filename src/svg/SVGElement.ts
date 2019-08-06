@@ -1,6 +1,6 @@
 import { parsePixelOrNumber } from './utils'
 
-export class SElement<T extends keyof SVGElementTagNameMap = any> {
+export class SElement<T extends keyof SVGElementTagNameMap> {
   static ns = 'http://www.w3.org/2000/svg'
 
   dom: SVGElementTagNameMap[T]
@@ -58,7 +58,7 @@ export class SElement<T extends keyof SVGElementTagNameMap = any> {
     this.move(this.x + dx, this.y + dy)
   }
 
-  add(node: SElement) {
+  add(node: SElement<any>) {
     this.dom.appendChild(node.dom)
   }
 
