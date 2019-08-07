@@ -12,6 +12,18 @@ export class SElement<T extends keyof SVGElementTagNameMap> {
     this.dom = document.createElementNS('http://www.w3.org/2000/svg', type)
 
     this.transform = new TransformMatrix(this)
+    this.textElementPreSetting()
+  }
+
+  private textElementPreSetting() {
+    if (!(this.dom instanceof SVGTextElement)) {
+      return
+    }
+
+    this.attr({
+      textAnchor: 'middle',
+      dominantBaseline: 'middle'
+    })
   }
 
   attr(obj: object | string) {
@@ -25,10 +37,12 @@ export class SElement<T extends keyof SVGElementTagNameMap> {
     for (const key in obj) {
       if (obj.hasOwnProperty(key)) {
         const value = obj[key]
+        const lowerCase = key.replace(/[A-Z]/g, (k) => `-${k.toLowerCase()}`)
+
         if (value === null) {
-          this.dom.removeAttribute(key)
+          this.dom.removeAttribute(lowerCase)
         } else {
-          this.dom.setAttribute(key, value)
+          this.dom.setAttribute(lowerCase, value)
         }
       }
     }

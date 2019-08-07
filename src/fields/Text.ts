@@ -6,7 +6,6 @@ import { SElement } from '../svg/SVGElement'
 export class FieldText extends Field<string> {
   group: SElement<'g'>
   shape: SElement<'text'>
-  value: string
   inputDom: HTMLInputElement
 
   constructor(block: BlockContainer, value: string = '') {
