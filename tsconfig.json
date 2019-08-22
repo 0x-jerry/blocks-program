@@ -1,0 +1,8 @@
+{
+  "include": ["src", "public"],
+  "compilerOptions": {
+    "rootDir": ".",
+    "moduleResolution": "classic",
+    "target": "es6"
+  }
+}

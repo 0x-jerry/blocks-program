@@ -1,6 +1,6 @@
 import { FilterManager } from '../utils/SVGEffectManager'
 import { GestureManager, Gesture, GestureEvent } from '../utils/Gesture'
-import { BlockContainer } from '../blocks/Container'
+import { Blocks } from './Blocks'
 import { ToolWidget } from '../utils/ToolWidget'
 import { SElement } from '../svg/SVGElement';
 import { SVG } from '../svg/SVG';
@@ -16,8 +16,8 @@ export class Workspace {
   gesture: Gesture
   gestures: GestureManager
 
-  selectedBlock?: BlockContainer
-  blocks: BlockContainer[] = []
+  selectedBlock?: Blocks
+  blocks: Blocks[] = []
 
   toolWidget: ToolWidget
 
@@ -55,12 +55,12 @@ export class Workspace {
     })
   }
 
-  selectBlock(block: BlockContainer) {
+  selectBlock(block: Blocks) {
     this.group.add(block.group)
     this.selectedBlock = block
   }
 
-  addBlock(block: BlockContainer) {
+  addBlock(block: Blocks) {
     this.blocks.push(block)
 
     this.gestures.add(block.gesture)
@@ -68,7 +68,7 @@ export class Workspace {
     this.group.add(block.group)
   }
 
-  removeBlock(block: BlockContainer) {
+  removeBlock(block: Blocks) {
     const idx = this.blocks.indexOf(block)
     this.blocks.splice(idx, 1)
 

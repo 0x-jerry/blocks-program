@@ -1,11 +1,11 @@
 import { Field } from './Field'
-import { BlockContainer } from '../blocks/Container'
+import { Blocks } from '../core/Blocks'
 import { SElement } from '../svg/SVGElement'
 
 export class FieldLabel extends Field<string> {
   shape: SElement<'text'>
 
-  constructor(block: BlockContainer, value: string = '') {
+  constructor(block: Blocks, value: string = '') {
     const shape = new SElement('text')
     super(block, shape)
 

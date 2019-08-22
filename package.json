@@ -4,7 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "start": "parcel src/index.html"
+    "start": "parcel public/index.html"
   },
   "dependencies": {
     "events": "^3.0.0",

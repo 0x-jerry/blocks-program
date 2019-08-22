@@ -1,5 +1,5 @@
 import { Gesture, GestureEvent } from '../utils/Gesture'
-import { Workspace } from '../core/Workspace'
+import { Workspace } from './Workspace'
 import { Field } from '../fields/Field'
 import { BlockFiled } from './BlockField'
 import { SElement } from '../svg/SVGElement'
@@ -11,7 +11,7 @@ export interface BlocksContainerOptions {
   stroke?: string
 }
 
-export abstract class BlockContainer {
+export class Blocks {
   static defaultOpt: Required<BlocksContainerOptions> = {
     x: 0,
     y: 0,
@@ -40,7 +40,7 @@ export abstract class BlockContainer {
   }
 
   constructor(workspace: Workspace, opt?: BlocksContainerOptions) {
-    opt = Object.assign({}, BlockContainer.defaultOpt, opt)
+    opt = Object.assign({}, Blocks.defaultOpt, opt)
     this.workspace = workspace
     this.shape = new SElement('path')
     this.group = new SElement('g')
@@ -75,7 +75,26 @@ export abstract class BlockContainer {
     })
   }
 
-  abstract calcPath(...opts: any[]): string
+  calcPath(...opts: any[]): string {
+    const width = this.caches.fields.width
+    const height = this.caches.fields.height + this.style.paddingTop * 2
+
+    const radius = height / 2
+
+    const path = []
+    path.push('M', 0, 0)
+    // left radius
+    path.push('c', -radius, 0, -radius, height, 0, height)
+    // body
+    path.push('h', width)
+
+    // right radius
+    path.push('c', radius, 0, radius, -height, 0, -height)
+
+    path.push('z')
+
+    return path.join(' ')
+  }
 
   private updateShape(opt: { fill?: string; stroke?: string; d?: string }) {
     this.shape.attr(opt)

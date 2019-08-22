@@ -1,5 +1,5 @@
 import { Field } from './Field'
-import { BlockContainer } from '../blocks/Container'
+import { Blocks } from '../core/Blocks'
 import { Gesture, GestureEvent } from '../utils/Gesture'
 import { SElement } from '../svg/SVGElement'
 
@@ -8,7 +8,7 @@ export class FieldText extends Field<string> {
   shape: SElement<'text'>
   inputDom: HTMLInputElement
 
-  constructor(block: BlockContainer, value: string = '') {
+  constructor(block: Blocks, value: string = '') {
     const group = new SElement('g')
     super(block, group)
 

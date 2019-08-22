@@ -1,4 +1,4 @@
-import { BlockContainer } from '../blocks/Container'
+import { Blocks } from '../core/Blocks'
 import { Gesture } from '../utils/Gesture'
 import { SElement } from '../svg/SVGElement'
 
@@ -6,13 +6,13 @@ export abstract class Field<T = any> {
   /**
    * All sub properties are only read, don't do side effect things
    */
-  sourceBlock: BlockContainer
+  sourceBlock: Blocks
   gesture?: Gesture
 
   group: SElement<any>
   value: T
 
-  constructor(block: BlockContainer, group: SElement<any>) {
+  constructor(block: Blocks, group: SElement<any>) {
     this.sourceBlock = block
     this.group = group
   }

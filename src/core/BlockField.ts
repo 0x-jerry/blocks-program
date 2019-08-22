@@ -1,13 +1,13 @@
 import { Field } from '../fields/Field'
-import { BlockContainer } from './Container'
+import { Blocks } from './Blocks'
 
 export class BlockFiled {
   field: Field
-  fieldBlock?: BlockContainer
+  fieldBlock?: Blocks
 
-  sourceBlock: BlockContainer
+  sourceBlock: Blocks
 
-  constructor(source: BlockContainer, field: Field) {
+  constructor(source: Blocks, field: Field) {
     this.sourceBlock = source
     this.field = field
     this.fieldBlock = null
@@ -32,7 +32,7 @@ export class BlockFiled {
     }
   }
 
-  updateField(fieldBlock?: BlockContainer) {
+  updateField(fieldBlock?: Blocks) {
     this.fieldBlock = fieldBlock
   }
 
