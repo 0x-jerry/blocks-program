@@ -1,5 +1,5 @@
-import '../src/less/style.less'
-import { Workspace, Blocks, FieldLabel, Gesture, GestureEvent, FieldText } from '../src/index'
+import './less/style.less'
+import { Workspace, Blocks, FieldLabel, Gesture, GestureEvent, FieldText } from './index'
 
 const el = document.getElementById('app')
 
