@@ -1,4 +1,4 @@
-import { Vec2 } from '../src/Vec2'
+import { Vec2 } from '../src'
 
 describe('Vec2', () => {
   it('constructor', () => {
