@@ -17,13 +17,12 @@
     "resolveJsonModule": true,
     "esModuleInterop": true,
     "lib": ["esnext", "dom"],
-    // "types": ["jest", "puppeteer", "node"],
+    "types": ["jest", "node"],
     "rootDir": ".",
     "paths": {
       "@x/core": ["packages/core/src"],
       "@x/fields": ["packages/fields/src"],
       "@x/generator": ["packages/generator/src"],
-      "@x/plugins": ["packages/plugins/src"],
       "@x/renderer": ["packages/renderer/src"],
       "@x/shared": ["packages/shared/src"]
     }

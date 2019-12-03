@@ -11,7 +11,7 @@ module.exports = {
     filename: 'index.js',
   },
   resolve: {
-    extensions: ['.ts', '.js'],
+    extensions: ['.ts'],
   },
   devtool: '#cheap-eval-source-map',
   devServer: {
