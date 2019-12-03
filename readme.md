@@ -9,7 +9,7 @@ Yarn: Package manager
 Lerna: Multiple packages manager
 
 ```sh
-yarn && yarn dev
+yarn && yarn test
 ```
 
 ## TODO

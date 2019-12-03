@@ -1,6 +1,11 @@
 {
-  "include": ["packages/global.d.ts", "packages/*/src"],
-  "exclude": ["node_modules"],
+  "include": [
+    "src/global.d.ts",
+    "src/*"
+  ],
+  "exclude": [
+    "node_modules"
+  ],
   "compilerOptions": {
     "baseUrl": ".",
     "outDir": "dist",
@@ -16,15 +21,14 @@
     "experimentalDecorators": true,
     "resolveJsonModule": true,
     "esModuleInterop": true,
-    "lib": ["esnext", "dom"],
-    "types": ["jest", "node"],
-    "rootDir": ".",
-    "paths": {
-      "@x/core": ["packages/core/src"],
-      "@x/fields": ["packages/fields/src"],
-      "@x/generator": ["packages/generator/src"],
-      "@x/renderer": ["packages/renderer/src"],
-      "@x/shared": ["packages/shared/src"]
-    }
+    "lib": [
+      "esnext",
+      "dom"
+    ],
+    "types": [
+      "jest",
+      "node"
+    ],
+    "rootDir": "."
   }
 }

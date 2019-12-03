@@ -1,4 +1,4 @@
-import { uid } from '../src'
+import { uid } from '../utils'
 
 describe('utils', () => {
   it('uid', () => {
