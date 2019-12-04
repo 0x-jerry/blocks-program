@@ -34,12 +34,15 @@ export class Block {
 
   constructor(id: string = uid()) {
     this.id = id
-    this.fieldManager = new BlockFieldManager(this)
     this.slots = []
-    this.parent = new Observer()
-    this.next = new Observer()
 
+    this.fieldManager = new BlockFieldManager()
+    this.fieldManager.setBlock(this)
+
+    this.next = new Observer()
     this.next.sub(this.nextUpdate)
+
+    this.parent = new Observer()
     this.parent.sub(this.parentUpdate)
   }
 
@@ -58,12 +61,7 @@ export class Block {
   }
 
   addField(field: BlockField, row: number = 0) {
-    const count = this.fieldManager.getRowCount(row)
-
-    field.setRow(row)
-    field.setIndex(count + 1)
-
-    this.fieldManager.add(field)
+    this.fieldManager.add(field, row)
   }
 
   connectTo(block: Block) {
