@@ -33,7 +33,7 @@ export class Observer<T = any> {
     }
   }
 
-  set(newVal: T) {
+  set(newVal: T | null) {
     if (this._value === newVal) {
       return
     }

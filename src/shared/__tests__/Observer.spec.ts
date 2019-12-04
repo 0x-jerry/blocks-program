@@ -7,7 +7,7 @@ describe('Observer', () => {
     observer = new Observer()
   })
 
-  it('Subscribe duplicate', () => {
+  it('subscribe duplicate', () => {
     const fn = jest.fn()
 
     observer.sub(fn)
@@ -18,7 +18,7 @@ describe('Observer', () => {
     expect(fn).toBeCalledTimes(1)
   })
 
-  it('Sub', (done) => {
+  it('sub', (done) => {
     const fn: ObserverCallbackFunc<number> = (now, pre) => {
       expect(now).toBe(1)
       expect(pre).toBe(null)
@@ -31,7 +31,15 @@ describe('Observer', () => {
     observer.set(1)
   })
 
-  it('Sub multi', () => {
+  it('set', () => {
+    observer.set(1)
+    expect(observer.value).toBe(1)
+
+    observer.set(null)
+    expect(observer.value).toBe(null)
+  })
+
+  it('sub multi', () => {
     const fn1 = jest.fn()
     const fn2 = jest.fn()
 
