@@ -1,5 +1,5 @@
 import { Block } from './Block'
-import { BlockField } from 'packages/fields/src/BlockField'
+import { BlockField } from '../fields'
 
 export class BlockFieldManager {
   /**

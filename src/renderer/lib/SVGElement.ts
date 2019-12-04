@@ -1,5 +1,6 @@
 import { parsePixelOrNumber } from '../utils/utils'
 import { TransformMatrix } from '../utils/TransformMatrix'
+import { ObjectAny } from '@/typedef'
 
 export class SElement<T extends keyof SVGElementTagNameMap> {
   static ns = 'http://www.w3.org/2000/svg'

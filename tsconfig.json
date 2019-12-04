@@ -1,7 +1,7 @@
 {
   "include": [
-    "src/global.d.ts",
-    "src/*"
+    "src",
+    "example"
   ],
   "exclude": [
     "node_modules"
@@ -29,6 +29,11 @@
       "jest",
       "node"
     ],
+    "paths": {
+      "@/*": [
+        "src/*"
+      ]
+    },
     "rootDir": "."
   }
 }
