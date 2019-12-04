@@ -10,6 +10,10 @@
     "events": "^3.0.0"
   },
   "devDependencies": {
+    "@babel/core": "^7.7.4",
+    "@babel/plugin-proposal-optional-chaining": "^7.7.4",
+    "@babel/preset-env": "^7.7.4",
+    "@babel/preset-typescript": "^7.7.4",
     "@types/events": "^3.0.0",
     "@types/jest": "^24.0.23",
     "jest": "^24.9.0",
