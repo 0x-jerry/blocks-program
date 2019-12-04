@@ -1,9 +1,8 @@
 import { Workspace } from './Workspace'
 import { BlockSlot } from './BlockSlot'
-import { uid } from '../shared'
 import { BlockFieldManager } from './BlockFieldsManager'
 import { BlockField } from '@/fields'
-import { Observer, ObserverCallbackFunc } from '@/shared/Observer'
+import { Observer, ObserverCallbackFunc, uid } from '@/shared'
 
 export class Block {
   /**

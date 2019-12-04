@@ -47,7 +47,7 @@ export class BlockFieldManager {
   getRow(row: number): BlockField[] {
     const fields = this.fields.filter((f) => f.row === row)
 
-    fields.sort((a, b) => (a.idx > b.idx ? -1 : 1))
+    fields.sort((a, b) => (a.index > b.index ? -1 : 1))
 
     return fields
   }
