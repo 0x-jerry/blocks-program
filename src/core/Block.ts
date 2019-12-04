@@ -17,6 +17,8 @@ export class BlockConfig {
 
   constructor(opts: Partial<BlockConfigOption> = {}) {
     this.output = []
+    this.next = false
+    this.previous = false
 
     this.update(opts)
   }
