@@ -15,6 +15,6 @@
     "jest": "^24.9.0",
     "lerna": "^3.19.0",
     "ts-jest": "^24.2.0",
-    "typescript": "^3.5.3"
+    "typescript": "^3.7.2"
   }
 }
