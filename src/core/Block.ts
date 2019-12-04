@@ -4,6 +4,31 @@ import { BlockFieldManager } from './BlockFieldsManager'
 import { BlockField } from '@/fields'
 import { Observer, ObserverCallbackFunc, uid } from '@/shared'
 
+export interface BlockConfigOption {
+  output: string[] | string
+  next: Boolean
+  previous: Boolean
+}
+
+export class BlockConfig {
+  output: string[]
+  next: Boolean
+  previous: Boolean
+
+  constructor(opts: Partial<BlockConfigOption> = {}) {
+    this.output = []
+
+    this.update(opts)
+  }
+
+  update(opts: Partial<BlockConfigOption> = {}) {
+    this.output = (<string[]>[]).concat(opts.output ?? [])
+
+    this.next = opts.next ?? this.next
+    this.previous = opts.previous ?? this.next
+  }
+}
+
 export class Block {
   /**
    * Next block
@@ -12,6 +37,7 @@ export class Block {
   parent: Observer<Block>
   slots: BlockSlot[]
   fieldManager: BlockFieldManager
+  config: BlockConfig
 
   readonly id: string
 
@@ -36,6 +62,8 @@ export class Block {
     this.id = id
     this.slots = []
 
+    this.config = new BlockConfig()
+
     this.fieldManager = new BlockFieldManager()
     this.fieldManager.setBlock(this)
 
@@ -54,6 +82,10 @@ export class Block {
   private parentUpdate: ObserverCallbackFunc<Block> = (now, pre) => {
     pre?.next.set(null)
     now?.next.set(this)
+  }
+
+  setBlockConfig(opts: Partial<BlockConfigOption> = {}) {
+    this.config.update(opts)
   }
 
   setWorkspace(w: Workspace | null) {

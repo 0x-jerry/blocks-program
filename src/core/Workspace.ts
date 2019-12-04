@@ -40,6 +40,10 @@ export class Workspace {
     if (block.isRoot) {
       this.addRootBlock(block)
     }
+
+    if (block.next.value) {
+      this.addBlock(block.next.value)
+    }
   }
 
   removeBlock(block: Block) {
@@ -48,11 +52,23 @@ export class Workspace {
     }
 
     if (block.isRoot) {
-      const idx = this.blockRoots.indexOf(block)
-      this.blockRoots.splice(idx, 1)
+      removeArrayItem(this.blockRoots, block)
     }
 
     removeArrayItem(this.blockDB, block)
+
     block.setWorkspace(null)
+
+    if (block.next.value) {
+      this.removeBlock(block.next.value)
+    }
+  }
+
+  connectBlock(parent: Block, block: Block) {
+    if (block.isRoot) {
+      removeArrayItem(this.blockRoots, block)
+    }
+
+    block.connectTo(parent)
   }
 }
