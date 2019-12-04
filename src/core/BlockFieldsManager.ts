@@ -1,5 +1,6 @@
 import { Block } from './Block'
 import { BlockField } from '../fields'
+import { getId, removeArrayItem } from '@/shared'
 
 export class BlockFieldManager {
   /**
@@ -13,14 +14,22 @@ export class BlockFieldManager {
     this.$b = block
   }
 
-  hasField(field: BlockField): false | BlockField {
-    return this.fields.find((f) => f.id === field.id) || false
+  has(fieldOrId: BlockField | string): false | BlockField {
+    const id = getId(fieldOrId)
+
+    return this.fields.find((f) => f.id === id) || false
   }
 
-  addField(field: BlockField) {
-    if (!this.hasField(field)) {
+  add(field: BlockField) {
+    if (!this.has(field)) {
       this.fields.push(field)
     }
+  }
+
+  remove(fieldOrId: BlockField | string) {
+    const id = getId(fieldOrId)
+
+    removeArrayItem(this.fields, (f) => f.id === id)
   }
 
   /**

@@ -1,4 +1,4 @@
-import { uid } from '@/shared'
+import { uid, removeArrayItem } from '@/shared'
 import { Block } from './Block'
 
 export class Workspace {
@@ -32,10 +32,7 @@ export class Workspace {
       this.blockRoots.splice(idx, 1)
     }
 
-    const idx = this.blockDB.indexOf(block)
-    if (idx >= 0) {
-      this.blockDB.splice(idx, 1)
-    }
+    removeArrayItem(this.blockDB, block)
 
     block.destroy()
   }
