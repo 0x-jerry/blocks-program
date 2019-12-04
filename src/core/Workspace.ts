@@ -1,4 +1,4 @@
-import { uid, removeArrayItem } from '@/shared'
+import { uid, removeArrayItem, getId } from '@/shared'
 import { Block } from './Block'
 
 export class Workspace {
@@ -10,15 +10,35 @@ export class Workspace {
   constructor(id: string = uid()) {
     this.id = id
     this.blockDB = []
+    this.blockRoots = []
   }
 
-  hasBlock(block: Block): false | Block {
-    return this.blockDB.find((b) => b.id === block.id) || false
+  hasRootBlock(blockOrId: Block | string): false | Block {
+    const id = getId(blockOrId)
+
+    return this.blockRoots.find((b) => b.id === id) || false
+  }
+
+  private addRootBlock(block: Block) {
+    if (!this.hasRootBlock(block)) {
+      this.blockRoots.push(block)
+    }
+  }
+
+  hasBlock(block: Block | string): false | Block {
+    const id = getId(block)
+
+    return this.blockDB.find((b) => b.id === id) || false
   }
 
   addBlock(block: Block) {
     if (!this.hasBlock(block)) {
       this.blockDB.push(block)
+      block.setWorkspace(this)
+    }
+
+    if (block.isRoot) {
+      this.addRootBlock(block)
     }
   }
 
@@ -33,7 +53,6 @@ export class Workspace {
     }
 
     removeArrayItem(this.blockDB, block)
-
-    block.destroy()
+    block.setWorkspace(null)
   }
 }

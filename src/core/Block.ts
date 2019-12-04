@@ -7,11 +7,6 @@ import { Observer, ObserverCallbackFunc } from '@/shared/Observer'
 
 export class Block {
   /**
-   * Workspace
-   */
-  $w: Workspace
-
-  /**
    * Next block
    */
   next: Observer<Block>
@@ -21,17 +16,25 @@ export class Block {
 
   readonly id: string
 
+  /**
+   * Workspace
+   */
+  private $w: Workspace | null
+
+  get workspace() {
+    return this.$w
+  }
+
   get isRoot(): boolean {
-    return !!this.parent.value
+    return !this.parent.value
   }
 
   get hasSlot(): boolean {
     return this.slots.length > 0
   }
 
-  constructor(workspace: Workspace, id: string = uid()) {
+  constructor(id: string = uid()) {
     this.id = id
-    this.$w = workspace
     this.fieldManager = new BlockFieldManager(this)
     this.slots = []
     this.parent = new Observer()
@@ -51,6 +54,10 @@ export class Block {
     now?.next.set(this)
   }
 
+  setWorkspace(w: Workspace | null) {
+    this.$w = w
+  }
+
   addField(field: BlockField, row: number = 0) {
     const count = this.fieldManager.getRowCount(row)
 
@@ -60,7 +67,12 @@ export class Block {
     this.fieldManager.add(field)
   }
 
+  connectTo(block: Block) {
+    this.parent.set(block)
+  }
+
   destroy() {
-    this.next.value?.parent.value?.destroy()
+    this.parent.set(null)
+    this.next.set(null)
   }
 }
