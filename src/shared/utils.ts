@@ -17,3 +17,7 @@ export function removeArrayItem<T = any>(arr: T[], predicate: ((o: T) => boolean
 
   return idx >= 0 ? arr.splice(idx, 1)[0] : null
 }
+
+export function warn(...args: any[]) {
+  console.warn(...args)
+}

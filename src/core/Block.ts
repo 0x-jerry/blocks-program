@@ -41,6 +41,8 @@ export class Block {
   fieldManager: BlockFieldManager
   config: BlockConfig
 
+  readonly name: string
+
   readonly id: string
 
   /**
@@ -60,7 +62,8 @@ export class Block {
     return this.slots.length > 0
   }
 
-  constructor(id: string = uid()) {
+  constructor(name: string = '', id: string = uid()) {
+    this.name = name
     this.id = id
     this.slots = []
 
