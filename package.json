@@ -12,7 +12,6 @@
   "devDependencies": {
     "@types/events": "^3.0.0",
     "@types/jest": "^24.0.23",
-    "babel-loader": "^8.0.6",
     "jest": "^24.9.0",
     "lerna": "^3.19.0",
     "ts-jest": "^24.2.0",
