@@ -22,4 +22,8 @@ export class BlockSlotField extends BlockField<Block> {
   checkConnection(block: Block): boolean {
     return !block.hasOutput
   }
+
+  value() {
+    return this._value.value
+  }
 }
