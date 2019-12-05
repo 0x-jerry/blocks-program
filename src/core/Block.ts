@@ -1,5 +1,4 @@
 import { Workspace } from './Workspace'
-import { BlockSlot } from './BlockSlot'
 import { BlockFieldManager } from './BlockFieldsManager'
 import { BlockField } from '@/fields'
 import { Observer, ObserverCallbackFunc, uid } from '@/shared'
@@ -36,10 +35,18 @@ export class Block {
    * Next block
    */
   next: Observer<Block>
-  parent: Observer<Block>
-  slots: BlockSlot[]
-  fieldManager: BlockFieldManager
+  /**
+   * Previous block
+   */
+  previous: Observer<Block>
+  /**
+   * Parent field
+   */
+  parent: Observer<BlockField>
+
   config: BlockConfig
+
+  fieldManager: BlockFieldManager
 
   readonly name: string
 
@@ -55,17 +62,16 @@ export class Block {
   }
 
   get isRoot(): boolean {
-    return !this.parent.value
+    return !this.previous.value && !this.parent.value
   }
 
-  get hasSlot(): boolean {
-    return this.slots.length > 0
+  get hasOutput() {
+    return this.config.output.length > 0
   }
 
   constructor(name: string = '', id: string = uid()) {
     this.name = name
     this.id = id
-    this.slots = []
 
     this.config = new BlockConfig()
 
@@ -75,18 +81,26 @@ export class Block {
     this.next = new Observer()
     this.next.sub(this.nextUpdate)
 
+    this.previous = new Observer()
+    this.previous.sub(this.previousUpdate)
+
     this.parent = new Observer()
     this.parent.sub(this.parentUpdate)
   }
 
   private nextUpdate: ObserverCallbackFunc<Block> = (now, pre) => {
-    pre?.parent.set(null)
-    now?.parent.set(this)
+    pre?.previous.set(null)
+    now?.previous.set(this)
   }
 
-  private parentUpdate: ObserverCallbackFunc<Block> = (now, pre) => {
+  private previousUpdate: ObserverCallbackFunc<Block> = (now, pre) => {
     pre?.next.set(null)
     now?.next.set(this)
+  }
+
+  private parentUpdate: ObserverCallbackFunc<BlockField> = (now, pre) => {
+    pre?.block.set(null)
+    now?.block.set(this)
   }
 
   setBlockConfig(opts: Partial<BlockConfigOption> = {}) {
@@ -97,16 +111,23 @@ export class Block {
     this.$w = w
   }
 
-  addField(field: BlockField, row: number = 0) {
-    this.fieldManager.add(field, row)
+  addField(field: BlockField) {
+    this.fieldManager.add(field)
   }
 
   connectTo(block: Block) {
-    this.parent.set(block)
+    this.previous.set(block)
+  }
+
+  connectToField(field: BlockField) {
+    if (field.checkConnection(this)) {
+      this.parent.set(field)
+    }
   }
 
   destroy() {
-    this.parent.set(null)
+    this.previous.set(null)
     this.next.set(null)
+    this.parent.set(null)
   }
 }

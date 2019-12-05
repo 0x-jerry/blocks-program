@@ -8,11 +8,11 @@ describe('Block', () => {
     a.connectTo(b)
 
     expect(b.next.value).toBe(a)
-    expect(b.parent.value).toBeNull()
+    expect(b.previous.value).toBeNull()
     expect(b.isRoot).toBe(true)
 
     expect(a.next.value).toBeNull()
-    expect(a.parent.value).toBe(b)
+    expect(a.previous.value).toBe(b)
     expect(a.isRoot).toBe(false)
   })
 
@@ -24,11 +24,11 @@ describe('Block', () => {
 
     a.destroy()
 
-    expect(b.parent.value).toBeNull()
+    expect(b.previous.value).toBeNull()
     expect(b.next.value).toBeNull()
     expect(b.isRoot).toBe(true)
 
-    expect(a.parent.value).toBeNull()
+    expect(a.previous.value).toBeNull()
     expect(a.next.value).toBeNull()
     expect(a.isRoot).toBe(true)
   })

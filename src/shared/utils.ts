@@ -21,3 +21,18 @@ export function removeArrayItem<T = any>(arr: T[], predicate: ((o: T) => boolean
 export function warn(...args: any[]) {
   console.warn(...args)
 }
+
+/**
+ * Check whether have at least one item of intersection
+ * @param arr1 
+ * @param arr2 
+ */
+export function oneOf<T>(arr1: T[], arr2: T[]): boolean {
+  for (const item of arr1) {
+    if (arr2.indexOf(item) >= 0) {
+      return true
+    }
+  }
+
+  return false
+}

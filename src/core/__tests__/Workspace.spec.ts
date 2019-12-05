@@ -53,9 +53,9 @@ describe('Workspace', () => {
     expect(b.next.value).toBe(c)
     expect(c.next.value).toBeNull()
 
-    expect(a.parent.value).toBeNull()
-    expect(b.parent.value).toBe(a)
-    expect(c.parent.value).toBe(b)
+    expect(a.previous.value).toBeNull()
+    expect(b.previous.value).toBe(a)
+    expect(c.previous.value).toBe(b)
 
     toBeTheSameIds($w.blockRoots, [a])
   })
