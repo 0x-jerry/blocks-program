@@ -39,4 +39,8 @@ describe('BlockField', () => {
 
     expect(field.checkConnection(a)).toBe(false)
   })
+
+  it('isBlock', () => {
+    expect(field.isBlock).toBe(false)
+  })
 })

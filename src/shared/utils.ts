@@ -1,6 +1,6 @@
 /**
  *
- * @param len Max is 13, default is 8
+ * @param len Max is 12, default is 8
  */
 export function uid(len = 8) {
   return Math.random()
@@ -20,6 +20,7 @@ export function removeArrayItem<T = any>(arr: T[], predicate: ((o: T) => boolean
 
 export function warn(...args: any[]) {
   console.warn(...args)
+  console.trace()
 }
 
 /**

@@ -51,15 +51,21 @@ export class GeneratorConfig extends Configuration<GeneratorConfigOptions> {
 
 export class CodeGenerator {
   config: GeneratorConfig
+  name: string
 
   private blocks: CodeBlocks
 
   private codes: Codes
 
-  constructor() {
+  constructor(name: string = '') {
+    this.name = name
     this.config = new GeneratorConfig()
     this.blocks = new CodeBlocks()
     this.codes = new Codes()
+  }
+
+  private linePrefix(code: string, prefix: string) {
+    return prefix + code.trim().replace(/\n/g, '\n' + prefix)
   }
 
   getCodes(workspace: Workspace) {
@@ -74,6 +80,7 @@ export class CodeGenerator {
     return this.codes.getCode()
   }
 
+  registerBlock(name: { [name: string]: GenerateFunc }): void
   registerBlock(name: string, func: GenerateFunc): void
   registerBlock(nameOrGenerates: { [name: string]: GenerateFunc } | string, func?: GenerateFunc): void {
     if (typeof nameOrGenerates === 'string') {
@@ -85,15 +92,15 @@ export class CodeGenerator {
     }
   }
 
-  provideFunction(name: string, codes: string[]) {
+  provideFunction(name: string, ...codes: string[]) {
     this.codes.addFunction(name, codes)
   }
 
-  provideDefine(name: string, codes: string[]) {
+  provideDefine(name: string, ...codes: string[]) {
     this.codes.addDefine(name, codes)
   }
 
-  provideFinished(name: string, codes: string[]) {
+  provideFinished(name: string, ...codes: string[]) {
     this.codes.addFinished(name, codes)
   }
 
@@ -101,21 +108,31 @@ export class CodeGenerator {
    * Get this block code and all the next connected block code
    * @param block
    */
-  getTopBlockCodes(block: Block): string[] {
-    let codes: string[] = []
+  getTopBlockCode(block: Block): string {
+    let codes = []
     let current: Block | null = block
 
     do {
-      const blockCodes = this.getBlockCodes(current)
-      codes.push(...blockCodes)
+      const blockCode = this.getBlockCode(current)
+      codes.push(blockCode)
 
       current = current.next.value
     } while (current)
 
-    return codes
+    return codes.join('\n')
   }
 
-  getFieldCodes(block: Block, fieldName: string): string {
+  /**
+   * Get only current block code
+   * @param block
+   */
+  getBlockCode(block: Block): string {
+    const func = this.blocks.get(block.config.get('name'))
+
+    return toArray(func(block, this)).join('\n')
+  }
+
+  getFieldCode(block: Block, fieldName: string): string {
     const field = block.getField(fieldName)
 
     if (!field) {
@@ -129,39 +146,31 @@ export class CodeGenerator {
     }
 
     if (field.isBlock) {
-      return this.getBlockCodes(field.block.value!).join('')
+      return this.getBlockCode(field.block.value!)
     }
 
     return String(field.value())
   }
 
-  getSlotFieldCodes(block: Block, fieldName: string): string[] {
+  getSlotFieldCode(block: Block, fieldName: string): string {
     const field = block.getField(fieldName)
 
     if (!field) {
       warn(`Not found ${fieldName} field on block id: ${block.id}`)
-      return []
+      return ''
     }
 
     if (field.type !== 'Slot') {
       warn(`Field ${fieldName} on block id: ${block.id} is not a slot, use getFieldCodes instead of.`)
-      return []
+      return ''
     }
 
     const slotField = field as BlockSlotField
 
     const slotBlock = slotField.value()
 
-    return slotBlock ? this.getTopBlockCodes(slotBlock) : []
-  }
+    const codes = slotBlock ? this.getTopBlockCode(slotBlock) : ''
 
-  /**
-   * Get only current block code
-   * @param block
-   */
-  getBlockCodes(block: Block): string[] {
-    const func = this.blocks.get(block.config.get('name'))
-
-    return toArray(func(block, this))
+    return this.linePrefix(codes, ' '.repeat(this.config.get('indentSize')))
   }
 }

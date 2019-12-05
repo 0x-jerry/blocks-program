@@ -21,7 +21,7 @@ export class Codes {
   private getCodes(provider: CodeDefineProvider): string[] {
     let codes: string[] = []
 
-    const sortedKeys = Object.keys(provider).sort((a, b) => (a > b ? -1 : 1))
+    const sortedKeys = Object.keys(provider).sort((a, b) => (a > b ? 1 : -1))
 
     sortedKeys.forEach((key) => {
       codes.push(...provider[key])

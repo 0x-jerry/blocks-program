@@ -37,7 +37,7 @@ export class BlockField<T = any> {
   }
 
   get isBlock(): boolean {
-    return !!this.block
+    return !!this.block.value
   }
 
   get index(): number {

@@ -6,7 +6,7 @@ describe('utils', () => {
 
     expect(uid()).toHaveLength(8)
 
-    expect(uid(13)).toHaveLength(13)
+    expect(uid(12)).toHaveLength(12)
   })
 
   it('getId', () => {
