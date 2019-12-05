@@ -13,14 +13,14 @@ export class Workspace {
     this.blockRoots = []
   }
 
-  hasRootBlock(blockOrId: Block | string): false | Block {
+  private isRootBlock(blockOrId: Block | string): false | Block {
     const id = getId(blockOrId)
 
     return this.blockRoots.find((b) => b.id === id) || false
   }
 
   private addRootBlock(block: Block) {
-    if (!this.hasRootBlock(block)) {
+    if (!this.isRootBlock(block)) {
       this.blockRoots.push(block)
     }
   }
