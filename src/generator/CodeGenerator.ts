@@ -63,10 +63,10 @@ export class CodeGenerator {
   }
 
   blockToCode(block: Block): string {
-    let func = this.blocks.get(block.config.name)
+    let func = this.blocks.get(block.config.get('name')!)
 
     if (!func) {
-      warn(`Can't found ${block.config.name}'s generator`)
+      warn(`Can't found ${block.config.get('name')!}'s generator`)
       return ''
     }
 

@@ -65,7 +65,7 @@ export class BlockField<T = any> {
    * Whether block can connect to this field
    */
   checkConnection(block: Block): boolean {
-    return this.hasInput && oneOf(this.input, block.config.output)
+    return this.hasInput && oneOf(this.input, block.config.get('output'))
   }
 
   value(val?: T): T | null {

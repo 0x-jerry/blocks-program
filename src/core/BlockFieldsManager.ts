@@ -1,5 +1,5 @@
 import { Block } from './Block'
-import { BlockField } from '../fields'
+import { BlockField } from './BlockField'
 import { getId, removeArrayItem } from '@/shared'
 
 export class BlockFieldManager {

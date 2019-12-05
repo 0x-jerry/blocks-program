@@ -1,63 +1,25 @@
 import { Workspace } from './Workspace'
 import { BlockFieldManager } from './BlockFieldsManager'
-import { BlockField } from '@/fields'
-import { Observer, ObserverCallbackFunc, uid } from '@/shared'
+import { BlockField } from './BlockField'
+import { Observer, ObserverCallbackFunc, uid, Configuration } from '@/shared'
 
 export interface BlockConfigOption {
-  name: string
-  output: string[] | string
-  next: Boolean
-  previous: Boolean
-}
-
-export class BlockConfig implements BlockConfigOption {
   name: string
   output: string[]
   next: Boolean
   previous: Boolean
+}
 
+export class BlockConfig extends Configuration<BlockConfigOption> {
   constructor(opts: Partial<BlockConfigOption> = {}) {
-    /**
-     * Do not modify directly, use update instead
-     */
-    this.output = []
-    /**
-     * Do not modify directly, use update instead
-     */
-    this.next = false
-    /**
-     * Do not modify directly, use update instead
-     */
-    this.previous = false
-    /**
-     * Do not modify directly, use update instead
-     */
-    this.name = ''
-
-    this.update(opts)
-  }
-
-  private set(key: keyof BlockConfigOption, val: any) {
-    if (key === 'output') {
-      this.output = [].concat(val)
-    } else {
-      this[key] = val
+    const defaultOpts: BlockConfigOption = {
+      name: '',
+      output: [],
+      next: false,
+      previous: false
     }
-  }
 
-  update(opts: Partial<BlockConfigOption>): void
-  update<T extends keyof BlockConfigOption>(key: T, val: BlockConfigOption[T]): void
-  update<T extends keyof BlockConfigOption>(
-    optsOrKey: Partial<BlockConfigOption> | T,
-    val?: BlockConfigOption[T]
-  ): void {
-    if (typeof optsOrKey === 'string') {
-      this.set(optsOrKey, val)
-    } else {
-      Object.entries(optsOrKey).forEach(([key, value]) => {
-        this.set(key as any, value)
-      })
-    }
+    super(Object.assign(defaultOpts, opts))
   }
 }
 
@@ -94,8 +56,10 @@ export class Block {
     return !this.previous.value && !this.parent.value
   }
 
-  get hasOutput() {
-    return this.config.output.length > 0
+  get hasOutput(): boolean {
+    const output = this.config.get('output')
+
+    return output ? output.length > 0 : false
   }
 
   constructor(config: Partial<BlockConfigOption> = {}, id: string = uid()) {
