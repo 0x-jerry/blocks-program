@@ -1,4 +1,4 @@
-import { BlockField } from './BlockField'
+import { BlockField } from '@/core'
 
 export class BlockTextField extends BlockField<string> {
   constructor(value = '', idx = 0) {

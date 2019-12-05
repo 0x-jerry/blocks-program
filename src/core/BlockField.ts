@@ -1,7 +1,10 @@
 import { Observer, uid, ObserverCallbackFunc, oneOf } from '@/shared'
 import { Block } from '@/core'
 
-export abstract class BlockField<T = any> {
+/**
+ * This is a abstract class, only for test.
+ */
+export class BlockField<T = any> {
   readonly id: string
 
   protected _idx: number
@@ -49,6 +52,11 @@ export abstract class BlockField<T = any> {
     this.block.sub(this.blockUpdate)
   }
 
+  private blockUpdate: ObserverCallbackFunc<Block> = (now, pre) => {
+    pre?.parent.set(null)
+    now?.parent.set(this)
+  }
+
   setParent(block: Block) {
     this.$b = block
   }
@@ -58,11 +66,6 @@ export abstract class BlockField<T = any> {
    */
   checkConnection(block: Block): boolean {
     return this.hasInput && oneOf(this.input, block.config.output)
-  }
-
-  private blockUpdate: ObserverCallbackFunc<Block> = (now, pre) => {
-    pre?.parent.set(null)
-    now?.parent.set(this)
   }
 
   value(val?: T): T | null {

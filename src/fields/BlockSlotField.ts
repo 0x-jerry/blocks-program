@@ -1,5 +1,4 @@
-import { BlockField } from './BlockField'
-import { Block } from '@/core'
+import { Block, BlockField } from '@/core'
 import { ObserverCallbackFunc } from '@/shared'
 
 export class BlockSlotField extends BlockField<Block> {
