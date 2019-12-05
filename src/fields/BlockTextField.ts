@@ -1,8 +1,9 @@
 import { BlockField } from '@/core'
 
 export class BlockTextField extends BlockField<string> {
-  constructor(value = '', idx = 0) {
-    super(value, idx)
+  constructor(name: string, value = '', idx = 0) {
+    super(name, value, idx)
+    this.type = 'Text'
     this.input = []
   }
 }

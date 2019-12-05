@@ -95,6 +95,10 @@ export class Block {
     now?.block.set(this)
   }
 
+  getField(nameOrId: string): BlockField | null {
+    return this.fieldManager.fields.find((f) => f.name === nameOrId || f.id === nameOrId) ?? null
+  }
+
   setWorkspace(w: Workspace | null) {
     this.$w = w
   }

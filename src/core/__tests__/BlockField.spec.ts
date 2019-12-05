@@ -5,7 +5,7 @@ describe('BlockField', () => {
   let field: BlockField
 
   beforeEach(() => {
-    field = new BlockField()
+    field = new BlockField('name')
   })
 
   it('get/set value', () => {

@@ -5,7 +5,10 @@ import { Block } from '@/core'
  * This is a abstract class, only for test.
  */
 export class BlockField<T = any> {
-  readonly id: string
+  /**
+   * Parent Block
+   */
+  private $b: Block | null
 
   protected _idx: number
   protected _value: Observer<T>
@@ -20,10 +23,10 @@ export class BlockField<T = any> {
    */
   block: Observer<Block>
 
-  /**
-   * Parent Block
-   */
-  private $b: Block | null
+  type: string
+
+  readonly id: string
+  readonly name: string
 
   get hasInput() {
     return this.input.length > 0
@@ -41,7 +44,9 @@ export class BlockField<T = any> {
     return this._idx
   }
 
-  constructor(value: T | null = null, idx = 0, id = uid()) {
+  constructor(name: string, value: T | null = null, idx = 0, id = uid()) {
+    this.name = name
+    this.type = ''
     this._idx = idx
     this.id = id
     this.$b = null

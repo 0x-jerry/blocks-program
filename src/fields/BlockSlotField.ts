@@ -6,8 +6,9 @@ export class BlockSlotField extends BlockField<Block> {
     return true
   }
 
-  constructor(value: Block | null = null, idx = 0) {
-    super(value, idx)
+  constructor(name: string, value: Block | null = null, idx = 0) {
+    super(name, value, idx)
+    this.type = 'Slot'
     this.block.sub(this.blockChanged)
   }
 

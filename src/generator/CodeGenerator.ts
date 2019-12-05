@@ -1,79 +1,167 @@
-import { BlockField, Block, Workspace } from '@/core'
-import { warn } from '@/shared'
+import { Block, Workspace } from '@/core'
+import { Configuration, warn, toArray } from '@/shared'
 import { Codes } from './Codes'
+import { BlockSlotField } from '@/fields'
+
+export interface GenerateFunc {
+  (block: Block, generator: CodeGenerator): string | string[]
+}
 
 export class CodeBlocks {
   blocks: {
-    [name: string]: (block: Block) => string
+    [name: string]: GenerateFunc
   }
 
   constructor() {
     this.blocks = {}
   }
 
-  register(name: string, func: (block: Block) => string) {
+  register(name: string, func: GenerateFunc) {
     this.blocks[name] = func
   }
 
-  get(name: string): Function | null {
-    return this.blocks[name] || null
+  private placeholderFunc() {
+    return ''
+  }
+
+  get(name: string): GenerateFunc {
+    const func = this.blocks[name]
+
+    if (!func) {
+      warn(`Not found ${name}'s generate function.`)
+    }
+
+    return func || this.placeholderFunc
+  }
+}
+
+interface GeneratorConfigOptions {
+  indentSize: number
+}
+
+export class GeneratorConfig extends Configuration<GeneratorConfigOptions> {
+  constructor(opts: Partial<GeneratorConfigOptions> = {}) {
+    const defaultOpts: GeneratorConfigOptions = {
+      indentSize: 2
+    }
+
+    super(Object.assign(defaultOpts, opts))
   }
 }
 
 export class CodeGenerator {
-  static indentSize: number = 2
+  config: GeneratorConfig
 
-  $w: Workspace | null
+  private blocks: CodeBlocks
 
-  name: string
+  private codes: Codes
 
-  blocks: CodeBlocks
-
-  codes: Codes
-
-  constructor(name = '') {
-    this.name = name
-    this.$w = null
+  constructor() {
+    this.config = new GeneratorConfig()
+    this.blocks = new CodeBlocks()
+    this.codes = new Codes()
   }
 
-  generate(workspace: Workspace): string {
-    this.$w = workspace
+  getCodes(workspace: Workspace) {
+    workspace.blockRoots.forEach((block) => {
+      const func = this.blocks.get(block.config.get('name'))
 
-    let code = this.startCode()
+      const codes = toArray(func(block, this))
 
-    this.$w.blockRoots.forEach((block) => {
-      code += this.blockToCode(block)
+      this.codes.addMain(codes)
     })
 
-    code + this.finishedCode()
-
-    return code
+    return this.codes.getCode()
   }
 
-  registerBlock(name: string, func: (block: Block) => string) {
-    this.blocks.register(name, func)
+  registerBlock(name: string, func: GenerateFunc): void
+  registerBlock(nameOrGenerates: { [name: string]: GenerateFunc } | string, func?: GenerateFunc): void {
+    if (typeof nameOrGenerates === 'string') {
+      this.blocks.register(nameOrGenerates, func!)
+    } else {
+      Object.entries(nameOrGenerates).forEach(([name, func]) => {
+        this.blocks.register(name, func)
+      })
+    }
   }
 
-  startCode(): string {
-    return ''
+  provideFunction(name: string, codes: string[]) {
+    this.codes.addFunction(name, codes)
   }
 
-  finishedCode(): string {
-    return ''
+  provideDefine(name: string, codes: string[]) {
+    this.codes.addDefine(name, codes)
   }
 
-  blockToCode(block: Block): string {
-    let func = this.blocks.get(block.config.get('name')!)
+  provideFinished(name: string, codes: string[]) {
+    this.codes.addFinished(name, codes)
+  }
 
-    if (!func) {
-      warn(`Can't found ${block.config.get('name')!}'s generator`)
+  /**
+   * Get this block code and all the next connected block code
+   * @param block
+   */
+  getTopBlockCodes(block: Block): string[] {
+    let codes: string[] = []
+    let current: Block | null = block
+
+    do {
+      const blockCodes = this.getBlockCodes(current)
+      codes.push(...blockCodes)
+
+      current = current.next.value
+    } while (current)
+
+    return codes
+  }
+
+  getFieldCodes(block: Block, fieldName: string): string {
+    const field = block.getField(fieldName)
+
+    if (!field) {
+      warn(`Not found ${fieldName} field on block id: ${block.id}`)
       return ''
     }
 
-    return func(block)
+    if (field.type === 'Slot') {
+      warn(`Field ${fieldName} on block id: ${block.id} is a slot, use getSlotFieldCodes instead of.`)
+      return ''
+    }
+
+    if (field.isBlock) {
+      return this.getBlockCodes(field.block.value!).join('')
+    }
+
+    return String(field.value())
   }
 
-  fieldToCode(filed: BlockField) {
-    return ''
+  getSlotFieldCodes(block: Block, fieldName: string): string[] {
+    const field = block.getField(fieldName)
+
+    if (!field) {
+      warn(`Not found ${fieldName} field on block id: ${block.id}`)
+      return []
+    }
+
+    if (field.type !== 'Slot') {
+      warn(`Field ${fieldName} on block id: ${block.id} is not a slot, use getFieldCodes instead of.`)
+      return []
+    }
+
+    const slotField = field as BlockSlotField
+
+    const slotBlock = slotField.value()
+
+    return slotBlock ? this.getTopBlockCodes(slotBlock) : []
+  }
+
+  /**
+   * Get only current block code
+   * @param block
+   */
+  getBlockCodes(block: Block): string[] {
+    const func = this.blocks.get(block.config.get('name'))
+
+    return toArray(func(block, this))
   }
 }

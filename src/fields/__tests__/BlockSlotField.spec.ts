@@ -5,7 +5,7 @@ describe('BlockSlotField', () => {
   let field: BlockSlotField
 
   beforeEach(() => {
-    field = new BlockSlotField()
+    field = new BlockSlotField('')
   })
 
   it('get/set value', () => {
@@ -27,5 +27,10 @@ describe('BlockSlotField', () => {
 
     expect(field.checkConnection(a)).toBe(false)
     expect(field.checkConnection(b)).toBe(true)
+  })
+
+  it('type', () => {
+    expect(field.isSlot).toBe(true)
+    expect(field.type).toBe('Slot')
   })
 })

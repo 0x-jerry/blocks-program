@@ -24,8 +24,8 @@ export function warn(...args: any[]) {
 
 /**
  * Check whether have at least one item of intersection
- * @param arr1 
- * @param arr2 
+ * @param arr1
+ * @param arr2
  */
 export function oneOf<T>(arr1: T[], arr2: T[]): boolean {
   for (const item of arr1) {
@@ -35,4 +35,8 @@ export function oneOf<T>(arr1: T[], arr2: T[]): boolean {
   }
 
   return false
+}
+
+export function toArray<T>(t: T | T[]): T[] {
+  return Array.isArray(t) ? t : [t]
 }

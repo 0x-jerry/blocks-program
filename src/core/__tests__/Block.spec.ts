@@ -1,5 +1,6 @@
 import { Block } from '../Block'
 import { BlockTextField, BlockSlotField } from '@/fields'
+import { BlockField } from '../BlockField'
 
 describe('Block', () => {
   it('connectTo', () => {
@@ -29,13 +30,13 @@ describe('Block', () => {
 
   it('connectToField', () => {
     const a = new Block()
-    const f1 = new BlockTextField()
+    const f1 = new BlockTextField('')
 
     a.connectToField(f1)
     expect(a.parent.value).toBe(null)
     expect(f1.block.value).toBe(null)
 
-    const f2 = new BlockSlotField()
+    const f2 = new BlockSlotField('')
     a.connectToField(f2)
     expect(a.parent.value).toBe(f2)
     expect(f2.block.value).toBe(a)
@@ -43,6 +44,19 @@ describe('Block', () => {
     a.connectToField(null)
     expect(a.parent.value).toBe(null)
     expect(f2.block.value).toBe(null)
+  })
+
+  it('getField', () => {
+    const a = new Block()
+    const b = new BlockField('arg')
+
+    a.addField(b)
+
+    expect(a.getField('arg')).toBe(b)
+
+    expect(a.getField(b.id)).toBe(b)
+
+    expect(a.getField('')).toBeNull()
   })
 
   it('destroy', () => {

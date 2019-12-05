@@ -5,7 +5,7 @@ describe('BlockTextField', () => {
   let field: BlockTextField
 
   beforeEach(() => {
-    field = new BlockTextField()
+    field = new BlockTextField('')
   })
 
   it('get/set value', () => {
@@ -24,5 +24,9 @@ describe('BlockTextField', () => {
     b.config.update('output', ['number', 'string'])
 
     expect(field.checkConnection(b)).toBe(false)
+  })
+
+  it('type', () => {
+    expect(field.type).toBe('Text')
   })
 })

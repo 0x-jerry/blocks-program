@@ -1,4 +1,4 @@
-import { uid, getId, removeArrayItem, oneOf } from '../utils'
+import { uid, getId, removeArrayItem, oneOf, toArray } from '../utils'
 
 describe('utils', () => {
   it('uid', () => {
@@ -45,5 +45,11 @@ describe('utils', () => {
     arr2 = [5, 1, 6]
 
     expect(oneOf(arr1, arr2)).toBe(true)
+  })
+
+  it('toArray', () => {
+    expect(toArray(1)).toEqual([1])
+
+    expect(toArray([12, 1])).toEqual([12, 1])
   })
 })

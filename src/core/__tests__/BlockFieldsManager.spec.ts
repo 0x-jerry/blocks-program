@@ -10,8 +10,8 @@ describe('BlockFieldsManager', () => {
   })
 
   it('add', () => {
-    const a = new BlockTextField()
-    const b = new BlockTextField()
+    const a = new BlockTextField('')
+    const b = new BlockTextField('')
 
     manager.add(a)
     manager.add(b)
@@ -22,8 +22,8 @@ describe('BlockFieldsManager', () => {
   })
 
   it('remove', () => {
-    const a = new BlockTextField()
-    const b = new BlockTextField()
+    const a = new BlockTextField('name')
+    const b = new BlockTextField('name')
 
     manager.add(a)
     manager.add(b)

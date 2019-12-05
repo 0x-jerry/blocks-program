@@ -1,26 +1,5 @@
-export class CodeLine {
-  parent: CodeLine | null
-  previous: CodeLine | null
-  next: CodeLine | null
-
-  indent: number
-  code: string
-
-  constructor() {
-    this.previous = null
-    this.next = null
-    this.indent = 0
-    this.code = ''
-    this.parent = null
-  }
-
-  getCode(): string {
-    return ' '.repeat(this.indent * CodeGenerator.indentSize) + this.code
-  }
-}
-
 export interface CodeDefineProvider {
-  [name: string]: CodeLine[]
+  [name: string]: string[]
 }
 
 export class Codes {
@@ -28,7 +7,7 @@ export class Codes {
 
   functions: CodeDefineProvider
 
-  main: CodeLine[]
+  main: string[]
 
   finished: CodeDefineProvider
 
@@ -45,36 +24,35 @@ export class Codes {
     const sortedKeys = Object.keys(provider).sort((a, b) => (a > b ? -1 : 1))
 
     sortedKeys.forEach((key) => {
-      codes = codes.concat(provider[key].map((n) => n.getCode()))
+      codes.push(...provider[key])
     })
 
     return codes
   }
 
-  addMain(...codes: CodeLine[]) {
+  addMain(codes: string[]) {
     this.main.push(...codes)
   }
 
-  addFunction(name: string, ...codes: CodeLine[]) {
+  addFunction(name: string, codes: string[]) {
     this.functions[name] = codes
   }
 
-  addDefine(name: string, ...codes: CodeLine[]) {
+  addDefine(name: string, codes: string[]) {
     this.defines[name] = codes
   }
 
-  addFinished(name: string, ...codes: CodeLine[]) {
+  addFinished(name: string, codes: string[]) {
     this.finished[name] = codes
   }
 
   getCode(): string {
     let codes: string[] = []
 
-    codes = codes.concat(this.getCodes(this.defines)).concat(this.getCodes(this.functions))
-
-    codes = codes.concat(this.main.map((n) => n.getCode()))
-
-    codes = codes.concat(this.getCodes(this.finished))
+    codes.push(...this.getCodes(this.defines))
+    codes.push(...this.getCodes(this.functions))
+    codes.push(...this.main)
+    codes.push(...this.getCodes(this.finished))
 
     return codes.join('\n')
   }
