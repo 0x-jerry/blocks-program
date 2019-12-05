@@ -10,7 +10,7 @@ export abstract class BlockField<T = any> {
   /**
    * Receive types (input <=> output)
    */
-  input: string[]
+  protected input: string[]
 
   /**
    * Field is connect to a Block
@@ -21,6 +21,10 @@ export abstract class BlockField<T = any> {
    * Parent Block
    */
   private $b: Block | null
+
+  get hasInput() {
+    return this.input.length > 0
+  }
 
   get parent() {
     return this.$b
@@ -53,7 +57,7 @@ export abstract class BlockField<T = any> {
    * Whether block can connect to this field
    */
   checkConnection(block: Block): boolean {
-    return oneOf(this.input, block.config.output)
+    return this.hasInput && oneOf(this.input, block.config.output)
   }
 
   private blockUpdate: ObserverCallbackFunc<Block> = (now, pre) => {

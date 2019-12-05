@@ -25,8 +25,6 @@ describe('BlockSlotField', () => {
       output: ['number']
     })
 
-    field.input = ['number']
-
     expect(field.checkConnection(a)).toBe(false)
     expect(field.checkConnection(b)).toBe(true)
   })

@@ -19,17 +19,10 @@ describe('BlockTextField', () => {
     const a = new Block()
     const b = new Block()
 
-    field.input = ['number']
-
-    expect(field.checkConnection(a)).toBe(false)
-    a.config.update({
-      output: ['string']
-    })
     expect(field.checkConnection(a)).toBe(false)
 
-    b.setBlockConfig({
-      output: ['number', 'string']
-    })
-    expect(field.checkConnection(b)).toBe(true)
+    b.config.update('output', ['number', 'string'])
+
+    expect(field.checkConnection(b)).toBe(false)
   })
 })

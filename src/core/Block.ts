@@ -4,29 +4,60 @@ import { BlockField } from '@/fields'
 import { Observer, ObserverCallbackFunc, uid } from '@/shared'
 
 export interface BlockConfigOption {
+  name: string
   output: string[] | string
   next: Boolean
   previous: Boolean
 }
 
-export class BlockConfig {
+export class BlockConfig implements BlockConfigOption {
+  name: string
   output: string[]
   next: Boolean
   previous: Boolean
 
   constructor(opts: Partial<BlockConfigOption> = {}) {
+    /**
+     * Do not modify directly, use update instead
+     */
     this.output = []
+    /**
+     * Do not modify directly, use update instead
+     */
     this.next = false
+    /**
+     * Do not modify directly, use update instead
+     */
     this.previous = false
+    /**
+     * Do not modify directly, use update instead
+     */
+    this.name = ''
 
     this.update(opts)
   }
 
-  update(opts: Partial<BlockConfigOption> = {}) {
-    this.output = (<string[]>[]).concat(opts.output ?? [])
+  private set(key: keyof BlockConfigOption, val: any) {
+    if (key === 'output') {
+      this.output = [].concat(val)
+    } else {
+      this[key] = val
+    }
+  }
 
-    this.next = opts.next ?? this.next
-    this.previous = opts.previous ?? this.next
+  update(opts: Partial<BlockConfigOption>): void
+  update<T extends keyof BlockConfigOption>(key: T, val: BlockConfigOption[T]): void
+  update<T extends keyof BlockConfigOption>(
+    optsOrKey: Partial<BlockConfigOption> | T,
+    val?: BlockConfigOption[T]
+  ): void {
+    if (typeof optsOrKey === 'string') {
+      this.set(optsOrKey, val)
+    } else {
+      Object.entries(optsOrKey).forEach(([key, value]) => {
+        this.set(key as any, value)
+      })
+    }
   }
 }
 
@@ -48,8 +79,6 @@ export class Block {
 
   fieldManager: BlockFieldManager
 
-  readonly name: string
-
   readonly id: string
 
   /**
@@ -69,11 +98,10 @@ export class Block {
     return this.config.output.length > 0
   }
 
-  constructor(name: string = '', id: string = uid()) {
-    this.name = name
+  constructor(config: Partial<BlockConfigOption> = {}, id: string = uid()) {
     this.id = id
 
-    this.config = new BlockConfig()
+    this.config = new BlockConfig(config)
 
     this.fieldManager = new BlockFieldManager()
     this.fieldManager.setBlock(this)
@@ -103,10 +131,6 @@ export class Block {
     now?.block.set(this)
   }
 
-  setBlockConfig(opts: Partial<BlockConfigOption> = {}) {
-    this.config.update(opts)
-  }
-
   setWorkspace(w: Workspace | null) {
     this.$w = w
   }
@@ -115,11 +139,22 @@ export class Block {
     this.fieldManager.add(field)
   }
 
-  connectTo(block: Block) {
+  /**
+   * @param block Null to break
+   */
+  connectTo(block: Block | null) {
     this.previous.set(block)
   }
 
-  connectToField(field: BlockField) {
+  /**
+   * @param field Null to break
+   */
+  connectToField(field: BlockField | null) {
+    if (!field) {
+      this.parent.set(null)
+      return
+    }
+
     if (field.checkConnection(this)) {
       this.parent.set(field)
     }
