@@ -1,34 +1,22 @@
 # Blocks Program
 
-Program with blocks.
-
-## How to develop
-
-Yarn: Package manager
-
-Lerna: Multiple packages manager
-
-```sh
-yarn && yarn test
-```
+Visual programming editor. Inspire by [blockly](https://github.com/google/blockly).
 
 ## TODO
 
-### Classes
-
 **Core**
 
-- [ ] Workspace
+- [x] Workspace
 - [ ] WorkspaceToolbox
-- [ ] Block
-- [ ] BlockField
+- [x] Block
+- [x] BlockField
 - [ ] BlockConnection
 - [ ] Renderer
   - [ ] Workspace
   - [ ] Block
   - [ ] BlockField
 - [ ] CodeGenerator
-  - [ ] JavaScript
+  - [x] CodeGenerator
   - [ ] Python
 - [ ] Language
 
@@ -42,7 +30,3 @@ yarn && yarn test
 **Other Utils**
 
 - [ ] BlockFormatParser
-
-### Others
-
-- [ ] Split renderer
