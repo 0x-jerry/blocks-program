@@ -1,6 +1,6 @@
 import { BlockFieldManager } from '../BlockFieldsManager'
 import { BlockTextField } from '@/fields'
-import { toBeTheSameIds } from '@/jest.setup'
+import { toBeTheSameIds } from '@/jest.utils'
 
 describe('BlockFieldsManager', () => {
   let manager: BlockFieldManager

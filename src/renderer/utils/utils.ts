@@ -1,23 +1,5 @@
-export function parsePixelOrNumber(numerical: any): number {
-  if (typeof numerical !== 'string') {
-    console.warn(numerical, 'may not a numerical')
-    return NaN
-  }
+export function createSVGEl<T extends keyof SVGElementTagNameMap>(tag: T): SVGElementTagNameMap[T] {
+  const ns = 'http://www.w3.org/2000/svg'
 
-  const numberReg = /^[\d\.]+(px)?$/
-
-  if (numerical.match(numberReg)) {
-    return parseFloat(numerical)
-  }
-
-  console.warn(numerical, 'may not a numerical')
-  return NaN
-}
-
-export const uuid = {
-  _prefix: 'blockly-',
-  _uid: 0,
-  next() {
-    return uuid._prefix + uuid._uid++
-  }
+  return document.createElementNS(ns, tag)
 }

@@ -1,3 +1,5 @@
+export * from './SElement'
 export * from './SVG'
-export * from './SVGElement'
-export * from './SVGFilter'
+export * from './Path'
+export * from './G'
+export * from './Text'
