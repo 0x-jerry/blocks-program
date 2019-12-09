@@ -1,4 +1,5 @@
-import { Path } from '@/renderer/lib'
+import { Path, SVG } from '@/renderer/lib'
+import { mockBBoxRect } from '../jest.setup'
 
 describe('Path', () => {
   let path: Path
@@ -59,5 +60,14 @@ describe('Path', () => {
       .a(20, 20, 30, 1, 0, 50, 50)
       .Z()
     expect(path.attr('d')).toBe('A 10 10 30 0 1 20,20 a 20 20 30 1 0 50,50 Z')
+  })
+
+  it('updatePath', () => {
+    const svg = new SVG()
+    svg.mount(document.body)
+    path.render(svg)
+
+    path.updatePath('M 0,0')
+    expect(path.bbox).toEqual(mockBBoxRect())
   })
 })
