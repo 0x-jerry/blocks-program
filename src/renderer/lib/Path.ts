@@ -2,10 +2,10 @@ import { SElement } from './SElement'
 import { createSVGEl } from '../utils'
 
 class D {
-  el: SElement<SVGPathElement>
+  el: Path
   path: (string | number)[]
 
-  constructor(el: SElement<SVGPathElement>) {
+  constructor(el: Path) {
     this.el = el
     this.clear()
   }
@@ -50,7 +50,7 @@ class D {
   done() {
     const p = this.path.join(' ')
 
-    this.el.attr('d', p)
+    this.el.updatePath(p)
   }
 
   /**
@@ -204,5 +204,10 @@ export class Path extends SElement<SVGPathElement> {
   constructor() {
     super(createSVGEl('path'))
     this.d = new D(this)
+  }
+
+  updatePath(p: string) {
+    this.attr('d', p)
+    this.cacheBBox()
   }
 }
