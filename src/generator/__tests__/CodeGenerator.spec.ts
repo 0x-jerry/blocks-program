@@ -2,9 +2,6 @@ import { CodeGenerator } from '../CodeGenerator'
 import { Block } from '@/core'
 import { BlockTextField, BlockSlotField } from '@/fields'
 
-const spyWarn = jest.spyOn(global.console, 'warn')
-const spyTrace = jest.spyOn(global.console, 'trace')
-
 describe('CodeGenerator', () => {
   let generator: CodeGenerator
   let block: Block
@@ -30,6 +27,7 @@ describe('CodeGenerator', () => {
 
     expect(code).toBe(`this is a text`)
 
+    const spyWarn = jest.spyOn(global.console, 'warn')
     spyWarn.mockReset()
     code = generator.getFieldCode(block, 'sfield')
     expect(spyWarn).toBeCalledTimes(1)
@@ -37,6 +35,7 @@ describe('CodeGenerator', () => {
     spyWarn.mockReset()
     code = generator.getFieldCode(block, 'nothing')
     expect(spyWarn).toBeCalledTimes(1)
+    spyWarn.mockRestore()
   })
 
   it('getSlotFieldCode', () => {
@@ -57,10 +56,10 @@ describe('CodeGenerator', () => {
     let code = generator.getBlockCode(slotBlock)
     expect(code).toBe(['if () {', '  new Time()', '}'].join('\n'))
 
-
     const field = new BlockTextField('field')
     block.addField(field)
 
+    const spyWarn = jest.spyOn(global.console, 'warn')
     spyWarn.mockReset()
     code = generator.getSlotFieldCode(block, 'field')
     expect(spyWarn).toBeCalledTimes(1)
@@ -68,6 +67,7 @@ describe('CodeGenerator', () => {
     spyWarn.mockReset()
     code = generator.getSlotFieldCode(block, 'nothing')
     expect(spyWarn).toBeCalledTimes(1)
+    spyWarn.mockRestore()
   })
 
   it('getBlockCode', () => {
@@ -81,13 +81,13 @@ describe('CodeGenerator', () => {
 
     const b = new Block({ name: 'nothing' })
 
+    const spyWarn = jest.spyOn(global.console, 'warn')
     spyWarn.mockReset()
-    spyTrace.mockReset()
     const bCode = generator.getBlockCode(b)
     expect(bCode).toBe('')
 
     expect(spyWarn).toBeCalledTimes(1)
-    expect(spyTrace).toBeCalledTimes(1)
+    spyWarn.mockRestore()
   })
 
   it('getTopBlockCode', () => {
