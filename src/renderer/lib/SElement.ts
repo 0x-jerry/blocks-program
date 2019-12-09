@@ -92,6 +92,9 @@ export class SElement<T extends SVGGraphicsElement = SVGGraphicsElement> {
     }
   }
 
+  /**
+   * Local coordinates
+   */
   move(x: number, y: number): void {
     this._rect.x = x
     this._rect.y = y

@@ -6,8 +6,22 @@ export class Text extends SElement<SVGTextElement> {
     super(createSVGEl('text'))
   }
 
+  /**
+   * Local coordinates
+   */
   move(x: number, y: number): void {
     super.move(x, y)
     this.attr({ x, y })
+  }
+
+  text(text: string): void
+  text(): string
+  text(text?: string): string | void {
+    if (text === undefined) {
+      return this.dom.textContent || ''
+    }
+
+    this.dom.textContent = text
+    this.cacheBBox()
   }
 }

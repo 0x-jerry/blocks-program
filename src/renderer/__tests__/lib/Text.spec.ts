@@ -1,4 +1,6 @@
 import { Text } from '@/renderer'
+import { SVG } from '@/renderer/lib'
+import { mockBBoxRect } from '../jest.setup'
 
 describe('Text', () => {
   let text: Text
@@ -27,5 +29,19 @@ describe('Text', () => {
 
     expect(text.attr('x')).toBe(-10)
     expect(text.attr('y')).toBe(-110)
+  })
+
+  it('text', () => {
+    const s = new SVG()
+    s.mount(document.body)
+
+    expect(text.width).toEqual(0)
+    expect(text.text()).toBe('')
+    text.text('hello')
+    expect(text.width).toEqual(0)
+    expect(text.text()).toBe('hello')
+
+    text.render(s)
+    expect(text.bbox).toEqual(mockBBoxRect())
   })
 })

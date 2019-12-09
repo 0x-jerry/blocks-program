@@ -9,6 +9,9 @@ export class G extends SElement<SVGGElement> {
     this.trans = new Transform(this)
   }
 
+  /**
+   * Local coordinates
+   */
   move(x: number, y: number): void {
     super.move(x, y)
     this.trans.move(x, y)
