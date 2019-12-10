@@ -26,7 +26,7 @@ describe('utils', () => {
     expect(removed).toBe(1)
     expect(arr).toEqual([2, 3])
 
-    removed = arr.remove(2)
+    removed = arr.removeItem(2)
     expect(arr).toEqual([3])
     expect(removed).toBe(2)
 

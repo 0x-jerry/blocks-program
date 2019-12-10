@@ -52,10 +52,10 @@ export class Workspace {
     }
 
     if (block.isRoot) {
-      this.blockRoots.remove(block)
+      this.blockRoots.removeItem(block)
     }
 
-    this.blockDB.remove(block)
+    this.blockDB.removeItem(block)
 
     block.setWorkspace(null)
 
@@ -66,7 +66,7 @@ export class Workspace {
 
   connectBlock(parent: Block, block: Block) {
     if (block.isRoot) {
-      this.blockRoots.remove(block)
+      this.blockRoots.removeItem(block)
     }
 
     block.connectTo(parent)

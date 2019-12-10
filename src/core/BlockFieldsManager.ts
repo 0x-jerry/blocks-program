@@ -54,6 +54,6 @@ export class BlockFieldManager {
       return
     }
 
-    this.fields.remove(removedField)
+    this.fields.removeItem(removedField)
   }
 }

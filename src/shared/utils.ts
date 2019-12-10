@@ -13,9 +13,14 @@ export function getId<T extends { id: string }>(instanceOrId: T | string) {
 }
 
 export class SArray<T> extends Array<T> {
-  remove(predicate: ((o: T) => boolean) | T): T | null {
-    const idx =
-      typeof predicate === 'function' ? this.findIndex(predicate as (o: T) => boolean) : this.indexOf(predicate)
+  remove(predicate: (o: T) => boolean): T | null {
+    const idx = this.findIndex(predicate)
+
+    return idx >= 0 ? this.splice(idx, 1)[0] : null
+  }
+
+  removeItem(item: T): T | null {
+    const idx = this.indexOf(item)
 
     return idx >= 0 ? this.splice(idx, 1)[0] : null
   }
