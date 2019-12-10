@@ -16,6 +16,8 @@ export class SElement<T extends SVGGraphicsElement = SVGGraphicsElement> {
 
   dom: T
 
+  parent: SElement | null
+
   get x() {
     return this._rect.x
   }
@@ -116,6 +118,8 @@ export class SElement<T extends SVGGraphicsElement = SVGGraphicsElement> {
       el._rendered = this._rendered
       el.cacheBBox()
     }
+
+    this.cacheBBox()
   }
 
   addClasses(...classes: string[]) {
@@ -128,5 +132,6 @@ export class SElement<T extends SVGGraphicsElement = SVGGraphicsElement> {
 
   destroy() {
     this.dom.remove()
+    this.parent?.cacheBBox()
   }
 }

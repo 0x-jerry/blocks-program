@@ -1,4 +1,4 @@
-import { createSVGEl, Transform } from '../utils'
+import { createSVGEl, Transform, Sizeable } from '../utils'
 
 describe('utils', () => {
   it('createSVGEl', () => {
@@ -33,5 +33,15 @@ describe('utils', () => {
 
     a.rotate(16)
     expect(mockEl.transform).toBe('scale(3) translate(3px, 4px) rotate(16deg)')
+  })
+
+  it('Sizeable', () => {
+    const size = new Sizeable(0, 0)
+    expect(size.width).toBe(0)
+    expect(size.height).toBe(0)
+
+    size.set({ width: 20, height: 20 })
+    expect(size.width).toBe(20)
+    expect(size.height).toBe(20)
   })
 })
