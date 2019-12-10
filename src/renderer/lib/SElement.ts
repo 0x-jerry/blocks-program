@@ -69,6 +69,24 @@ export class SElement<T extends SVGGraphicsElement = SVGGraphicsElement> {
     }
   }
 
+  on<K extends keyof SVGElementEventMap>(
+    type: K,
+    listener: (this: SVGGElement, ev: SVGElementEventMap[K]) => any,
+    options?: boolean | AddEventListenerOptions
+  ): void
+  on(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void {
+    this.dom.addEventListener(type, listener, options)
+  }
+
+  off<K extends keyof SVGElementEventMap>(
+    type: K,
+    listener: (this: SVGGElement, ev: SVGElementEventMap[K]) => any,
+    options?: boolean | EventListenerOptions
+  ): void
+  off(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void {
+    this.dom.removeEventListener(type, listener, options)
+  }
+
   attr(attrs: AttributeObject): void
   attr(attrName: string): string | number | null
   attr(attrName: string, attrVal: string | number | null): void

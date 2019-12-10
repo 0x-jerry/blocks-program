@@ -155,8 +155,14 @@ export class ScrollPair {
     this.vertical.setRatio(vRatio)
   }
 
-  render(el: SElement) {
-    this.horizontal.render(el)
-    this.vertical.render(el)
+  render(el: SElement, showHorizontal = true, showVertical = true) {
+    showHorizontal && this.horizontal.render(el)
+
+    showVertical && this.vertical.render(el)
+  }
+
+  destroy() {
+    this.horizontal.destroy()
+    this.vertical.destroy()
   }
 }
