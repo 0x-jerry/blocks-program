@@ -1,9 +1,9 @@
 export interface ObserverCallbackFunc<T> {
-  (now: T | null, pre: T | null): void
+  (now: T, pre: T): void
 }
 
 export class Observer<T = any> {
-  private _value: T | null
+  private _value: T
 
   private subs: ObserverCallbackFunc<T>[]
 
@@ -14,7 +14,7 @@ export class Observer<T = any> {
   /**
    * Only support immutable value
    */
-  constructor(val: T | null = null) {
+  constructor(val: T) {
     this._value = val
     this.subs = []
   }
@@ -33,7 +33,7 @@ export class Observer<T = any> {
     }
   }
 
-  set(newVal: T | null) {
+  set(newVal: T) {
     if (this._value === newVal) {
       return
     }

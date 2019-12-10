@@ -1,10 +1,10 @@
 import { Observer, ObserverCallbackFunc } from '../Observer'
 
 describe('Observer', () => {
-  let observer: Observer<number>
+  let observer: Observer<number|null>
 
   beforeEach(() => {
-    observer = new Observer()
+    observer = new Observer(null)
   })
 
   it('subscribe duplicate', () => {

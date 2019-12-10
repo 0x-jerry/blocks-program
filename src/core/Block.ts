@@ -27,15 +27,15 @@ export class Block {
   /**
    * Next block
    */
-  next: Observer<Block>
+  next: Observer<Block | null>
   /**
    * Previous block
    */
-  previous: Observer<Block>
+  previous: Observer<Block | null>
   /**
    * Parent field
    */
-  parent: Observer<BlockField>
+  parent: Observer<BlockField | null>
 
   config: BlockConfig
 
@@ -70,27 +70,27 @@ export class Block {
     this.fieldManager = new BlockFieldManager()
     this.fieldManager.setBlock(this)
 
-    this.next = new Observer()
+    this.next = new Observer(null)
     this.next.sub(this.nextUpdate)
 
-    this.previous = new Observer()
+    this.previous = new Observer(null)
     this.previous.sub(this.previousUpdate)
 
-    this.parent = new Observer()
+    this.parent = new Observer(null)
     this.parent.sub(this.parentUpdate)
   }
 
-  private nextUpdate: ObserverCallbackFunc<Block> = (now, pre) => {
+  private nextUpdate: ObserverCallbackFunc<Block | null> = (now, pre) => {
     pre?.previous.set(null)
     now?.previous.set(this)
   }
 
-  private previousUpdate: ObserverCallbackFunc<Block> = (now, pre) => {
+  private previousUpdate: ObserverCallbackFunc<Block | null> = (now, pre) => {
     pre?.next.set(null)
     now?.next.set(this)
   }
 
-  private parentUpdate: ObserverCallbackFunc<BlockField> = (now, pre) => {
+  private parentUpdate: ObserverCallbackFunc<BlockField | null> = (now, pre) => {
     pre?.block.set(null)
     now?.block.set(this)
   }

@@ -11,7 +11,7 @@ export class BlockField<T = any> {
   private $b: Block | null
 
   protected _idx: number
-  protected _value: Observer<T>
+  protected _value: Observer<T | null>
 
   /**
    * Receive types (input <=> output)
@@ -21,7 +21,7 @@ export class BlockField<T = any> {
   /**
    * Field is connect to a Block
    */
-  block: Observer<Block>
+  block: Observer<Block | null>
 
   type: string
 
@@ -53,7 +53,7 @@ export class BlockField<T = any> {
     this.input = []
     this._value = new Observer(value)
 
-    this.block = new Observer()
+    this.block = new Observer(null)
     this.block.sub(this.blockUpdate)
   }
 
