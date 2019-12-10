@@ -12,10 +12,25 @@ export function getId<T extends { id: string }>(instanceOrId: T | string) {
   return typeof instanceOrId === 'string' ? instanceOrId : instanceOrId.id
 }
 
-export function removeArrayItem<T = any>(arr: T[], predicate: ((o: T) => boolean) | T): T | null {
-  const idx = typeof predicate === 'function' ? arr.findIndex(predicate as (o: T) => boolean) : arr.indexOf(predicate)
+export class SArray<T> extends Array<T> {
+  remove(predicate: ((o: T) => boolean) | T): T | null {
+    const idx =
+      typeof predicate === 'function' ? this.findIndex(predicate as (o: T) => boolean) : this.indexOf(predicate)
 
-  return idx >= 0 ? arr.splice(idx, 1)[0] : null
+    return idx >= 0 ? this.splice(idx, 1)[0] : null
+  }
+
+  /**
+   *
+   * Return true when has the item
+   */
+  pushDistinct(item: T): boolean {
+    const has = this.indexOf(item) >= 0
+
+    !has && this.push(item)
+
+    return has
+  }
 }
 
 export function warn(...args: any[]) {

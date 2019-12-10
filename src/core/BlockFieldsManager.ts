@@ -1,9 +1,9 @@
 import { Block } from './Block'
 import { BlockField } from './BlockField'
-import { getId, removeArrayItem } from '@/shared'
+import { getId, SArray } from '@/shared'
 
 export class BlockFieldManager {
-  fields: BlockField[]
+  fields: SArray<BlockField>
 
   get block() {
     return this.$b
@@ -23,7 +23,7 @@ export class BlockFieldManager {
 
   constructor() {
     this.$b = null
-    this.fields = []
+    this.fields = new SArray()
   }
 
   setBlock(block: Block) {
@@ -54,6 +54,6 @@ export class BlockFieldManager {
       return
     }
 
-    removeArrayItem(this.fields, removedField)
+    this.fields.remove(removedField)
   }
 }

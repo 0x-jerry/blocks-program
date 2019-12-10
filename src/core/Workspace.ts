@@ -1,16 +1,16 @@
-import { uid, removeArrayItem, getId } from '@/shared'
+import { uid, getId, SArray } from '@/shared'
 import { Block } from './Block'
 
 export class Workspace {
   readonly id: string
-  blockDB: Block[]
+  blockDB: SArray<Block>
 
-  blockRoots: Block[]
+  blockRoots: SArray<Block>
 
   constructor(id: string = uid()) {
     this.id = id
-    this.blockDB = []
-    this.blockRoots = []
+    this.blockDB = new SArray()
+    this.blockRoots = new SArray()
   }
 
   private isRootBlock(blockOrId: Block | string): false | Block {
@@ -52,10 +52,10 @@ export class Workspace {
     }
 
     if (block.isRoot) {
-      removeArrayItem(this.blockRoots, block)
+      this.blockRoots.remove(block)
     }
 
-    removeArrayItem(this.blockDB, block)
+    this.blockDB.remove(block)
 
     block.setWorkspace(null)
 
@@ -66,7 +66,7 @@ export class Workspace {
 
   connectBlock(parent: Block, block: Block) {
     if (block.isRoot) {
-      removeArrayItem(this.blockRoots, block)
+      this.blockRoots.remove(block)
     }
 
     block.connectTo(parent)

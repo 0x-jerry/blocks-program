@@ -1,4 +1,4 @@
-import { uid, getId, removeArrayItem, oneOf, toArray } from '../utils'
+import { uid, getId, oneOf, toArray, SArray } from '../utils'
 
 describe('utils', () => {
   it('uid', () => {
@@ -19,20 +19,28 @@ describe('utils', () => {
     expect(getId(obj)).toBe(id)
   })
 
-  it('removeArray', () => {
-    const arr = [1, 2, 3]
+  it('SArray', () => {
+    const arr = new SArray(1, 2, 3)
 
-    let removed = removeArrayItem(arr, (n) => n === 1)
+    let removed = arr.remove((n) => n === 1)
     expect(removed).toBe(1)
     expect(arr).toEqual([2, 3])
 
-    removed = removeArrayItem(arr, 2)
+    removed = arr.remove(2)
     expect(arr).toEqual([3])
     expect(removed).toBe(2)
 
-    removed = removeArrayItem(arr, (n) => n === 5)
+    removed = arr.remove((n) => n === 5)
     expect(removed).toBe(null)
     expect(arr).toEqual([3])
+
+    let has = arr.pushDistinct(3)
+    expect(has).toBe(true)
+    expect(arr).toEqual([3])
+
+    has = arr.pushDistinct(2)
+    expect(has).toBe(false)
+    expect(arr).toEqual([3, 2])
   })
 
   it('oneOf', () => {
