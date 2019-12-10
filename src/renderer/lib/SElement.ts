@@ -2,7 +2,7 @@ interface AttributeObject {
   [key: string]: string | number | null
 }
 
-export interface Rect {
+export interface BBox {
   x: number
   y: number
   width: number
@@ -12,7 +12,7 @@ export interface Rect {
 export class SElement<T extends SVGGraphicsElement = SVGGraphicsElement> {
   protected _rendered: boolean
 
-  protected _rect: Rect
+  protected _rect: BBox
 
   dom: T
 
@@ -24,19 +24,11 @@ export class SElement<T extends SVGGraphicsElement = SVGGraphicsElement> {
     return this._rect.y
   }
 
-  get width() {
-    return this._rect.width
-  }
-
-  get height() {
-    return this._rect.height
-  }
-
   get rendered() {
     return this._rendered
   }
 
-  get bbox(): Rect {
+  get bbox(): BBox {
     return Object.assign({}, this._rect)
   }
 
@@ -112,17 +104,18 @@ export class SElement<T extends SVGGraphicsElement = SVGGraphicsElement> {
     this.move(this.x + dx, this.y + dy)
   }
 
-  render(el: SElement) {
-    el.dom.appendChild(this.dom)
-    this._rendered = el.rendered
+  render(parentEl: SElement) {
+    parentEl.dom.appendChild(this.dom)
+    this._rendered = parentEl.rendered
     this.cacheBBox()
   }
 
-  add(...nodes: SElement[]) {
-    nodes.forEach((node) => {
-      node._rendered = this._rendered
-      this.dom.appendChild(node.dom)
-    })
+  append(...children: SElement[]) {
+    for (const el of children) {
+      this.dom.appendChild(el.dom)
+      el._rendered = this._rendered
+      el.cacheBBox()
+    }
   }
 
   addClasses(...classes: string[]) {

@@ -8,8 +8,8 @@ describe('SVG', () => {
   })
 
   it('new', () => {
-    expect(svg.width).toBe(600)
-    expect(svg.height).toBe(400)
+    expect(svg.bbox.width).toBe(600)
+    expect(svg.bbox.height).toBe(400)
 
     expect(svg.dom.tagName.toUpperCase()).toBe('SVG')
     expect(svg.dom.getAttribute('xmlns')).toBe('http://www.w3.org/2000/svg')

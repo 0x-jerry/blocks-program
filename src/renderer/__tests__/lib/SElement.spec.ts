@@ -79,7 +79,7 @@ describe('SElement', () => {
   it('add', () => {
     const a = new SElement(createSVGEl('g'))
 
-    el.add(a)
+    el.append(a)
     expect(el.dom.children[0]).toBe(a.dom)
   })
 

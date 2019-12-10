@@ -35,10 +35,10 @@ describe('Text', () => {
     const s = new SVG()
     s.mount(document.body)
 
-    expect(text.width).toEqual(0)
+    expect(text.bbox.width).toEqual(0)
     expect(text.text()).toBe('')
     text.text('hello')
-    expect(text.width).toEqual(0)
+    expect(text.bbox.width).toEqual(0)
     expect(text.text()).toBe('hello')
 
     text.render(s)
