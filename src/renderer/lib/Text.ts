@@ -2,8 +2,9 @@ import { SElement } from './SElement'
 import { createSVGEl } from '../utils'
 
 export class Text extends SElement<SVGTextElement> {
-  constructor() {
+  constructor(text = '') {
     super(createSVGEl('text'))
+    this.text(text)
   }
 
   /**

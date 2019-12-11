@@ -46,9 +46,7 @@ export class Transform {
   }
 
   move(x: number, y: number) {
-    const args = [x, y].map((x) => x + 'px')
-
-    this.changeModify('translate', args)
+    this.changeModify('translate', [x, y])
   }
 
   scale(factor: number): void

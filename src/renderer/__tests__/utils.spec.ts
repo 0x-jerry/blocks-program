@@ -17,22 +17,22 @@ describe('utils', () => {
     //@ts-ignore
     const a = new Transform(mockEl)
     a.move(1, 2)
-    expect(mockEl.transform).toBe('translate(1px, 2px)')
+    expect(mockEl.transform).toBe('translate(1, 2)')
 
     a.move(3, 4)
-    expect(mockEl.transform).toBe('translate(3px, 4px)')
+    expect(mockEl.transform).toBe('translate(3, 4)')
 
     a.scale(1)
-    expect(mockEl.transform).toBe('scale(1) translate(3px, 4px)')
+    expect(mockEl.transform).toBe('scale(1) translate(3, 4)')
 
     a.scale(1, 2)
-    expect(mockEl.transform).toBe('scale(1, 2) translate(3px, 4px)')
+    expect(mockEl.transform).toBe('scale(1, 2) translate(3, 4)')
 
     a.scale(3)
-    expect(mockEl.transform).toBe('scale(3) translate(3px, 4px)')
+    expect(mockEl.transform).toBe('scale(3) translate(3, 4)')
 
     a.rotate(16)
-    expect(mockEl.transform).toBe('scale(3) translate(3px, 4px) rotate(16deg)')
+    expect(mockEl.transform).toBe('scale(3) translate(3, 4) rotate(16deg)')
   })
 
   it('Sizeable', () => {
