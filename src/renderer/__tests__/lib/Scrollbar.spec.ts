@@ -88,8 +88,10 @@ describe('ScrollPair', () => {
     scroll.setSize(200, 100)
 
     expect(scroll.horizontal.background.attr('width')).toBe(200 - 2)
+    expect(scroll.horizontal.y).toBe(100 - 2)
 
     expect(scroll.vertical.background.attr('height')).toBe(100 - 2)
+    expect(scroll.vertical.x).toBe(200 - 2)
   })
 
   it('scrollTo', () => {

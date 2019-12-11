@@ -107,14 +107,6 @@ export class ScrollPair {
 
   readonly thickness: number
 
-  get x() {
-    return this.horizontal.current
-  }
-
-  get y() {
-    return this.vertical.current
-  }
-
   size: Sizeable
 
   /**
@@ -147,7 +139,7 @@ export class ScrollPair {
     this.horizontal.move(0, height - this.thickness)
 
     this.vertical.setViewport(height - this.thickness)
-    this.horizontal.move(width - this.thickness, 0)
+    this.vertical.move(width - this.thickness, 0)
   }
 
   setRatio(hRatio: number, vRatio: number) {
