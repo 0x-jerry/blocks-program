@@ -8,6 +8,6 @@ describe('Area', () => {
   })
 
   it('setSize', () => {
-    
+    expect(area).not.toBeNull()
   })
 })

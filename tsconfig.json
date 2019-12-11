@@ -1,12 +1,12 @@
 {
   "include": [
     "src",
-    "example"
   ],
   "exclude": [
     "node_modules"
   ],
   "compilerOptions": {
+    "rootDir": ".",
     "baseUrl": ".",
     "outDir": "dist",
     "sourceMap": false,
@@ -33,7 +33,6 @@
       "@/*": [
         "src/*"
       ]
-    },
-    "rootDir": "."
+    }
   }
 }
