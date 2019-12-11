@@ -15,9 +15,10 @@ export class Rect extends SElement<SVGRectElement> {
     return this._size.height
   }
 
-  constructor(width: number, height: number, rx: number = 0, ry: number = 0) {
+  constructor(width: number, height: number, rx: number = 0, ry?: number) {
     super(createSVGEl('rect'))
     this._size = { width, height }
+    ry = ry || rx
 
     this.attr({ width, height, rx, ry })
   }

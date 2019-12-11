@@ -31,7 +31,7 @@ export class SElement<T extends SVGGraphicsElement = SVGGraphicsElement> {
   }
 
   get bbox(): BBox {
-    return Object.assign({}, this._rect)
+    return this._rect
   }
 
   constructor(dom: T) {

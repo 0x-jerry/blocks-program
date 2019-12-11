@@ -46,18 +46,22 @@ export class ScrollBar extends G {
     this._view = { thickness, length }
     this.isVertical = isVertical
     this.current = 0
+
     this._initSVG()
+    this.addClasses('s_scroll')
   }
 
   private _initSVG() {
     if (this.isVertical) {
-      this.background = new Rect(this.thickness, this.length)
-      this.scrollBar = new Rect(this.thickness, this.length * this.ratio)
+      this.background = new Rect(this.thickness, this.length, this.thickness / 2)
+      this.scrollBar = new Rect(this.thickness, this.length * this.ratio, this.thickness / 2)
     } else {
-      this.background = new Rect(this.length, this.thickness)
-      this.scrollBar = new Rect(this.length * this.ratio, this.thickness)
+      this.background = new Rect(this.length, this.thickness, this.thickness / 2)
+      this.scrollBar = new Rect(this.length * this.ratio, this.thickness, this.thickness / 2)
     }
-    this.background.move(0, 0)
+    this.background.addClasses('s_scroll_background')
+    this.scrollBar.addClasses('s_scroll_bar')
+
     this.scrollTo(this.current)
   }
 
@@ -100,7 +104,7 @@ export class ScrollBar extends G {
   }
 }
 
-export class ScrollPair {
+export class ScrollPair extends G {
   vertical: ScrollBar
 
   horizontal: ScrollBar
@@ -117,14 +121,18 @@ export class ScrollPair {
    * @param height View size height
    */
   constructor(hRatio: number, vRatio: number, width: number, height: number, thickness = 2) {
+    super()
     this.thickness = thickness
     this.size = new Sizeable(width, height)
 
     this.vertical = new ScrollBar(vRatio, height - this.thickness, true, this.thickness)
+    this.vertical.addClasses('s_scrolls_vertical')
     this.horizontal = new ScrollBar(hRatio, width - this.thickness, false, this.thickness)
+    this.horizontal.addClasses('s_scrolls_horizontal')
 
     this.setRatio(hRatio, vRatio)
     this.setSize(width, height)
+    this.addClasses('s_scrolls')
   }
 
   scrollTo(x: number, y: number) {
@@ -148,13 +156,13 @@ export class ScrollPair {
   }
 
   render(el: SElement, showHorizontal = true, showVertical = true) {
-    showHorizontal && this.horizontal.render(el)
+    super.render(el)
 
-    showVertical && this.vertical.render(el)
+    showHorizontal && this.horizontal.render(this)
+    showVertical && this.vertical.render(this)
   }
 
   destroy() {
-    this.horizontal.destroy()
-    this.vertical.destroy()
+    super.destroy()
   }
 }

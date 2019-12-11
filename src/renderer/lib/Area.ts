@@ -94,22 +94,30 @@ export class Area extends EventEmitter<IAreaEventMap> {
     this.size = new Sizeable(width, height)
 
     this.background = new AreaBackground(width, height)
+    this.background.addClasses('s_area_background')
     this.content = new AreaContent()
-    this.scroll = new ScrollPair(1, 1, width, height)
+    this.content.addClasses('s_area_content')
+    this.scroll = new ScrollPair(1, 1, width, height, 5)
+  }
+
+  resize() {
+    const { width, height } = this.size
+
+    this.background.setSize(width, height)
+    this.scroll.setSize(width, height)
+    this.scroll.setRatio(width / this.totalWidth, height / this.totalHeight)
   }
 
   setSize(width: number, height: number) {
     this.size.set({ width, height })
-
-    this.background.setSize(width, height)
-    this.scroll.setSize(width, height)
-    this.scroll.setRatio(this.content.bbox.width / this.totalWidth, this.content.bbox.height / this.totalHeight)
+    this.resize()
   }
 
   render(parentEl: SElement) {
     this.background.render(parentEl)
     this.content.render(parentEl)
     this.scroll.render(parentEl, this.draggableX, this.draggableY)
+    this.resize()
   }
 
   append(...children: SElement[]) {
