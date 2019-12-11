@@ -19,22 +19,26 @@ export default {
   output: [
     {
       file: config.file + '.cjs.js',
+      sourcemap: true,
       format: 'cjs'
     },
     {
       file: config.file + '.esm.js',
+      sourcemap: true,
       format: 'esm'
     },
     {
       file: config.file + '.browser.min.js',
       format: 'iife',
       name: config.name,
+      sourcemap: true,
       plugins: [terser()]
     },
     {
       file: config.file + '.umd.min.js',
       format: 'umd',
       name: config.name,
+      sourcemap: true,
       plugins: [terser()]
     }
   ],

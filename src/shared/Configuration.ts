@@ -1,18 +1,18 @@
 import { ObjectAny } from '@/typedef'
 
 export class Configuration<T extends ObjectAny = {}> {
-  private data: T
+  protected _data: T
 
   constructor(opts: T) {
-    this.data = opts
+    this._data = opts
   }
 
   get<K extends keyof T>(key: K): T[K] {
-    return this.data[key]
+    return this._data[key]
   }
 
   set<K extends keyof T>(key: K, val: T[K]): void {
-    this.data[key] = val
+    this._data[key] = val
   }
 
   update(opts: Partial<T>): void
