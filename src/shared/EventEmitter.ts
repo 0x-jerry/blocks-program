@@ -4,7 +4,7 @@ export interface IEventCallback {
   (...params: any[]): void
 }
 
-export interface IEventsMap {
+interface IEventsMap {
   [name: string]: IEventCallback
 }
 

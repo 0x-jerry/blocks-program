@@ -1,9 +1,17 @@
 import { Rect } from './Shape'
 import { G } from './G'
 import { SElement } from './SElement'
-import { Sizeable } from '../utils'
+import { Sizeable, Dragger } from '../utils'
+import { EventEmitter, Observer, ObserverCallbackFunc } from '@/shared'
+
+type IScrollBarEventMap = {
+  'scroll'(pos: number): void
+}
 
 export class ScrollBar extends G {
+  events: EventEmitter<IScrollBarEventMap>
+  dragger: Dragger
+
   isVertical: boolean
 
   background: Rect
@@ -13,7 +21,7 @@ export class ScrollBar extends G {
   /**
    * scroll current position
    */
-  current: number
+  current: Observer<number>
 
   /**
    * scroll bar length / scroll total length [0 - 1]
@@ -45,10 +53,24 @@ export class ScrollBar extends G {
     this.ratio = ratio
     this._view = { thickness, length }
     this.isVertical = isVertical
-    this.current = 0
+    this.current = new Observer(0)
+
+    this.events = new EventEmitter()
 
     this._initSVG()
     this.addClasses('s_scroll')
+    this.current.sub(this._posUpdate)
+    this.dragger = new Dragger(this.scrollBar.dom)
+
+    this._initDragger()
+  }
+
+  private _initDragger() {
+    this.dragger.on('dragging', (dx, dy) => {
+      const dmove = this.isVertical ? dy : dx
+      console.log(dx, dy)
+      this.scrollTo(this.current.value + dmove)
+    })
   }
 
   private _initSVG() {
@@ -62,7 +84,15 @@ export class ScrollBar extends G {
     this.background.addClasses('s_scroll_background')
     this.scrollBar.addClasses('s_scroll_bar')
 
-    this.scrollTo(this.current)
+    this.scrollTo(this.current.value)
+  }
+
+  private _posUpdate: ObserverCallbackFunc<number> = (now) => {
+    if (this.isVertical) {
+      this.scrollBar.move(0, now)
+    } else {
+      this.scrollBar.move(now, 0)
+    }
   }
 
   resize() {
@@ -88,17 +118,13 @@ export class ScrollBar extends G {
 
   scrollTo(pos: number) {
     const maxLen = this.length * (1 - this.ratio)
-    this.current = pos < 0 ? 0 : pos > maxLen ? maxLen : pos
-
-    if (this.isVertical) {
-      this.scrollBar.move(0, this.current)
-    } else {
-      this.scrollBar.move(this.current, 0)
-    }
+    const current = pos < 0 ? 0 : pos > maxLen ? maxLen : pos
+    this.current.set(current)
   }
 
   render(el: SElement) {
     super.render(el)
+    this.dragger.destroy()
     this.background.render(this)
     this.scrollBar.render(this)
   }

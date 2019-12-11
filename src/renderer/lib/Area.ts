@@ -3,7 +3,7 @@ import { G } from './G'
 import { SElement } from './SElement'
 import { Sizeable } from '../utils'
 import { ScrollPair } from './ScrollBar'
-import { SArray, EventEmitter, IEventsMap } from '@/shared'
+import { SArray, EventEmitter } from '@/shared'
 
 export class AreaBackground extends Rect {
   effect() {
@@ -46,7 +46,7 @@ export class AreaContent extends G {
   }
 }
 
-export interface IAreaEventMap extends IEventsMap {
+type IAreaEventMap = {
   click: (e: MouseEvent, el?: SElement) => void
 }
 
