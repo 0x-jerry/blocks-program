@@ -61,3 +61,98 @@ export function oneOf<T>(arr1: T[], arr2: T[]): boolean {
 export function toArray<T>(t: T | T[]): T[] {
   return Array.isArray(t) ? t : [t]
 }
+
+interface IThrottleConfig {
+  leading: boolean
+  trailing: boolean
+}
+
+export function throttle<T extends (...args: any[]) => void>(
+  func: T,
+  time: number,
+  options: Partial<IThrottleConfig> = {}
+): T {
+  let firstTimeCalled = false
+  let lastCalledTime = 0
+
+  const opt: IThrottleConfig = Object.assign({ leading: true, trailing: false }, options)
+
+  let trailingHandle: NodeJS.Timeout
+
+  // @ts-ignore
+  return (...params: Parameters<T>) => {
+    const now = new Date().getTime()
+
+    // leading
+    if (!firstTimeCalled) {
+      firstTimeCalled = true
+      lastCalledTime = now
+
+      if (opt.leading) {
+        func(...params)
+        return
+      }
+    }
+
+    // exact time interval
+    if (now - lastCalledTime >= time) {
+      lastCalledTime = now
+      func(...params)
+      return
+    }
+
+    // between time interval, for trailing
+    if (opt.trailing) {
+      clearTimeout(trailingHandle)
+      trailingHandle = setTimeout(() => func(...params), time)
+    }
+  }
+}
+
+interface IDebounceConfig {
+  leading: boolean
+  maxWait: number
+  trailing: boolean
+}
+
+export function debounce<T extends (...args: any[]) => void>(
+  func: T,
+  time: number,
+  options: Partial<IDebounceConfig> = {}
+): T {
+  let trailingHandle: NodeJS.Timeout
+  let firstTimeCalled = false
+  let lastRecordTime = 0
+
+  const opt: IDebounceConfig = Object.assign({ leading: false, trailing: true, maxWait: time }, options)
+
+  //@ts-ignore
+  return (...params: any[]) => {
+    const now = new Date().getTime()
+
+    // leading
+    if (!firstTimeCalled) {
+      lastRecordTime = now
+      firstTimeCalled = true
+
+      if (opt.leading) {
+        func(...params)
+        return
+      }
+    }
+
+    // exact time interval
+    if (now - lastRecordTime >= time) {
+      func(...params)
+      lastRecordTime = now
+      return
+    }
+
+    lastRecordTime = now
+
+    if (opt.trailing) {
+      clearTimeout(trailingHandle)
+      trailingHandle = setTimeout(() => func(...params), opt.maxWait)
+    }
+  }
+}

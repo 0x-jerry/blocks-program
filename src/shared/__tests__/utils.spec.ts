@@ -1,4 +1,4 @@
-import { uid, getId, oneOf, toArray, SArray } from '../utils'
+import { uid, getId, oneOf, toArray, SArray, debounce, throttle } from '../utils'
 
 describe('utils', () => {
   it('uid', () => {
@@ -59,5 +59,194 @@ describe('utils', () => {
     expect(toArray(1)).toEqual([1])
 
     expect(toArray([12, 1])).toEqual([12, 1])
+  })
+})
+
+describe('debounce', () => {
+  it('normal', (done) => {
+    const fn = jest.fn()
+    const wrapper = debounce(fn, 200)
+
+    wrapper()
+
+    expect(fn).toBeCalledTimes(0)
+
+    setTimeout(() => {
+      wrapper()
+      expect(fn).toBeCalledTimes(0)
+    }, 100)
+
+    setTimeout(() => {
+      expect(fn).toBeCalledTimes(1)
+      done()
+    }, 500)
+  })
+
+  it('leading', (done) => {
+    const fn = jest.fn()
+    const wrapper = debounce(fn, 200, { leading: true })
+
+    wrapper()
+
+    expect(fn).toBeCalledTimes(1)
+
+    setTimeout(() => {
+      wrapper()
+      expect(fn).toBeCalledTimes(1)
+    }, 100)
+
+    setTimeout(() => {
+      expect(fn).toBeCalledTimes(2)
+      done()
+    }, 500)
+  })
+
+  it('trailing', (done) => {
+    const fn = jest.fn()
+    const wrapper = debounce(fn, 200, { trailing: false })
+
+    wrapper()
+
+    expect(fn).toBeCalledTimes(0)
+
+    setTimeout(() => {
+      wrapper()
+      expect(fn).toBeCalledTimes(0)
+    }, 50)
+
+    setTimeout(() => {
+      wrapper()
+      expect(fn).toBeCalledTimes(1)
+    }, 300)
+
+    setTimeout(() => {
+      wrapper()
+      wrapper()
+      wrapper()
+      wrapper()
+    }, 350)
+
+    setTimeout(() => {
+      expect(fn).toBeCalledTimes(1)
+      done()
+    }, 600)
+  })
+
+  it('maxWait', (done) => {
+    const fn = jest.fn()
+    const wrapper = debounce(fn, 200, { maxWait: 400 })
+
+    wrapper()
+
+    expect(fn).toBeCalledTimes(0)
+
+    setTimeout(() => {
+      wrapper()
+      expect(fn).toBeCalledTimes(0)
+    }, 100)
+
+    setTimeout(() => {
+      expect(fn).toBeCalledTimes(0)
+    }, 400)
+
+    setTimeout(() => {
+      expect(fn).toBeCalledTimes(1)
+      done()
+    }, 550)
+  })
+})
+
+describe('throttle', () => {
+  it('normal', (done) => {
+    const fn = jest.fn()
+    const wrapper = throttle(fn, 200)
+
+    wrapper()
+    wrapper()
+    wrapper()
+
+    expect(fn).toBeCalledTimes(1)
+
+    setTimeout(() => {
+      wrapper()
+      expect(fn).toBeCalledTimes(2)
+    }, 210)
+
+    setTimeout(() => {
+      wrapper()
+      wrapper()
+    }, 220)
+
+    setTimeout(() => {
+      expect(fn).toBeCalledTimes(2)
+      done()
+    }, 500)
+  })
+
+  it('leading', (done) => {
+    const fn = jest.fn()
+    const wrapper = throttle(fn, 200, { leading: false })
+
+    wrapper()
+    wrapper()
+    wrapper()
+    wrapper()
+
+    expect(fn).toBeCalledTimes(0)
+
+    setTimeout(() => {
+      wrapper()
+      expect(fn).toBeCalledTimes(1)
+    }, 220)
+
+    setTimeout(() => {
+      wrapper()
+      wrapper()
+      wrapper()
+    }, 250)
+
+    setTimeout(() => {
+      expect(fn).toBeCalledTimes(1)
+      done()
+    }, 500)
+  })
+
+  it('trailing', (done) => {
+    const fn = jest.fn()
+    const wrapper = throttle(fn, 200, { trailing: true })
+
+    wrapper()
+    wrapper()
+    wrapper()
+
+    expect(fn).toBeCalledTimes(1)
+
+    setTimeout(() => {
+      wrapper()
+      wrapper()
+      wrapper()
+    }, 10)
+
+    setTimeout(() => {
+      expect(fn).toBeCalledTimes(2)
+    }, 220)
+
+    setTimeout(() => {
+      wrapper()
+    }, 230)
+
+    setTimeout(() => {
+      wrapper()
+    }, 400)
+
+    setTimeout(() => {
+      expect(fn).toBeCalledTimes(3)
+      done()
+    }, 500)
+
+    setTimeout(() => {
+      expect(fn).toBeCalledTimes(4)
+      done()
+    }, 650)
   })
 })
