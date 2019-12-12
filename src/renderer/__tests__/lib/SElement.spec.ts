@@ -61,16 +61,10 @@ describe('SElement', () => {
   })
 
   it('bbox', () => {
-    expect(el.bbox).toEqual({
-      x: 0,
-      y: 0,
-      width: 0,
-      height: 0
-    })
-
     const svg = new SVG()
     svg.mount(document.createElement('div'))
-    el.render(svg)
+
+    svg.append(el)
 
     expect(el.rendered).toBe(true)
     expect(el.bbox).toEqual(mockBBoxRect())

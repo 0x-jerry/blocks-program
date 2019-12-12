@@ -26,7 +26,7 @@ describe('EventEmitter', () => {
     expect(evts.length).toBe(0)
   })
 
-  it('emit', async (done) => {
+  it('emit', (done) => {
     const fn = jest.fn()
     e.on('test', fn)
 
@@ -39,5 +39,22 @@ describe('EventEmitter', () => {
     })
 
     e.emit('test1', 1)
+  })
+
+  it('clear', (done) => {
+    const fn = jest.fn()
+
+    e.on('test',fn)
+    e.on('test1',fn)
+    e.on('test2',fn)
+
+    expect(e.events('test').length).toBe(1)
+    expect(e.events('test1').length).toBe(1)
+    expect(e.events('test2').length).toBe(1)
+    e.clear()
+
+    expect(e.events('test').length).toBe(0)
+    expect(e.events('test1').length).toBe(0)
+    expect(e.events('test2').length).toBe(0)
   })
 })

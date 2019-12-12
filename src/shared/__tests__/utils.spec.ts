@@ -1,12 +1,15 @@
-import { uid, getId, oneOf, toArray, SArray, debounce, throttle } from '../utils'
+import { uuid, getId, oneOf, toArray, SArray, debounce, throttle } from '../utils'
 
 describe('utils', () => {
   it('uid', () => {
-    expect(uid(4)).toHaveLength(4)
+    const c = '[0-9a-z]'
 
-    expect(uid()).toHaveLength(8)
+    const reg = new RegExp(`${c}{8}-${c}{4}-${c}{4}-${c}{4}-${c}{12}`, 'i')
 
-    expect(uid(12)).toHaveLength(12)
+    expect(reg.test(uuid())).toBe(true)
+    expect(reg.test(uuid())).toBe(true)
+    expect(reg.test(uuid())).toBe(true)
+    expect(reg.test(uuid())).toBe(true)
   })
 
   it('getId', () => {

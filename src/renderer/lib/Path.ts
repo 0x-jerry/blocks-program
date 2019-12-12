@@ -208,6 +208,5 @@ export class Path extends SElement<SVGPathElement> {
 
   updatePath(p: string) {
     this.attr('d', p)
-    this.cacheBBox()
   }
 }

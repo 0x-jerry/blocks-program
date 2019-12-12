@@ -23,6 +23,5 @@ export class Text extends SElement<SVGTextElement> {
     }
 
     this.dom.textContent = text
-    this.cacheBBox()
   }
 }

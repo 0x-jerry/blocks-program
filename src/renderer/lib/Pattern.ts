@@ -1,7 +1,7 @@
 import { createSVGEl, Sizeable, ISize } from '../utils'
 import { BasicElement } from './SElement'
 import { Rect } from './Shape'
-import { ObserverCallbackFunc, uid } from '@/shared'
+import { ObserverCallbackFunc, uuid } from '@/shared'
 
 export function Grid() {
   return `<pattern id="Pattern" x="0" y="0" width=".25" height=".25">
@@ -17,7 +17,7 @@ export class PatternGrid extends BasicElement<SVGPatternElement> {
   rect: Rect
   size: Sizeable
 
-  constructor(width: number, height: number, id = uid()) {
+  constructor(width: number, height: number, id = uuid()) {
     super(createSVGEl('pattern'))
     this.id = id
 
@@ -45,18 +45,5 @@ export class PatternGrid extends BasicElement<SVGPatternElement> {
   move(x: number, y: number) {
     this.dom.setAttribute('x', String(x))
     this.dom.setAttribute('y', String(y))
-  }
-
-  render(el: BasicElement) {
-    super.render(el)
-    this.rect.render(this)
-  }
-
-  append(...children: BasicElement[]) {
-    super.append(...children)
-
-    for (const el of children) {
-      el.render(this)
-    }
   }
 }

@@ -1,11 +1,27 @@
-/**
- *
- * @param len Max is 12, default is 8
- */
-export function uid(len = 8) {
-  return Math.random()
-    .toString(16)
-    .substr(2, len)
+export function uuid() {
+  let uuid = '';
+
+  for (let i = 0; i < 32; i += 1) {
+    switch (i) {
+      case 8:
+      case 20:
+        uuid += '-'
+        uuid += ((Math.random() * 16) | 0).toString(16)
+        break
+      case 12:
+        uuid += '-'
+        uuid += ((Math.random() * 16) | 0).toString(16)
+        break
+      case 16:
+        uuid += '-'
+        uuid += ((Math.random() * 4) | 8).toString(16)
+        break
+      default:
+        uuid += ((Math.random() * 16) | 0).toString(16)
+    }
+  }
+
+  return uuid
 }
 
 export function getId<T extends { id: string }>(instanceOrId: T | string) {

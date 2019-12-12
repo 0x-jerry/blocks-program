@@ -1,7 +1,7 @@
 import { Workspace } from './Workspace'
 import { BlockFieldManager } from './BlockFieldsManager'
 import { BlockField } from './BlockField'
-import { Observer, ObserverCallbackFunc, uid, Configuration } from '@/shared'
+import { Observer, ObserverCallbackFunc, uuid, Configuration } from '@/shared'
 
 export interface BlockConfigOption {
   name: string
@@ -62,7 +62,7 @@ export class Block {
     return output ? output.length > 0 : false
   }
 
-  constructor(config: Partial<BlockConfigOption> = {}, id: string = uid()) {
+  constructor(config: Partial<BlockConfigOption> = {}, id: string = uuid()) {
     this.id = id
 
     this.config = new BlockConfig(config)

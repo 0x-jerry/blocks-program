@@ -1,6 +1,5 @@
 import { Rect } from './Shape'
 import { G } from './G'
-import { SElement } from './SElement'
 import { Sizeable, Dragger } from '../utils'
 import { EventEmitter, Observer, ObserverCallbackFunc } from '@/shared'
 
@@ -83,6 +82,9 @@ export class ScrollBar extends G {
     this.background.addClasses('s_scroll_background')
     this.scrollBar.addClasses('s_scroll_bar')
 
+    this.append(this.background)
+    this.append(this.scrollBar)
+
     this.scrollTo(this.current.value)
   }
 
@@ -119,12 +121,6 @@ export class ScrollBar extends G {
     const maxLen = this.length * (1 - this.ratio)
     const current = pos < 0 ? 0 : pos > maxLen ? maxLen : pos
     this.current.set(current)
-  }
-
-  render(el: SElement) {
-    super.render(el)
-    this.background.render(this)
-    this.scrollBar.render(this)
   }
 
   destroy() {
@@ -164,14 +160,22 @@ export class ScrollPair extends G {
     this.thickness = thickness
     this.size = new Sizeable(width, height)
 
-    this.vertical = new ScrollBar(vRatio, height - this.thickness, true, this.thickness)
-    this.vertical.addClasses('s_scrolls_vertical')
-    this.horizontal = new ScrollBar(hRatio, width - this.thickness, false, this.thickness)
-    this.horizontal.addClasses('s_scrolls_horizontal')
+    this._initSVG(vRatio, height, hRatio, width)
 
     this.setRatio(hRatio, vRatio)
     this.setSize(width, height)
     this.addClasses('s_scrolls')
+  }
+
+  private _initSVG(vRatio: number, height: number, hRatio: number, width: number) {
+    this.vertical = new ScrollBar(vRatio, height - this.thickness, true, this.thickness)
+    this.vertical.addClasses('s_scrolls_vertical')
+
+    this.horizontal = new ScrollBar(hRatio, width - this.thickness, false, this.thickness)
+    this.horizontal.addClasses('s_scrolls_horizontal')
+
+    this.append(this.vertical)
+    this.append(this.horizontal)
   }
 
   scrollTo(x: number, y: number) {
@@ -192,13 +196,6 @@ export class ScrollPair extends G {
   setRatio(hRatio: number, vRatio: number) {
     this.horizontal.setRatio(hRatio)
     this.vertical.setRatio(vRatio)
-  }
-
-  render(el: SElement, showHorizontal = true, showVertical = true) {
-    super.render(el)
-
-    showHorizontal && this.horizontal.render(this)
-    showVertical && this.vertical.render(this)
   }
 
   destroy() {

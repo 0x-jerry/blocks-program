@@ -37,9 +37,11 @@
     <script>
       const svg = new BlocksProgram.SVG(600, 400)
       svg.mount(document.getElementById('app'))
-      const area = new BlocksProgram.Area(600, 400)
 
-      area.render(svg)
+      const area = new BlocksProgram.Area(600, 400)
+      svg.append(area)
+      area.resize()
+
     </script>
   </body>
 </html>

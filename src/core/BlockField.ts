@@ -1,4 +1,4 @@
-import { Observer, uid, ObserverCallbackFunc, oneOf } from '@/shared'
+import { Observer, uuid, ObserverCallbackFunc, oneOf } from '@/shared'
 import { Block } from '@/core'
 
 /**
@@ -44,7 +44,7 @@ export class BlockField<T = any> {
     return this._idx
   }
 
-  constructor(name: string, value: T | null = null, idx = 0, id = uid()) {
+  constructor(name: string, value: T | null = null, idx = 0, id = uuid()) {
     this.name = name
     this.type = ''
     this._idx = idx

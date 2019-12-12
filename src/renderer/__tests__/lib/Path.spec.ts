@@ -65,7 +65,7 @@ describe('Path', () => {
   it('updatePath', () => {
     const svg = new SVG()
     svg.mount(document.body)
-    path.render(svg)
+    svg.append(path)
 
     path.updatePath('M 0,0')
     expect(path.bbox).toEqual(mockBBoxRect())

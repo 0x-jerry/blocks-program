@@ -1,4 +1,4 @@
-import { uid, getId, SArray } from '@/shared'
+import { uuid, getId, SArray } from '@/shared'
 import { Block } from './Block'
 
 export class Workspace {
@@ -7,7 +7,7 @@ export class Workspace {
 
   blockRoots: SArray<Block>
 
-  constructor(id: string = uid()) {
+  constructor(id: string = uuid()) {
     this.id = id
     this.blockDB = new SArray()
     this.blockRoots = new SArray()

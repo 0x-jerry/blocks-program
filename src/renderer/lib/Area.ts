@@ -50,7 +50,8 @@ type IAreaEventMap = {
   click: (e: MouseEvent, el?: SElement) => void
 }
 
-export class Area extends EventEmitter<IAreaEventMap> {
+export class Area extends G {
+  events: EventEmitter<IAreaEventMap>
   dragger: Dragger
 
   background: AreaBackground
@@ -89,21 +90,33 @@ export class Area extends EventEmitter<IAreaEventMap> {
 
   constructor(width: number, height: number, draggableX = true, draggableY = true) {
     super()
+    this.addClasses('s_area')
 
     this.draggableX = draggableX
     this.draggableY = draggableY
 
     this.size = new Sizeable(width, height)
 
-    this.background = new AreaBackground(width, height)
-    this.background.addClasses('s_area_background')
-    this.content = new AreaContent()
-    this.content.addClasses('s_area_content')
-    this.scroll = new ScrollPair(1, 1, width, height, 5)
+    this._initSVG(width, height)
 
     this.dragger = new Dragger(this.background.dom)
+    this.events = new EventEmitter()
 
     this._initDragger()
+  }
+
+  private _initSVG(width: number, height: number) {
+    this.background = new AreaBackground(width, height)
+    this.background.addClasses('s_area_background')
+
+    this.content = new AreaContent()
+    this.content.addClasses('s_area_content')
+
+    this.scroll = new ScrollPair(1, 1, width, height, 5)
+
+    this.append(this.background)
+    this.append(this.content)
+    this.append(this.scroll)
   }
 
   private _initDragger() {
@@ -127,24 +140,16 @@ export class Area extends EventEmitter<IAreaEventMap> {
     this.resize()
   }
 
-  render(parentEl: SElement) {
-    this.background.render(parentEl)
-    this.content.render(parentEl)
-    this.scroll.render(parentEl, this.draggableX, this.draggableY)
-    this.resize()
-  }
-
-  append(...children: SElement[]) {
+  appendContent(...children: SElement[]) {
     this.content.append(...children)
   }
 
-  remove(...children: SElement[]) {
+  removeContent(...children: SElement[]) {
     this.content.remove(...children)
   }
 
   destroy() {
-    this.background.destroy()
-    this.content.destroy()
-    this.scroll.destroy()
+    super.destroy()
+    this.dragger.destroy()
   }
 }

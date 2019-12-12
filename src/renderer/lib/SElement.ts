@@ -1,51 +1,31 @@
+import { SArray } from '@/shared'
+
 interface AttributeObject {
   [key: string]: string | number | null
 }
 
-export interface BBox {
-  x: number
-  y: number
-  width: number
-  height: number
-}
-
-export class SElement<T extends SVGGraphicsElement = SVGGraphicsElement> {
+export class BasicElement<T extends Element = Element> {
   protected _rendered: boolean
-
-  protected _rect: BBox
+  protected _parent: BasicElement | null
 
   dom: T
+  children: SArray<BasicElement>
 
-  parent: SElement | null
-
-  get x() {
-    return this._rect.x
-  }
-
-  get y() {
-    return this._rect.y
+  get parent() {
+    return this._parent
   }
 
   get rendered() {
     return this._rendered
   }
 
-  get bbox(): BBox {
-    return this._rect
-  }
-
   constructor(dom: T) {
     this.dom = dom
     this._rendered = false
-    this._rect = {
-      x: 0,
-      y: 0,
-      width: 0,
-      height: 0
-    }
+    this.children = new SArray()
   }
 
-  private getAttr(name: string): string | null | number {
+  protected getAttr(name: string): string | null | number {
     const attr = this.dom.getAttribute(name)
     if (!attr) {
       return attr
@@ -55,7 +35,7 @@ export class SElement<T extends SVGGraphicsElement = SVGGraphicsElement> {
     return Number.isNaN(px) ? attr : px
   }
 
-  private setAttr(name: string, val: string | number | null) {
+  protected setAttr(name: string, val: string | number | null) {
     if (val === null) {
       this.dom.removeAttribute(name)
     } else {
@@ -63,24 +43,18 @@ export class SElement<T extends SVGGraphicsElement = SVGGraphicsElement> {
     }
   }
 
-  protected cacheBBox() {
-    if (this._rendered) {
-      this._rect = this.dom.getBBox()
-    }
-  }
-
-  on<K extends keyof SVGElementEventMap>(
+  on<K extends keyof ElementEventMap>(
     type: K,
-    listener: (this: SVGGElement, ev: SVGElementEventMap[K]) => any,
+    listener: (this: T, ev: ElementEventMap[K]) => any,
     options?: boolean | AddEventListenerOptions
   ): void
   on(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void {
     this.dom.addEventListener(type, listener, options)
   }
 
-  off<K extends keyof SVGElementEventMap>(
+  off<K extends keyof ElementEventMap>(
     type: K,
-    listener: (this: SVGGElement, ev: SVGElementEventMap[K]) => any,
+    listener: (this: T, ev: ElementEventMap[K]) => any,
     options?: boolean | EventListenerOptions
   ): void
   off(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void {
@@ -104,40 +78,25 @@ export class SElement<T extends SVGGraphicsElement = SVGGraphicsElement> {
     }
   }
 
-  /**
-   * Local coordinates
-   */
-  move(x: number, y: number): void {
-    this._rect.x = x
-    this._rect.y = y
-  }
-
-  dx(dx: number) {
-    this.move(this.x + dx, this.y)
-  }
-
-  dy(dy: number) {
-    this.move(this.x, this.y + dy)
-  }
-
-  dmove(dx: number, dy: number): void {
-    this.move(this.x + dx, this.y + dy)
-  }
-
-  render(parentEl: SElement) {
-    parentEl.dom.appendChild(this.dom)
-    this._rendered = parentEl.rendered
-    this.cacheBBox()
-  }
-
-  append(...children: SElement[]) {
+  append(...children: BasicElement[]) {
     for (const el of children) {
       this.dom.appendChild(el.dom)
-      el._rendered = this._rendered
-      el.cacheBBox()
-    }
+      this.children.pushDistinct(el)
 
-    this.cacheBBox()
+      el._rendered = this.rendered
+      el._parent = this
+    }
+  }
+
+  remove(...children: BasicElement[]) {
+    for (const el of children) {
+      const hasEl = this.children.removeItem(el)
+
+      if (hasEl) {
+        this.dom.removeChild(el.dom)
+        el.destroy()
+      }
+    }
   }
 
   addClasses(...classes: string[]) {
@@ -150,6 +109,61 @@ export class SElement<T extends SVGGraphicsElement = SVGGraphicsElement> {
 
   destroy() {
     this.dom.remove()
-    this.parent?.cacheBBox()
+    this.children.forEach((child) => child.destroy())
+
+    this._rendered = false
+    this._parent = null
+  }
+}
+
+export class SElement<T extends SVGGraphicsElement = SVGGraphicsElement> extends BasicElement<T> {
+  x: number
+  y: number
+
+  get bbox(): DOMRect {
+    return this.dom.getBBox()
+  }
+
+  constructor(dom: T) {
+    super(dom)
+    this._rendered = false
+  }
+
+  on<K extends keyof SVGElementEventMap>(
+    type: K,
+    listener: (this: SVGGElement, ev: SVGElementEventMap[K]) => any,
+    options?: boolean | AddEventListenerOptions
+  ): void
+  on(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void {
+    this.dom.addEventListener(type, listener, options)
+  }
+
+  off<K extends keyof SVGElementEventMap>(
+    type: K,
+    listener: (this: SVGGElement, ev: SVGElementEventMap[K]) => any,
+    options?: boolean | EventListenerOptions
+  ): void
+  off(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void {
+    this.dom.removeEventListener(type, listener, options)
+  }
+
+  /**
+   * Local coordinates
+   */
+  move(x: number, y: number): void {
+    this.x = x
+    this.y = y
+  }
+
+  dx(dx: number) {
+    this.move(this.x + dx, this.y)
+  }
+
+  dy(dy: number) {
+    this.move(this.x, this.y + dy)
+  }
+
+  dmove(dx: number, dy: number): void {
+    this.move(this.x + dx, this.y + dy)
   }
 }
