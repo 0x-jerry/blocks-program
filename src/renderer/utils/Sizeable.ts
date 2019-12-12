@@ -1,6 +1,6 @@
 import { Observer } from '@/shared'
 
-interface ISize {
+export interface ISize {
   width: number
   height: number
 }
