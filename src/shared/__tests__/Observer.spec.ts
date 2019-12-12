@@ -18,7 +18,7 @@ describe('Observer', () => {
     expect(fn).toBeCalledTimes(1)
   })
 
-  it('sub', (done) => {
+  it('sub', async (done) => {
     const fn: ObserverCallbackFunc<number> = (now, pre) => {
       expect(now).toBe(1)
       expect(pre).toBe(null)

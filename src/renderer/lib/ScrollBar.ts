@@ -68,7 +68,6 @@ export class ScrollBar extends G {
   private _initDragger() {
     this.dragger.on('dragging', (dx, dy) => {
       const dmove = this.isVertical ? dy : dx
-      console.log(dx, dy)
       this.scrollTo(this.current.value + dmove)
     })
   }
@@ -124,9 +123,13 @@ export class ScrollBar extends G {
 
   render(el: SElement) {
     super.render(el)
-    this.dragger.destroy()
     this.background.render(this)
     this.scrollBar.render(this)
+  }
+
+  destroy() {
+    super.destroy()
+    this.dragger.destroy()
   }
 }
 

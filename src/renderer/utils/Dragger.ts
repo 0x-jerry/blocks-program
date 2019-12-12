@@ -1,14 +1,14 @@
 import { EventEmitter } from '@/shared'
 
 type IGlobalDomEvent = {
-  mouseup(e: MouseEvent): void
-  mousemove(e: MouseEvent): void
+  pointerup(e: MouseEvent): void
+  pointermove(e: MouseEvent): void
 }
 
 const globalDomEvent = new EventEmitter<IGlobalDomEvent>()
 
-window.addEventListener('mouseup', (e) => globalDomEvent.emit('mouseup', e))
-window.addEventListener('mousemove', (e) => globalDomEvent.emit('mousemove', e))
+window.addEventListener('pointerup', (e) => globalDomEvent.emit('pointerup', e))
+window.addEventListener('pointermove', (e) => globalDomEvent.emit('pointermove', e))
 
 type IDraggableEventsMap = {
   dragstart(): void
@@ -29,22 +29,22 @@ export class Dragger extends EventEmitter<IDraggableEventsMap> {
     this.dom = dom
     this._isDragging = false
 
-    this._mousedown = this._mousedown.bind(this)
-    this._mouseup = this._mouseup.bind(this)
-    this._mousemove = this._mousemove.bind(this)
+    this._pointerdown = this._pointerdown.bind(this)
+    this._pointerup = this._pointerup.bind(this)
+    this._pointermove = this._pointermove.bind(this)
 
-    this.dom.addEventListener('mousedown', this._mousedown)
+    this.dom.addEventListener('pointerdown', this._pointerdown)
 
-    globalDomEvent.on('mousemove', this._mousemove)
-    globalDomEvent.on('mouseup', this._mouseup)
+    globalDomEvent.on('pointermove', this._pointermove)
+    globalDomEvent.on('pointerup', this._pointerup)
   }
 
-  private _mousedown() {
+  private _pointerdown() {
     this._isDragging = true
     this.emit('dragstart')
   }
 
-  private _mousemove(e: MouseEvent) {
+  private _pointermove(e: MouseEvent) {
     if (!this.isDragging) {
       return
     }
@@ -52,14 +52,14 @@ export class Dragger extends EventEmitter<IDraggableEventsMap> {
     this.emit('dragging', e.movementX, e.movementY)
   }
 
-  private _mouseup() {
+  private _pointerup() {
     this._isDragging = false
     this.emit('dragend')
   }
 
   destroy() {
-    this.dom.removeEventListener('mousedown', this._mousedown)
-    globalDomEvent.off('mouseup', this._mouseup)
-    globalDomEvent.off('mousemove', this._mousemove)
+    this.dom.removeEventListener('pointerdown', this._pointerdown)
+    globalDomEvent.off('pointerup', this._pointerup)
+    globalDomEvent.off('pointermove', this._pointermove)
   }
 }

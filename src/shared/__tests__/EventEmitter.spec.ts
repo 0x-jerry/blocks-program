@@ -26,7 +26,7 @@ describe('EventEmitter', () => {
     expect(evts.length).toBe(0)
   })
 
-  it('emit', (done) => {
+  it('emit', async (done) => {
     const fn = jest.fn()
     e.on('test', fn)
 
