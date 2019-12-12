@@ -143,6 +143,16 @@ export class ScrollPair extends G {
   size: Sizeable
 
   /**
+   * Current scroll position
+   */
+  get current() {
+    return {
+      x: this.horizontal.current.value,
+      y: this.vertical.current.value
+    }
+  }
+
+  /**
    *
    * @param hRatio Scroll bar ratio [0 - 1]
    * @param vRatio Scroll bar ratio [0 - 1]

@@ -1,7 +1,7 @@
 import { Rect } from './Shape'
 import { G } from './G'
 import { SElement } from './SElement'
-import { Sizeable } from '../utils'
+import { Sizeable, Dragger } from '../utils'
 import { ScrollPair } from './ScrollBar'
 import { SArray, EventEmitter } from '@/shared'
 
@@ -51,6 +51,8 @@ type IAreaEventMap = {
 }
 
 export class Area extends EventEmitter<IAreaEventMap> {
+  dragger: Dragger
+
   background: AreaBackground
   content: AreaContent
   scroll: ScrollPair
@@ -98,6 +100,18 @@ export class Area extends EventEmitter<IAreaEventMap> {
     this.content = new AreaContent()
     this.content.addClasses('s_area_content')
     this.scroll = new ScrollPair(1, 1, width, height, 5)
+
+    this.dragger = new Dragger(this.background.dom)
+
+    this._initDragger()
+  }
+
+  private _initDragger() {
+    this.dragger.on('dragging', (dx, dy) => {
+      const x = this.scroll.current.x - dx
+      const y = this.scroll.current.y - dy
+      this.scroll.scrollTo(x, y)
+    })
   }
 
   resize() {
