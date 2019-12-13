@@ -1,7 +1,7 @@
 import { Rect } from './Shape'
 import { G } from './G'
 import { Sizeable, Dragger } from '../utils'
-import { EventEmitter, Observer, ObserverCallbackFunc } from '@/shared'
+import { EventEmitter, Observer, ObserverCallbackFunc, Vec2 } from '@/shared'
 
 type IScrollBarEventMap = {
   'scroll'(pos: number): void
@@ -16,6 +16,8 @@ export class ScrollBar extends G {
   background: Rect
 
   scrollBar: Rect
+
+  disabled: Observer<boolean>
 
   /**
    * scroll current position
@@ -52,16 +54,26 @@ export class ScrollBar extends G {
     this.ratio = ratio
     this._view = { thickness, length }
     this.isVertical = isVertical
+    this.disabled = new Observer(false)
     this.current = new Observer(0)
 
     this.events = new EventEmitter()
 
     this._initSVG()
     this.addClasses('s_scroll')
+
     this.current.sub(this._posUpdate)
+    this.disabled.sub(this._disabledChanged)
+
     this.dragger = new Dragger(this.scrollBar.dom)
 
     this._initDragger()
+  }
+
+  private _disabledChanged: ObserverCallbackFunc<boolean> = (now) => {
+    const disabledClassName = 's_scroll_disabled'
+
+    now ? this.addClasses(disabledClassName) : this.removeClasses(disabledClassName)
   }
 
   private _initDragger() {
@@ -118,6 +130,10 @@ export class ScrollBar extends G {
   }
 
   scrollTo(pos: number) {
+    if (this.disabled.value) {
+      return
+    }
+
     const maxLen = this.length * (1 - this.ratio)
     const current = pos < 0 ? 0 : pos > maxLen ? maxLen : pos
     this.current.set(current)
@@ -138,15 +154,7 @@ export class ScrollPair extends G {
 
   size: Sizeable
 
-  /**
-   * Current scroll position
-   */
-  get current() {
-    return {
-      x: this.horizontal.current.value,
-      y: this.vertical.current.value
-    }
-  }
+  current: Observer<Vec2>
 
   /**
    *
@@ -159,6 +167,7 @@ export class ScrollPair extends G {
     super()
     this.thickness = thickness
     this.size = new Sizeable(width, height)
+    this.current = new Observer(new Vec2())
 
     this._initSVG(vRatio, height, hRatio, width)
 
@@ -170,17 +179,41 @@ export class ScrollPair extends G {
   private _initSVG(vRatio: number, height: number, hRatio: number, width: number) {
     this.vertical = new ScrollBar(vRatio, height - this.thickness, true, this.thickness)
     this.vertical.addClasses('s_scrolls_vertical')
+    this.vertical.current.sub((now) => this._positionChanged('y', now))
 
     this.horizontal = new ScrollBar(hRatio, width - this.thickness, false, this.thickness)
     this.horizontal.addClasses('s_scrolls_horizontal')
+    this.horizontal.current.sub((now) => this._positionChanged('x', now))
 
-    this.append(this.vertical)
-    this.append(this.horizontal)
+    this.setVisible()
+  }
+
+  private _positionChanged(type: 'x' | 'y', pos: number) {
+    const c = new Vec2(this.current.value)
+    c[type] = pos
+
+    this.current.set(c)
   }
 
   scrollTo(x: number, y: number) {
     this.horizontal.scrollTo(x)
     this.vertical.scrollTo(y)
+  }
+
+  setVisible(horizontal = true, vertical = true) {
+    const _setVisibleScroll = (scroll: ScrollBar, show = true) => {
+      show ? scroll.parent !== this && this.append(scroll) : this.remove(scroll)
+
+      scroll.disabled.set(!show)
+    }
+
+    _setVisibleScroll(this.horizontal, horizontal)
+    _setVisibleScroll(this.vertical, vertical)
+  }
+
+  setDisabled(horizontal = false, vertical = false) {
+    this.horizontal.disabled.set(horizontal)
+    this.vertical.disabled.set(vertical)
   }
 
   setSize(width: number, height: number) {

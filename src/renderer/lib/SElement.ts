@@ -5,23 +5,21 @@ interface AttributeObject {
 }
 
 export class BasicElement<T extends Element = Element> {
-  protected _rendered: boolean
   protected _parent: BasicElement | null
 
   dom: T
   children: SArray<BasicElement>
 
+  get rendered() {
+    return document.body.contains(this.dom)
+  }
+
   get parent() {
     return this._parent
   }
 
-  get rendered() {
-    return this._rendered
-  }
-
   constructor(dom: T) {
     this.dom = dom
-    this._rendered = false
     this.children = new SArray()
   }
 
@@ -82,8 +80,6 @@ export class BasicElement<T extends Element = Element> {
     for (const el of children) {
       this.dom.appendChild(el.dom)
       this.children.pushDistinct(el)
-
-      el._rendered = this.rendered
       el._parent = this
     }
   }
@@ -94,7 +90,7 @@ export class BasicElement<T extends Element = Element> {
 
       if (hasEl) {
         this.dom.removeChild(el.dom)
-        el.destroy()
+        el._parent = null
       }
     }
   }
@@ -110,8 +106,6 @@ export class BasicElement<T extends Element = Element> {
   destroy() {
     this.dom.remove()
     this.children.forEach((child) => child.destroy())
-
-    this._rendered = false
     this._parent = null
   }
 }
@@ -126,7 +120,8 @@ export class SElement<T extends SVGGraphicsElement = SVGGraphicsElement> extends
 
   constructor(dom: T) {
     super(dom)
-    this._rendered = false
+    this.x = 0
+    this.y = 0
   }
 
   on<K extends keyof SVGElementEventMap>(

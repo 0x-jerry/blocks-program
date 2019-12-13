@@ -66,7 +66,6 @@ describe('SElement', () => {
 
     svg.append(el)
 
-    expect(el.rendered).toBe(true)
     expect(el.bbox).toEqual(mockBBoxRect())
   })
 

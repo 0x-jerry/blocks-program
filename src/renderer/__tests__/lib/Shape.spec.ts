@@ -12,8 +12,5 @@ describe('Shape', () => {
     expect(r.height).toBe(200)
     expect(r.attr('width')).toBe(200)
     expect(r.attr('height')).toBe(200)
-
-    expect(r.bbox.width).not.toBe(200)
-    expect(r.bbox.height).not.toBe(200)
   })
 })

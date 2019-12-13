@@ -83,6 +83,10 @@ interface IThrottleConfig {
   trailing: boolean
 }
 
+/**
+ * 
+ * @param options default is { leading: true, trailing: false }
+ */
 export function throttle<T extends (...args: any[]) => void>(
   func: T,
   time: number,
@@ -131,6 +135,9 @@ interface IDebounceConfig {
   trailing: boolean
 }
 
+/**
+ * @param options default is { leading: false, trailing: true }
+ */
 export function debounce<T extends (...args: any[]) => void>(
   func: T,
   time: number,

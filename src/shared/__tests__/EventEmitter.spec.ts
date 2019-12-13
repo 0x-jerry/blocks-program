@@ -41,7 +41,7 @@ describe('EventEmitter', () => {
     e.emit('test1', 1)
   })
 
-  it('clear', (done) => {
+  it('clear', () => {
     const fn = jest.fn()
 
     e.on('test',fn)

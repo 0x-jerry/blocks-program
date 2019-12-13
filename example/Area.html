@@ -29,10 +29,15 @@
       .s_scroll_bar {
         fill: blue;
       }
+
+      .s_scroll_disabled > .s_scroll_bar {
+        fill: gray;
+      }
     </style>
   </head>
   <body>
     <div id="app"></div>
+    <p>double click to add rect</p>
     <script src="../build/blocks-program.browser.min.js"></script>
     <script>
       const svg = new BlocksProgram.SVG(600, 400)
@@ -41,7 +46,19 @@
       const area = new BlocksProgram.Area(600, 400)
       svg.append(area)
       area.resize()
+      // area.scroll.setDisabled(true, false)
 
+      const rect = new BlocksProgram.Rect(20, 20)
+      rect.move(10, 10)
+      area.appendContent(rect)
+
+      svg.on('dblclick', (e) => {
+        const rect = new BlocksProgram.Rect(20, 20)
+        rect.move(e.offsetX, e.offsetY)
+        area.appendContent(rect)
+
+        area.resize()
+      })
     </script>
   </body>
 </html>

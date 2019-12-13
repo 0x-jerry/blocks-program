@@ -19,7 +19,6 @@ describe('SVG', () => {
     const d = document.createElement('div')
     svg.mount(d)
 
-    expect(svg.rendered).toBe(true)
     expect(d.children[0]).toBe(svg.dom)
   })
 })

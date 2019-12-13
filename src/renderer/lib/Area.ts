@@ -3,97 +3,53 @@ import { G } from './G'
 import { SElement } from './SElement'
 import { Sizeable, Dragger } from '../utils'
 import { ScrollPair } from './ScrollBar'
-import { SArray, EventEmitter } from '@/shared'
-
-export class AreaBackground extends Rect {
-  effect() {
-    //
-  }
-
-  drag(x: number, y: number) {
-    //
-  }
-}
-
-export class AreaContent extends G {
-  children: SArray<SElement>
-
-  constructor() {
-    super()
-    this.children = new SArray()
-  }
-
-  append(...children: SElement[]) {
-    super.append(...children)
-
-    for (const el of children) {
-      this.children.pushDistinct(el)
-    }
-  }
-
-  remove(...children: SElement[]) {
-    for (const el of children) {
-      this.children.removeItem(el)
-    }
-  }
-
-  destroy() {
-    super.destroy()
-
-    for (const el of this.children) {
-      el.destroy()
-    }
-  }
-}
+import { EventEmitter, Configuration, Vec2, ObserverCallbackFunc } from '@/shared'
 
 type IAreaEventMap = {
   click: (e: MouseEvent, el?: SElement) => void
+}
+
+interface IAreaOptions {
+  autoExpand: boolean
 }
 
 export class Area extends G {
   events: EventEmitter<IAreaEventMap>
   dragger: Dragger
 
-  background: AreaBackground
-  content: AreaContent
+  background: Rect
+  content: G
   scroll: ScrollPair
 
   size: Sizeable
 
-  readonly draggableX: boolean
-
-  readonly draggableY: boolean
+  config: Configuration<IAreaOptions>
 
   get totalWidth(): number {
-    if (!this.draggableX) {
+    if (!this.config.get('autoExpand')) {
       return this.size.width
-    }
-
-    if (this.content.bbox.width <= this.size.width / 2) {
-      return this.size.width * 2 - this.content.bbox.width
     }
 
     return this.size.width * 2 + this.content.bbox.width
   }
 
   get totalHeight(): number {
-    if (!this.draggableY) {
-      return this.size.width
-    }
-
-    if (this.content.bbox.height <= this.size.height / 2) {
-      return this.size.height * 2 - this.content.bbox.height
+    if (!this.config.get('autoExpand')) {
+      return this.size.height
     }
 
     return this.size.height * 2 + this.content.bbox.height
   }
 
-  constructor(width: number, height: number, draggableX = true, draggableY = true) {
+  constructor(width: number, height: number, options: Partial<IAreaOptions> = {}) {
     super()
     this.addClasses('s_area')
 
-    this.draggableX = draggableX
-    this.draggableY = draggableY
+    const defaultOpt: IAreaOptions = {
+      autoExpand: true
+    }
+
+    this.config = new Configuration(Object.assign(defaultOpt, options))
 
     this.size = new Sizeable(width, height)
 
@@ -106,23 +62,32 @@ export class Area extends G {
   }
 
   private _initSVG(width: number, height: number) {
-    this.background = new AreaBackground(width, height)
+    this.background = new Rect(width, height)
     this.background.addClasses('s_area_background')
 
-    this.content = new AreaContent()
+    this.content = new G()
     this.content.addClasses('s_area_content')
 
     this.scroll = new ScrollPair(1, 1, width, height, 5)
+    this.scroll.current.sub(this._scrollCurrentChanged)
 
     this.append(this.background)
     this.append(this.content)
     this.append(this.scroll)
   }
 
+  private _scrollCurrentChanged: ObserverCallbackFunc<Vec2> = (now) => {
+    const x = (now.x / this.scroll.size.width) * this.totalWidth
+    const y = (now.y / this.scroll.size.height) * this.totalHeight
+
+    this.content.move(-x, -y)
+  }
+
   private _initDragger() {
     this.dragger.on('dragging', (dx, dy) => {
-      const x = this.scroll.current.x - dx
-      const y = this.scroll.current.y - dy
+      let { x, y } = this.scroll.current.value
+      x -= (dx / this.totalWidth) * this.scroll.size.width
+      y -= (dy / this.totalHeight) * this.scroll.size.height
       this.scroll.scrollTo(x, y)
     })
   }
@@ -141,7 +106,10 @@ export class Area extends G {
   }
 
   appendContent(...children: SElement[]) {
-    this.content.append(...children)
+    for (const el of children) {
+      el.dmove(-this.content.x, -this.content.y)
+      this.content.append(el)
+    }
   }
 
   removeContent(...children: SElement[]) {
