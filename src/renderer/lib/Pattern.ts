@@ -25,7 +25,7 @@ export class PatternGrid extends BasicElement<SVGPatternElement> {
     this.rect.addClasses('s_pattern_grid')
 
     this.addClasses('s_pattern')
-    this.size.set({ width, height })
+    this.size.update({ width, height })
     this.size.sub(this._sizeUpdate)
   }
 
@@ -39,7 +39,7 @@ export class PatternGrid extends BasicElement<SVGPatternElement> {
   resize(width?: number, height?: number) {
     width = width ?? this.size.width
     height = height ?? this.size.height
-    this.size.set({ width, height })
+    this.size.update({ width, height })
   }
 
   move(x: number, y: number) {

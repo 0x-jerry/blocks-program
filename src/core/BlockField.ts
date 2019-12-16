@@ -11,7 +11,7 @@ export class BlockField<T = any> {
   private $b: Block | null
 
   protected _idx: number
-  protected _value: Observer<T | null>
+  protected _value: T | null
 
   /**
    * Receive types (input <=> output)
@@ -51,15 +51,15 @@ export class BlockField<T = any> {
     this.id = id
     this.$b = null
     this.input = []
-    this._value = new Observer(value)
+    this._value = value
 
     this.block = new Observer(null)
     this.block.sub(this.blockUpdate)
   }
 
   private blockUpdate: ObserverCallbackFunc<Block> = (now, pre) => {
-    pre?.parent.set(null)
-    now?.parent.set(this)
+    pre?.parent.update(null)
+    now?.parent.update(this)
   }
 
   setParent(block: Block) {
@@ -75,10 +75,10 @@ export class BlockField<T = any> {
 
   value(val?: T): T | null {
     if (val !== undefined) {
-      this._value.set(val)
+      this._value = val
     }
 
-    return this._value.value
+    return this._value
   }
 
   setIndex(n: number) {

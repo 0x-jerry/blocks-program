@@ -81,18 +81,18 @@ export class Block {
   }
 
   private nextUpdate: ObserverCallbackFunc<Block | null> = (now, pre) => {
-    pre?.previous.set(null)
-    now?.previous.set(this)
+    pre?.previous.update(null)
+    now?.previous.update(this)
   }
 
   private previousUpdate: ObserverCallbackFunc<Block | null> = (now, pre) => {
-    pre?.next.set(null)
-    now?.next.set(this)
+    pre?.next.update(null)
+    now?.next.update(this)
   }
 
   private parentUpdate: ObserverCallbackFunc<BlockField | null> = (now, pre) => {
-    pre?.block.set(null)
-    now?.block.set(this)
+    pre?.block.update(null)
+    now?.block.update(this)
   }
 
   getField(nameOrId: string): BlockField | null {
@@ -111,7 +111,7 @@ export class Block {
    * @param block Null to break
    */
   connectTo(block: Block | null) {
-    this.previous.set(block)
+    this.previous.update(block)
   }
 
   /**
@@ -119,18 +119,18 @@ export class Block {
    */
   connectToField(field: BlockField | null) {
     if (!field) {
-      this.parent.set(null)
+      this.parent.update(null)
       return
     }
 
     if (field.checkConnection(this)) {
-      this.parent.set(field)
+      this.parent.update(field)
     }
   }
 
   destroy() {
-    this.previous.set(null)
-    this.next.set(null)
-    this.parent.set(null)
+    this.previous.update(null)
+    this.next.update(null)
+    this.parent.update(null)
   }
 }

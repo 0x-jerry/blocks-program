@@ -101,7 +101,7 @@ export class Area extends G {
   }
 
   setSize(width: number, height: number) {
-    this.size.set({ width, height })
+    this.size.update({ width, height })
     this.resize()
   }
 

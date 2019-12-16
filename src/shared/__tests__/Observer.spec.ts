@@ -13,7 +13,7 @@ describe('Observer', () => {
     observer.sub(fn)
     observer.sub(fn)
 
-    observer.set(1)
+    observer.update(1)
 
     expect(fn).toBeCalledTimes(1)
   })
@@ -28,14 +28,14 @@ describe('Observer', () => {
 
     observer.sub(fn)
 
-    observer.set(1)
+    observer.update(1)
   })
 
   it('set', () => {
-    observer.set(1)
+    observer.update(1)
     expect(observer.value).toBe(1)
 
-    observer.set(null)
+    observer.update(null)
     expect(observer.value).toBe(null)
   })
 
@@ -45,7 +45,7 @@ describe('Observer', () => {
 
     observer.sub(fn1)
     observer.sub(fn2)
-    observer.set(1)
+    observer.update(1)
 
     expect(fn1).toBeCalledTimes(1)
     expect(fn2).toBeCalledTimes(1)
@@ -57,7 +57,7 @@ describe('Observer', () => {
     observer.sub(fn)
     observer.unSub(fn)
 
-    observer.set(11)
+    observer.update(11)
     expect(fn).toBeCalledTimes(0)
     expect(observer.value).toBe(11)
   })

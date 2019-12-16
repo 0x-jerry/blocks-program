@@ -40,7 +40,7 @@ describe('utils', () => {
     expect(size.width).toBe(0)
     expect(size.height).toBe(0)
 
-    size.set({ width: 20, height: 20 })
+    size.update({ width: 20, height: 20 })
     expect(size.width).toBe(20)
     expect(size.height).toBe(20)
   })

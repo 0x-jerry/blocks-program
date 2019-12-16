@@ -33,7 +33,7 @@ export class Observer<T = any> {
     }
   }
 
-  set(newVal: T) {
+  update(newVal: T, updateOnly = false) {
     if (this._value === newVal) {
       return
     }
@@ -41,6 +41,10 @@ export class Observer<T = any> {
     const oldValue = this._value
 
     this._value = newVal
+
+    if (updateOnly) {
+      return
+    }
 
     this.subs.forEach((func) => {
       func(newVal, oldValue)

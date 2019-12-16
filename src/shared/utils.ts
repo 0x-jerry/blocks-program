@@ -1,5 +1,5 @@
 export function uuid() {
-  let uuid = '';
+  let uuid = ''
 
   for (let i = 0; i < 32; i += 1) {
     switch (i) {
@@ -78,13 +78,13 @@ export function toArray<T>(t: T | T[]): T[] {
   return Array.isArray(t) ? t : [t]
 }
 
-interface IThrottleConfig {
+export interface IThrottleConfig {
   leading: boolean
   trailing: boolean
 }
 
 /**
- * 
+ *
  * @param options default is { leading: true, trailing: false }
  */
 export function throttle<T extends (...args: any[]) => void>(
@@ -129,7 +129,7 @@ export function throttle<T extends (...args: any[]) => void>(
   }
 }
 
-interface IDebounceConfig {
+export interface IDebounceConfig {
   leading: boolean
   maxWait: number
   trailing: boolean

@@ -13,7 +13,7 @@ export class BlockSlotField extends BlockField<Block> {
   }
 
   private blockChanged: ObserverCallbackFunc<Block> = (now, pre) => {
-    this._value.set(now)
+    this._value = now
   }
 
   /**
@@ -24,6 +24,6 @@ export class BlockSlotField extends BlockField<Block> {
   }
 
   value() {
-    return this._value.value
+    return this._value
   }
 }

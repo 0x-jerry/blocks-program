@@ -136,7 +136,7 @@ export class ScrollBar extends G {
 
     const maxLen = this.length * (1 - this.ratio)
     const current = pos < 0 ? 0 : pos > maxLen ? maxLen : pos
-    this.current.set(current)
+    this.current.update(current)
   }
 
   destroy() {
@@ -192,7 +192,7 @@ export class ScrollPair extends G {
     const c = new Vec2(this.current.value)
     c[type] = pos
 
-    this.current.set(c)
+    this.current.update(c)
   }
 
   scrollTo(x: number, y: number) {
@@ -204,7 +204,7 @@ export class ScrollPair extends G {
     const _setVisibleScroll = (scroll: ScrollBar, show = true) => {
       show ? scroll.parent !== this && this.append(scroll) : this.remove(scroll)
 
-      scroll.disabled.set(!show)
+      scroll.disabled.update(!show)
     }
 
     _setVisibleScroll(this.horizontal, horizontal)
@@ -212,12 +212,12 @@ export class ScrollPair extends G {
   }
 
   setDisabled(horizontal = false, vertical = false) {
-    this.horizontal.disabled.set(horizontal)
-    this.vertical.disabled.set(vertical)
+    this.horizontal.disabled.update(horizontal)
+    this.vertical.disabled.update(vertical)
   }
 
   setSize(width: number, height: number) {
-    this.size.set({ width, height })
+    this.size.update({ width, height })
 
     this.horizontal.setViewport(width - this.thickness)
     this.horizontal.move(0, height - this.thickness)
