@@ -100,7 +100,8 @@ export function throttle<T extends (...args: any[]) => void>(
   let trailingHandle: NodeJS.Timeout
 
   // @ts-ignore
-  return (...params: Parameters<T>) => {
+  return function(this: T, ...params: Parameters<T>) {
+    const wrapperFunc = func.bind(this)
     const now = new Date().getTime()
 
     // leading
@@ -109,7 +110,7 @@ export function throttle<T extends (...args: any[]) => void>(
       lastCalledTime = now
 
       if (opt.leading) {
-        func(...params)
+        wrapperFunc(...params)
         return
       }
     }
@@ -117,14 +118,14 @@ export function throttle<T extends (...args: any[]) => void>(
     // exact time interval
     if (now - lastCalledTime >= time) {
       lastCalledTime = now
-      func(...params)
+      wrapperFunc(...params)
       return
     }
 
     // between time interval, for trailing
     if (opt.trailing) {
       clearTimeout(trailingHandle)
-      trailingHandle = setTimeout(() => func(...params), time)
+      trailingHandle = setTimeout(() => wrapperFunc(...params), time)
     }
   }
 }
@@ -150,7 +151,8 @@ export function debounce<T extends (...args: any[]) => void>(
   const opt: IDebounceConfig = Object.assign({ leading: false, trailing: true, maxWait: time }, options)
 
   //@ts-ignore
-  return (...params: any[]) => {
+  return function(this:T, ...params: any[]) {
+    const wrapperFunc = func.bind(this)
     const now = new Date().getTime()
 
     // leading
@@ -159,14 +161,14 @@ export function debounce<T extends (...args: any[]) => void>(
       firstTimeCalled = true
 
       if (opt.leading) {
-        func(...params)
+        wrapperFunc(...params)
         return
       }
     }
 
     // exact time interval
     if (now - lastRecordTime >= time) {
-      func(...params)
+      wrapperFunc(...params)
       lastRecordTime = now
       return
     }
@@ -175,7 +177,7 @@ export function debounce<T extends (...args: any[]) => void>(
 
     if (opt.trailing) {
       clearTimeout(trailingHandle)
-      trailingHandle = setTimeout(() => func(...params), opt.maxWait)
+      trailingHandle = setTimeout(() => wrapperFunc(...params), opt.maxWait)
     }
   }
 }
