@@ -9,16 +9,13 @@ export class Vec2 {
   constructor()
   constructor(vec2: Vec2)
   constructor(x: number, y: number)
-  constructor(vec2OrX?: Vec2 | number, y?: number) {
-    if (vec2OrX === undefined) {
-      this.x = 0
-      this.y = 0
-    } else if (vec2OrX instanceof Vec2) {
+  constructor(vec2OrX: Vec2 | number = 0, y: number = 0) {
+    if (vec2OrX instanceof Vec2) {
       this.x = vec2OrX.x
       this.y = vec2OrX.y
     } else {
       this.x = vec2OrX
-      this.y = y || 0
+      this.y = y
     }
   }
 

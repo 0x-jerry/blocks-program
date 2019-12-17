@@ -2,9 +2,10 @@ import { Rect } from './Shape'
 import { G } from './G'
 import { Sizeable, Dragger } from '../utils'
 import { EventEmitter, Observer, ObserverCallbackFunc, Vec2 } from '@/shared'
+import { Throttle } from '@/shared/decrators'
 
 type IScrollBarEventMap = {
-  'scroll'(pos: number): void
+  'scroll'(posPercentage: number): void
 }
 
 export class ScrollBar extends G {
@@ -22,7 +23,7 @@ export class ScrollBar extends G {
   /**
    * scroll current position
    */
-  current: Observer<number>
+  currentPercentage: number
 
   /**
    * scroll bar length / scroll total length [0 - 1]
@@ -32,6 +33,10 @@ export class ScrollBar extends G {
   private _view: {
     length: number
     thickness: number
+  }
+
+  get scrollLength() {
+    return this.length * (1 - this.ratio)
   }
 
   get length() {
@@ -55,14 +60,13 @@ export class ScrollBar extends G {
     this._view = { thickness, length }
     this.isVertical = isVertical
     this.disabled = new Observer(false)
-    this.current = new Observer(0)
+    this.currentPercentage = 0
 
     this.events = new EventEmitter()
 
     this._initSVG()
     this.addClasses('s_scroll')
 
-    this.current.sub(this._posUpdate)
     this.disabled.sub(this._disabledChanged)
 
     this.dragger = new Dragger(this.scrollBar.dom)
@@ -78,8 +82,11 @@ export class ScrollBar extends G {
 
   private _initDragger() {
     this.dragger.on('dragging', (dx, dy) => {
-      const dmove = this.isVertical ? dy : dx
-      this.scrollTo(this.current.value + dmove)
+      const dPercentage = (this.isVertical ? dy : dx) / this.scrollLength
+
+      this.scrollTo(this.currentPercentage + dPercentage)
+
+      this.events.emit('scroll', this.currentPercentage)
     })
   }
 
@@ -97,10 +104,12 @@ export class ScrollBar extends G {
     this.append(this.background)
     this.append(this.scrollBar)
 
-    this.scrollTo(this.current.value)
+    this.scrollTo(this.currentPercentage)
   }
 
-  private _posUpdate: ObserverCallbackFunc<number> = (now) => {
+  private _updateCurrent() {
+    const now = this.scrollLength * this.currentPercentage
+
     if (this.isVertical) {
       this.scrollBar.move(0, now)
     } else {
@@ -129,20 +138,24 @@ export class ScrollBar extends G {
     this.resize()
   }
 
-  scrollTo(pos: number) {
+  scrollTo(posPercentage: number) {
     if (this.disabled.value) {
       return
     }
 
-    const maxLen = this.length * (1 - this.ratio)
-    const current = pos < 0 ? 0 : pos > maxLen ? maxLen : pos
-    this.current.update(current)
+    this.currentPercentage = posPercentage < 0 ? 0 : posPercentage >= 1 ? 1 : posPercentage
+
+    this._updateCurrent()
   }
 
   destroy() {
     super.destroy()
     this.dragger.destroy()
   }
+}
+
+type IScrollPairEventsMap = {
+  'scroll'(current: Vec2): void
 }
 
 export class ScrollPair extends G {
@@ -153,8 +166,8 @@ export class ScrollPair extends G {
   readonly thickness: number
 
   size: Sizeable
-
-  current: Observer<Vec2>
+  currentPercentage: Vec2
+  events: EventEmitter<IScrollPairEventsMap>
 
   /**
    *
@@ -165,9 +178,10 @@ export class ScrollPair extends G {
    */
   constructor(hRatio: number, vRatio: number, width: number, height: number, thickness = 2) {
     super()
+    this.events = new EventEmitter()
     this.thickness = thickness
     this.size = new Sizeable(width, height)
-    this.current = new Observer(new Vec2())
+    this.currentPercentage = new Vec2()
 
     this._initSVG(vRatio, height, hRatio, width)
 
@@ -179,25 +193,27 @@ export class ScrollPair extends G {
   private _initSVG(vRatio: number, height: number, hRatio: number, width: number) {
     this.vertical = new ScrollBar(vRatio, height - this.thickness, true, this.thickness)
     this.vertical.addClasses('s_scrolls_vertical')
-    this.vertical.current.sub((now) => this._positionChanged('y', now))
+    this.vertical.events.on('scroll', (pos) => this._positionChanged('y', pos))
 
     this.horizontal = new ScrollBar(hRatio, width - this.thickness, false, this.thickness)
     this.horizontal.addClasses('s_scrolls_horizontal')
-    this.horizontal.current.sub((now) => this._positionChanged('x', now))
+    this.horizontal.events.on('scroll', (pos) => this._positionChanged('x', pos))
 
     this.setVisible()
   }
 
-  private _positionChanged(type: 'x' | 'y', pos: number) {
-    const c = new Vec2(this.current.value)
-    c[type] = pos
-
-    this.current.update(c)
+  @Throttle(1000 / 60, { leading: true, trailing: true })
+  private _positionChanged(type: 'x' | 'y', posPercentage: number) {
+    this.currentPercentage[type] = posPercentage
+    this.events.emit('scroll', this.currentPercentage)
   }
 
-  scrollTo(x: number, y: number) {
-    this.horizontal.scrollTo(x)
-    this.vertical.scrollTo(y)
+  scrollTo(xPercentage: number, yPercentage: number) {
+    this.horizontal.scrollTo(xPercentage)
+    this.vertical.scrollTo(yPercentage)
+
+    this.currentPercentage.x = xPercentage
+    this.currentPercentage.y = yPercentage
   }
 
   setVisible(horizontal = true, vertical = true) {
