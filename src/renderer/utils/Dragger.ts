@@ -17,16 +17,19 @@ type IDraggableEventsMap = {
 }
 
 export class Dragger extends EventEmitter<IDraggableEventsMap> {
-  private dom: Element
+  private dom: HTMLElement | SVGElement
   private _isDragging: boolean
 
   get isDragging() {
     return this._isDragging
   }
 
-  constructor(dom: Element) {
+  constructor(dom: HTMLElement | SVGElement) {
     super()
     this.dom = dom
+
+    this.dom.style.cursor = 'grab'
+
     this._isDragging = false
 
     this._pointerdown = this._pointerdown.bind(this)
@@ -42,6 +45,9 @@ export class Dragger extends EventEmitter<IDraggableEventsMap> {
   private _pointerdown() {
     this._isDragging = true
     this.emit('dragstart')
+
+    document.body.style.cursor = 'grabbing'
+    this.dom.style.cursor = ''
   }
 
   private _pointermove(e: MouseEvent) {
@@ -55,6 +61,9 @@ export class Dragger extends EventEmitter<IDraggableEventsMap> {
   private _pointerup() {
     this._isDragging = false
     this.emit('dragend')
+
+    document.body.style.cursor = ''
+    this.dom.style.cursor = 'grab'
   }
 
   destroy() {
