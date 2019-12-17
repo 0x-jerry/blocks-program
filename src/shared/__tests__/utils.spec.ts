@@ -157,6 +157,28 @@ describe('debounce', () => {
       done()
     }, 550)
   })
+
+  it('scope', (done) => {
+    let c = ''
+    class A {
+      hi = 'hi'
+      constructor() {
+        this.test = debounce(this.test, 200)
+      }
+
+      test() {
+        c = this.hi
+      }
+    }
+
+    const a = new A()
+    a.test()
+
+    setTimeout(() => {
+      expect(c).toBe('hi')
+      done()
+    }, 220)
+  })
 })
 
 describe('throttle', () => {
@@ -251,5 +273,28 @@ describe('throttle', () => {
       expect(fn).toBeCalledTimes(4)
       done()
     }, 650)
+  })
+
+  it('scope', (done) => {
+    let c = ''
+    class A {
+      hi = 'hi'
+
+      constructor() {
+        this.test = throttle(this.test, 200)
+      }
+
+      test() {
+        c = this.hi
+      }
+    }
+
+    const a = new A()
+    a.test()
+
+    setTimeout(() => {
+      expect(c).toBe('hi')
+      done()
+    }, 220)
   })
 })
