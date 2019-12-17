@@ -1,6 +1,6 @@
 import { IThrottleConfig, throttle, IDebounceConfig, debounce } from './utils'
 
-export function Throttle(time: number, options: Partial<IThrottleConfig>): MethodDecorator {
+export function Throttle(time: number, options: Partial<IThrottleConfig> = {}): MethodDecorator {
   return (target, prop, descriptor) => {
     const func = descriptor.value as any
 
@@ -8,7 +8,7 @@ export function Throttle(time: number, options: Partial<IThrottleConfig>): Metho
   }
 }
 
-export function Debounce(time: number, options: Partial<IDebounceConfig>): MethodDecorator {
+export function Debounce(time: number, options: Partial<IDebounceConfig> = {}): MethodDecorator {
   return (target, prop, descriptor) => {
     const func = descriptor.value as any
 
