@@ -11,8 +11,8 @@ type IAreaEventMap = {
 }
 
 export class AreaContent extends G {
-  readonly width: number
-  readonly height: number
+  width: number
+  height: number
 
   events: EventEmitter
 
@@ -57,11 +57,17 @@ export class AreaContent extends G {
 
   constructor(width: number, height: number) {
     super()
+    this.events = new EventEmitter()
 
+    this.setSize(width, height)
+  }
+
+  setSize(width: number, height: number) {
     this.width = width
     this.height = height
 
-    this.events = new EventEmitter()
+    const { x, y } = this.currentPercentage
+    this.moveTo(x, y)
   }
 
   moveTo(xPercentage: number, yPercentage: number) {
@@ -88,7 +94,7 @@ export class Area extends G {
 
   background: Rect
   content: AreaContent
-  scroll: ScrollPair
+  scrolls: ScrollPair
 
   size: Sizeable
 
@@ -110,12 +116,12 @@ export class Area extends G {
     this.content = new AreaContent(width, height)
     this.content.addClasses('s_area_content')
 
-    this.scroll = new ScrollPair(1, 1, width, height, 5)
-    this.scroll.events.on('scroll', this._scrollCurrentChanged.bind(this))
+    this.scrolls = new ScrollPair(1, 1, width, height, 5)
+    this.scrolls.events.on('scroll', this._scrollCurrentChanged.bind(this))
 
     this.append(this.background)
     this.append(this.content)
-    this.append(this.scroll)
+    this.append(this.scrolls)
   }
 
   private _scrollCurrentChanged(now: Vec2) {
@@ -129,13 +135,13 @@ export class Area extends G {
       this.content.dmove(dx, dy)
 
       const { x, y } = this.content.currentPercentage
-      this.scroll.scrollTo(x, y)
+      this.scrolls.scrollTo(x, y)
     })
   }
 
   scrollTo(xPercentage: number, yPercentage: number) {
     this.content.moveTo(xPercentage, yPercentage)
-    this.scroll.scrollTo(xPercentage, yPercentage)
+    this.scrolls.scrollTo(xPercentage, yPercentage)
   }
 
   @Debounce(100, { trailing: true })
@@ -143,13 +149,11 @@ export class Area extends G {
     const { width, height } = this.size
 
     this.background.setSize(width, height)
+    this.content.setSize(width, height)
 
-    this.scroll.setSize(width, height)
-    this.scroll.setRatio(width / this.content.totalWidth, height / this.content.totalHeight)
-
-    const currentPercentagePos = this.content.currentPercentage
-    this.scroll.scrollTo(currentPercentagePos.x, currentPercentagePos.y)
-    this.content.moveTo(currentPercentagePos.x, currentPercentagePos.y)
+    this.scrolls.setSize(width, height)
+    this.scrolls.setRatio(width / this.content.totalWidth, height / this.content.totalHeight)
+    this.scrolls.scrollTo(this.content.currentPercentage.x, this.content.currentPercentage.y)
   }
 
   setSize(width: number, height: number) {
