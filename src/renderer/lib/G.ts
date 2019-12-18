@@ -6,7 +6,10 @@ export class G extends SElement<SVGGElement> {
 
   constructor() {
     super(createSVGEl('g'))
-    this.trans = new Transform(this)
+
+    this.trans = new Transform((transform) => {
+      this.attr('transform', transform)
+    })
   }
 
   /**

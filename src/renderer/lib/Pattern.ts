@@ -1,49 +1,35 @@
-import { createSVGEl, Sizeable, ISize } from '../utils'
+import { createSVGEl, Transform } from '../utils'
 import { BasicElement } from './SElement'
 import { Rect } from './Shape'
-import { ObserverCallbackFunc, uuid } from '@/shared'
-
-export function Grid() {
-  return `<pattern id="Pattern" x="0" y="0" width=".25" height=".25">
-      <rect x="0" y="0" width="50" height="50" fill="skyblue"/>
-      <rect x="0" y="0" width="25" height="25" fill="url(#Gradient2)"/>
-      <circle cx="25" cy="25" r="20" fill="url(#Gradient1)" fill-opacity="0.5"/>
-    </pattern>`
-}
+import { uuid } from '@/shared'
 
 export class PatternGrid extends BasicElement<SVGPatternElement> {
   readonly id: string
 
   rect: Rect
-  size: Sizeable
+
+  trans: Transform
 
   constructor(width: number, height: number, id = uuid()) {
     super(createSVGEl('pattern'))
     this.id = id
 
-    this.rect = new Rect(50, 50)
+    this.addClasses('s_pattern')
+    this.attr({ id, width, height })
+
+    this.rect = new Rect(width, height)
     this.rect.addClasses('s_pattern_grid')
 
-    this.addClasses('s_pattern')
-    this.size.update({ width, height })
-    this.size.sub(this._sizeUpdate)
-  }
-
-  protected _sizeUpdate: ObserverCallbackFunc<ISize> = (now) => {
-    this.attr({
-      width: now.width,
-      height: now.height
+    this.trans = new Transform((transform) => {
+      this.attr('patternTransform', transform)
     })
   }
 
-  resize(width?: number, height?: number) {
-    width = width ?? this.size.width
-    height = height ?? this.size.height
-    this.size.update({ width, height })
+  scale(factor: number) {
+    this.trans.scale(factor)
   }
 
   move(x: number, y: number) {
-    this.dom.setAttribute('x', String(x))
-    this.dom.setAttribute('y', String(y))
+    this.attr({ x, y })
   }
 }
