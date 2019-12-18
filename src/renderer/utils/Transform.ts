@@ -1,17 +1,15 @@
-import { SElement } from '../lib/SElement'
-
 interface TransformItem {
   type: 'translate' | 'rotate' | 'scale'
   params: (string | number)[]
 }
 
 export class Transform {
-  el: SElement
-
   modifies: TransformItem[]
 
-  constructor(el: SElement) {
-    this.el = el
+  readonly setTransform: (transform: string) => void
+
+  constructor(func: (transform: string) => void) {
+    this.setTransform = func
     this.modifies = [
       {
         type: 'scale',
@@ -29,16 +27,16 @@ export class Transform {
   }
 
   // scale -> translate -> rotate
-  private applyTransform() {
+  protected applyTransform() {
     const str = this.modifies
       .filter((modify) => modify.params.length > 0)
       .map((modify) => `${modify.type}(${modify.params.join(', ')})`)
       .join(' ')
 
-    this.el.attr('transform', str)
+    this.setTransform(str)
   }
 
-  private changeModify(type: TransformItem['type'], params: TransformItem['params']) {
+  protected changeModify(type: TransformItem['type'], params: TransformItem['params']) {
     const find = this.modifies.find((m) => m.type === type)!
     find.params = params
 
