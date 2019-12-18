@@ -33,6 +33,12 @@
       .s_scroll_disabled > .s_scroll_bar {
         fill: gray;
       }
+
+      .s_pattern_grid {
+        fill: #f9f9f9;
+        stroke: #eeeeee;
+        stroke-width: 1px;
+      }
     </style>
   </head>
   <body>
@@ -45,13 +51,20 @@
 
       const area = new BlocksProgram.Area(600, 400)
       svg.append(area)
-      area.resize()
-      // area.scroll.setDisabled(true, false)
 
       const rect = new BlocksProgram.Rect(20, 20)
 
       rect.move(10, 10)
       area.appendContent(rect)
+
+      const gridPattern = new BlocksProgram.PatternGrid(40, 40)
+      svg.defs.append(gridPattern)
+
+      area.background.dom.style.fill = `url(#${gridPattern.id})`
+
+      area.events.on('move', (dx, dy) => {
+        gridPattern.dmove(dx, dy)
+      })
 
       svg.on('dblclick', (e) => {
         const rect = new BlocksProgram.Rect(20, 20)

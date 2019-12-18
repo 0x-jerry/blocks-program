@@ -14,8 +14,6 @@ export class SVG extends SElement<SVGSVGElement> {
 
   constructor(width: number = 600, height: number = 400) {
     super(createSVGEl('svg'))
-
-    this.defs = new Defs()
     this.size = new Sizeable(width, height)
 
     this.attr({
@@ -24,11 +22,12 @@ export class SVG extends SElement<SVGSVGElement> {
       width: width,
       height: height
     })
+
+    this.defs = new Defs()
+    this.append(this.defs)
   }
 
   mount(el: HTMLElement) {
     el.appendChild(this.dom)
-
-    this.append(this.defs)
   }
 }

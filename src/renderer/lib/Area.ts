@@ -6,10 +6,6 @@ import { ScrollPair } from './ScrollBar'
 import { EventEmitter, Vec2 } from '@/shared'
 import { Debounce } from '@/shared/decrators'
 
-type IAreaEventMap = {
-  click: (e: MouseEvent, el?: SElement) => void
-}
-
 export class AreaContent extends G {
   width: number
   height: number
@@ -88,6 +84,11 @@ export class AreaContent extends G {
   }
 }
 
+type IAreaEventMap = {
+  click: (e: MouseEvent, el?: SElement) => void
+  move: (dx: number, dy: number) => void
+}
+
 export class Area extends G {
   events: EventEmitter<IAreaEventMap>
   dragger: Dragger
@@ -125,17 +126,36 @@ export class Area extends G {
   }
 
   private _scrollCurrentChanged(now: Vec2) {
+    const moveableRange = this.content.moveableRange
+    const currentPercentage = this.content.currentPercentage
+
+    const dx = (now.x - currentPercentage.x) * moveableRange.width
+    const dy = (now.y - currentPercentage.y) * moveableRange.height
+
     this.content.moveTo(now.x, now.y)
+
+    this.events.emit('move', dx, dy)
   }
 
   private _initDragger() {
     this.dragger = new Dragger(this.background.dom)
 
     this.dragger.on('dragging', (dx, dy) => {
+      const beforeContentPercentage = {
+        x: this.content.currentPercentage.x,
+        y: this.content.currentPercentage.y
+      }
+
       this.content.dmove(dx, dy)
 
       const { x, y } = this.content.currentPercentage
       this.scrolls.scrollTo(x, y)
+
+      // Emit move event
+      const moveableRange = this.content.moveableRange
+      const ddx = (x - beforeContentPercentage.x) * moveableRange.width
+      const ddy = (y - beforeContentPercentage.y) * moveableRange.height
+      this.events.emit('move', ddx, ddy)
     })
   }
 
