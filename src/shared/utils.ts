@@ -115,6 +115,7 @@ export function throttle<T extends (...args: any[]) => void>(
       }
     }
 
+    clearTimeout(trailingHandle)
     // exact time interval
     if (now - lastCalledTime >= time) {
       lastCalledTime = now
@@ -124,7 +125,6 @@ export function throttle<T extends (...args: any[]) => void>(
 
     // between time interval, for trailing
     if (opt.trailing) {
-      clearTimeout(trailingHandle)
       trailingHandle = setTimeout(() => wrapperFunc(...params), time)
     }
   }
@@ -137,7 +137,7 @@ export interface IDebounceConfig {
 }
 
 /**
- * @param options default is { leading: false, trailing: true }
+ * @param options default is { leading: false, trailing: true, maxWait: time }
  */
 export function debounce<T extends (...args: any[]) => void>(
   func: T,
@@ -166,6 +166,7 @@ export function debounce<T extends (...args: any[]) => void>(
       }
     }
 
+    clearTimeout(trailingHandle)
     // exact time interval
     if (now - lastRecordTime >= time) {
       wrapperFunc(...params)
@@ -176,7 +177,6 @@ export function debounce<T extends (...args: any[]) => void>(
     lastRecordTime = now
 
     if (opt.trailing) {
-      clearTimeout(trailingHandle)
       trailingHandle = setTimeout(() => wrapperFunc(...params), opt.maxWait)
     }
   }

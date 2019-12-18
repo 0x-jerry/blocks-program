@@ -1,5 +1,9 @@
 import { IThrottleConfig, throttle, IDebounceConfig, debounce } from './utils'
 
+/**
+ * Throttle decorator
+ * @param options default is { leading: true, trailing: false }
+ */
 export function Throttle(time: number, options: Partial<IThrottleConfig> = {}): MethodDecorator {
   return (target, prop, descriptor) => {
     const func = descriptor.value as any
@@ -8,6 +12,10 @@ export function Throttle(time: number, options: Partial<IThrottleConfig> = {}): 
   }
 }
 
+/**
+ * Debounce decorator
+ * @param options default is { leading: false, trailing: true, maxWait: time }
+ */
 export function Debounce(time: number, options: Partial<IDebounceConfig> = {}): MethodDecorator {
   return (target, prop, descriptor) => {
     const func = descriptor.value as any
