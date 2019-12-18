@@ -46,15 +46,13 @@ describe('ScrollBar', () => {
 
   it('scrollTo', () => {
     bar.setRatio(0.1)
+    let length = 100 * 0.9
 
-    bar.scrollTo(10)
-    expect(bar.scrollBar.attr('x')).toBe(10)
+    bar.scrollTo(0.1)
+    expect(bar.scrollBar.attr('x')).toBe(length * 0.1)
 
-    bar.scrollTo(-1)
-    expect(bar.scrollBar.attr('x')).toBe(0)
-
-    bar.scrollTo(100)
-    expect(bar.scrollBar.attr('x')).toBe(90)
+    bar.scrollTo(1)
+    expect(bar.scrollBar.x).toBe(length)
   })
 })
 
@@ -95,19 +93,25 @@ describe('ScrollPair', () => {
   })
 
   it('scrollTo', () => {
-    scroll.scrollTo(20, 20)
+    const size = {
+      width: (100 - 2) * 0.9,
+      height: (200 - 2) * 0.8
+    }
 
-    expect(scroll.horizontal.scrollBar.attr('x')).toBe(20)
-    expect(scroll.vertical.scrollBar.attr('y')).toBe(20)
-
-    scroll.scrollTo(-20, -20)
-
+    scroll.scrollTo(-0.1, -0.2)
     expect(scroll.horizontal.scrollBar.attr('x')).toBe(0)
     expect(scroll.vertical.scrollBar.attr('y')).toBe(0)
 
-    scroll.scrollTo(2000, 2000)
+    scroll.scrollTo(0.1, 0.2)
+    expect(scroll.horizontal.scrollBar.attr('x')).toBe(size.width * 0.1)
+    expect(scroll.vertical.scrollBar.attr('y')).toBe(size.height * 0.2)
 
-    expect(scroll.horizontal.scrollBar.attr('x')).toBe((100 - 2) * (1 - 0.1))
-    expect(scroll.vertical.scrollBar.attr('y')).toBe((200 - 2) * (1 - 0.2))
+    scroll.scrollTo(1, 1)
+    expect(scroll.horizontal.scrollBar.attr('x')).toBe(size.width)
+    expect(scroll.vertical.scrollBar.attr('y')).toBe(size.height)
+
+    scroll.scrollTo(2000, 2000)
+    expect(scroll.horizontal.scrollBar.attr('x')).toBe(size.width)
+    expect(scroll.vertical.scrollBar.attr('y')).toBe(size.height)
   })
 })

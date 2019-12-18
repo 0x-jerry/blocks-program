@@ -7,7 +7,7 @@ describe('Area', () => {
     area = new Area(600, 400)
   })
 
-  it('setSize', () => {
+  it('new', () => {
     expect(area).not.toBeNull()
   })
 })

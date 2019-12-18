@@ -27,6 +27,9 @@ describe('SElement', () => {
 
     expect(el.dom.getAttribute('test3')).toBe('xx')
     expect(el.attr('test2')).toBe('xx')
+
+    el.attr('test', null)
+    expect(el.dom.getAttribute('test')).toBeNull()
   })
 
   it('move', () => {
@@ -69,11 +72,21 @@ describe('SElement', () => {
     expect(el.bbox).toEqual(mockBBoxRect())
   })
 
-  it('add', () => {
+  it('append', () => {
     const a = new SElement(createSVGEl('g'))
 
     el.append(a)
     expect(el.dom.children[0]).toBe(a.dom)
+  })
+
+  it('remove', () => {
+    const a = new SElement(createSVGEl('g'))
+
+    el.append(a)
+    el.remove(a)
+
+    expect(el.children.length).toBe(0)
+    expect(el.dom.children.length).toBe(0)
   })
 
   it('addClasses', () => {
@@ -100,13 +113,34 @@ describe('SElement', () => {
     expect(el.dom.classList.contains('test2')).toBe(false)
   })
 
-  it('destroy', () => {
-    const d = document.createElement('div')
-    d.appendChild(el.dom)
+  it('on/off event', () => {
+    let clicked = 0
+    const fn = () => (clicked += 1)
 
-    expect(d.children[0]).toBe(el.dom)
+    el.on('click', fn)
+    el.dom.dispatchEvent(new Event('click'))
+    expect(clicked).toBe(1)
+
+    el.off('click', fn)
+    el.dom.dispatchEvent(new Event('click'))
+    expect(clicked).toBe(1)
+  })
+
+  it('destroy', () => {
+    const a = new SElement(createSVGEl('g'))
+    el.append(a)
+
+    const $div = document.createElement('div')
+    $div.appendChild(el.dom)
+
+    expect($div.children[0]).toBe(el.dom)
+    expect(el.children.length).toBe(1)
+    expect(el.dom.children.length).toBe(1)
 
     el.destroy()
-    expect(d.children[0]).toBeFalsy()
+    expect($div.children[0]).toBeFalsy()
+
+    expect(el.children.length).toBe(0)
+    expect(el.dom.children.length).toBe(0)
   })
 })

@@ -105,7 +105,12 @@ export class BasicElement<T extends Element = Element> {
 
   destroy() {
     this.dom.remove()
-    this.children.forEach((child) => child.destroy())
+
+    this.children.forEach((child) => {
+      this.remove(child)
+      child.destroy()
+    })
+
     this._parent = null
   }
 }
