@@ -3,38 +3,25 @@ import { G } from './G'
 import { SElement } from './SElement'
 import { Sizeable, Dragger } from '../utils'
 import { ScrollPair } from './ScrollBar'
-import { EventEmitter, Configuration, Vec2 } from '@/shared'
+import { EventEmitter, Vec2 } from '@/shared'
 import { Debounce } from '@/shared/decrators'
 
 type IAreaEventMap = {
   click: (e: MouseEvent, el?: SElement) => void
 }
 
-interface IAreaOptions {
-  autoExpand: boolean
-}
-
 export class AreaContent extends G {
   readonly width: number
   readonly height: number
-  readonly autoExpand: boolean
 
   events: EventEmitter
 
   get totalWidth(): number {
-    if (this.autoExpand) {
-      return this.bbox.width + this.width
-    }
-
-    return this.width
+    return this.bbox.width + this.width
   }
 
   get totalHeight(): number {
-    if (this.autoExpand) {
-      return this.bbox.height + this.height
-    }
-
-    return this.height
+    return this.bbox.height + this.height
   }
 
   get origin() {
@@ -77,10 +64,9 @@ export class AreaContent extends G {
     return { x, y }
   }
 
-  constructor(width: number, height: number, autoExpand = false) {
+  constructor(width: number, height: number) {
     super()
 
-    this.autoExpand = autoExpand
     this.width = width
     this.height = height
 
@@ -115,17 +101,10 @@ export class Area extends G {
 
   size: Sizeable
 
-  config: Configuration<IAreaOptions>
-
-  constructor(width: number, height: number, options: Partial<IAreaOptions> = {}) {
+  constructor(width: number, height: number) {
     super()
     this.addClasses('s_area')
 
-    const defaultOpt: IAreaOptions = {
-      autoExpand: true
-    }
-
-    this.config = new Configuration(Object.assign(defaultOpt, options))
     this.size = new Sizeable(width, height)
     this.events = new EventEmitter()
 
@@ -137,7 +116,7 @@ export class Area extends G {
     this.background = new Rect(width, height)
     this.background.addClasses('s_area_background')
 
-    this.content = new AreaContent(width, height, this.config.get('autoExpand'))
+    this.content = new AreaContent(width, height)
     this.content.addClasses('s_area_content')
 
     this.scroll = new ScrollPair(1, 1, width, height, 5)
@@ -193,17 +172,13 @@ export class Area extends G {
       this.content.append(el)
     }
 
-    if (this.config.get('autoExpand')) {
-      this.resize()
-    }
+    this.resize()
   }
 
   removeContent(...children: SElement[]) {
     this.content.remove(...children)
 
-    if (this.config.get('autoExpand')) {
-      this.resize()
-    }
+    this.resize()
   }
 
   destroy() {
