@@ -6,6 +6,7 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "test": "jest",
+    "docs": "typedoc",
     "build": "rollup -c"
   },
   "engines": {
@@ -25,6 +26,7 @@
     "rollup-plugin-terser": "^5.1.2",
     "rollup-plugin-typescript2": "^0.25.3",
     "ts-jest": "^24.2.0",
+    "typedoc": "^0.15.5",
     "typescript": "^3.7.3"
   }
 }
