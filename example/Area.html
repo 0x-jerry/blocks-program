@@ -66,6 +66,14 @@
         gridPattern.dmove(dx, dy)
       })
 
+      // Performance test
+      for (let index = 0; index < 10000; index++) {
+        const rect = new BlocksProgram.Rect(20, 20)
+
+        rect.move(-2000 + Math.random() * 4000, -2000 + Math.random() * 4000)
+        area.appendContent(rect)
+      }
+
       svg.on('dblclick', (e) => {
         const rect = new BlocksProgram.Rect(20, 20)
         rect.move(e.offsetX, e.offsetY)
