@@ -254,11 +254,8 @@ describe('throttle', () => {
 
     setTimeout(() => {
       expect(fn).toBeCalledTimes(2)
-    }, 220)
-
-    setTimeout(() => {
       wrapper()
-    }, 230)
+    }, 240)
 
     setTimeout(() => {
       wrapper()
