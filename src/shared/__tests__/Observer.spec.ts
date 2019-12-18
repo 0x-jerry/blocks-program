@@ -31,12 +31,18 @@ describe('Observer', () => {
     observer.update(1)
   })
 
-  it('set', () => {
+  it('update', () => {
     observer.update(1)
     expect(observer.value).toBe(1)
 
     observer.update(null)
     expect(observer.value).toBe(null)
+
+    const fn = jest.fn()
+    observer.sub(fn)
+    observer.update(2, true)
+
+    expect(fn).toBeCalledTimes(0)
   })
 
   it('sub multi', () => {
