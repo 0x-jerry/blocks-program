@@ -24,15 +24,6 @@ export class AreaContent extends G {
     return this.bbox.height + this.height
   }
 
-  get origin() {
-    const bbox = this.bbox
-
-    return {
-      x: bbox.x - this.width / 2,
-      y: bbox.y - this.height / 2
-    }
-  }
-
   get moveableRange() {
     const bbox = this.bbox
 

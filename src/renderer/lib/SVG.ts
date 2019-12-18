@@ -28,7 +28,6 @@ export class SVG extends SElement<SVGSVGElement> {
 
   mount(el: HTMLElement) {
     el.appendChild(this.dom)
-    this._rendered = true
 
     this.append(this.defs)
   }
