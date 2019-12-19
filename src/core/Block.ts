@@ -128,6 +128,15 @@ export class Block {
     }
   }
 
+  clone() {
+    const block = new Block(this.config.raw)
+    for (const field of this.fieldManager.fields) {
+      block.addField(field.clone())
+    }
+
+    return block
+  }
+
   destroy() {
     this.previous.update(null)
     this.next.update(null)

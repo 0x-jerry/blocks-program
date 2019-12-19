@@ -1,5 +1,6 @@
 import { Block, BlockField } from '@/core'
 import { ObserverCallbackFunc } from '@/shared'
+import { FIELD_TYPES } from './const'
 
 export class BlockSlotField extends BlockField<Block> {
   get isSlot() {
@@ -8,7 +9,7 @@ export class BlockSlotField extends BlockField<Block> {
 
   constructor(name: string, value: Block | null = null, idx = 0) {
     super(name, value, idx)
-    this.type = 'Slot'
+    this.type = FIELD_TYPES.BLOCK_SLOT
     this.block.sub(this.blockChanged)
   }
 
@@ -25,5 +26,15 @@ export class BlockSlotField extends BlockField<Block> {
 
   value() {
     return this._value
+  }
+
+  clone() {
+    const newField = new BlockSlotField(this.name, null, this.index)
+
+    const block = this.value()?.clone()
+
+    block?.connectToField(newField)
+
+    return newField
   }
 }

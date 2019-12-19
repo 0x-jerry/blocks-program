@@ -1,5 +1,6 @@
 import { Observer, uuid, ObserverCallbackFunc, oneOf } from '@/shared'
 import { Block } from '@/core'
+import { FIELD_TYPES } from '@/fields'
 
 /**
  * This is a abstract class, only for test.
@@ -23,7 +24,7 @@ export class BlockField<T = any> {
    */
   block: Observer<Block | null>
 
-  type: string
+  type: FIELD_TYPES | string
 
   readonly id: string
   readonly name: string
@@ -83,5 +84,9 @@ export class BlockField<T = any> {
 
   setIndex(n: number) {
     this._idx = n
+  }
+
+  clone() {
+    return new BlockField(this.name, this.value(), this.index)
   }
 }
