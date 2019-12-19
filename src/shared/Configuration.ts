@@ -3,6 +3,10 @@ import { ObjectAny } from '@/typedef'
 export class Configuration<T extends ObjectAny = {}> {
   protected _data: T
 
+  get raw() {
+    return this._data
+  }
+
   constructor(opts: T) {
     this._data = opts
   }

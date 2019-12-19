@@ -11,9 +11,9 @@ window.addEventListener('pointerup', (e) => globalDomEvent.emit('pointerup', e))
 window.addEventListener('pointermove', (e) => globalDomEvent.emit('pointermove', e))
 
 type IDraggableEventsMap = {
-  dragstart(): void
-  dragging(dx: number, dy: number): void
-  dragend(): void
+  dragstart(e: MouseEvent): void
+  dragging(dx: number, dy: number, e: MouseEvent): void
+  dragend(e: MouseEvent): void
 }
 
 export class Dragger extends EventEmitter<IDraggableEventsMap> {
@@ -42,9 +42,9 @@ export class Dragger extends EventEmitter<IDraggableEventsMap> {
     globalDomEvent.on('pointerup', this._pointerup)
   }
 
-  private _pointerdown() {
+  private _pointerdown(e: MouseEvent) {
     this._isDragging = true
-    this.emit('dragstart')
+    this.emit('dragstart', e)
 
     document.body.style.cursor = 'grabbing'
     this.dom.style.cursor = ''
@@ -55,12 +55,12 @@ export class Dragger extends EventEmitter<IDraggableEventsMap> {
       return
     }
 
-    this.emit('dragging', e.movementX, e.movementY)
+    this.emit('dragging', e.movementX, e.movementY, e)
   }
 
-  private _pointerup() {
+  private _pointerup(e: MouseEvent) {
     this._isDragging = false
-    this.emit('dragend')
+    this.emit('dragend', e)
 
     document.body.style.cursor = ''
     this.dom.style.cursor = 'grab'
