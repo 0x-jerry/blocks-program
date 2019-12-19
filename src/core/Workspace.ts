@@ -3,12 +3,16 @@ import { Block } from './Block'
 
 export class Workspace {
   readonly id: string
+  definedBlocks: SArray<Block>
+
   blockDB: SArray<Block>
 
   blockRoots: SArray<Block>
 
   constructor(id: string = uuid()) {
     this.id = id
+
+    this.definedBlocks = new SArray()
     this.blockDB = new SArray()
     this.blockRoots = new SArray()
   }
@@ -23,6 +27,18 @@ export class Workspace {
     if (!this.isRootBlock(block)) {
       this.blockRoots.push(block)
     }
+  }
+
+  addDefinedBlock(block: Block) {
+    this.definedBlocks.pushDistinct(block)
+  }
+
+  removeDefinedBlock(block: Block) {
+    this.definedBlocks.removeItem(block)
+  }
+
+  clearDefinedBlocks() {
+    this.definedBlocks = new SArray()
   }
 
   hasBlock(block: Block | string): false | Block {
