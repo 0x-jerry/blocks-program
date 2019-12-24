@@ -5,6 +5,7 @@ export class Text extends SElement<SVGTextElement> {
   constructor(text = '') {
     super(createSVGEl('text'))
     this.text(text)
+    this.addClasses('s_text')
   }
 
   /**
@@ -12,6 +13,12 @@ export class Text extends SElement<SVGTextElement> {
    */
   move(x: number, y: number): void {
     super.move(x, y)
+
+    // Set top-left to origin
+    y += this.bbox.height
+    // Fixed top padding
+    y -= 3
+
     this.attr({ x, y })
   }
 
