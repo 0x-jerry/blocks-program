@@ -1,7 +1,6 @@
 import { Block } from '@/core'
 import { FIELD_TYPES } from '@/fields'
 import { Configuration, SArray } from '@/shared'
-import { BlockTextFieldSVG } from './fields'
 import { FieldSVG } from './fields/FieldSVG'
 import { G, Path } from './lib'
 import { Renderer } from './Renderer'
@@ -51,7 +50,7 @@ export class BlockSVG extends G {
     this.move(this.options.get('x'), this.options.get('y'))
 
     this._initBackground()
-    this._initFieldsSVG()
+    this._initFieldSVG()
     this._initDragger()
 
     this.updateShape()
@@ -80,23 +79,18 @@ export class BlockSVG extends G {
     })
   }
 
-  private _initFieldsSVG() {
+  private _initFieldSVG() {
     for (const field of this.$b.fieldManager.fields) {
-      let fieldEl: FieldSVG | null = null
+      const Ctor = this.$r.getFieldCtor(field.type)
 
-      switch (field.type) {
-        case FIELD_TYPES.TEXT:
-          fieldEl = new BlockTextFieldSVG(field)
-          break
-
-        default:
-          break
+      if (!Ctor) {
+        continue
       }
 
-      if (fieldEl) {
-        this.fields.pushDistinct(fieldEl)
-        this.append(fieldEl.svg)
-      }
+      const fieldSVG = new Ctor(field)
+
+      this.fields.pushDistinct(fieldSVG)
+      this.append(fieldSVG.svg)
     }
   }
 
