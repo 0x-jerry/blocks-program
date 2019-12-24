@@ -48,7 +48,10 @@ export class AreaContent extends G {
       return { x: 0, y: 0 }
     }
 
-    return { x, y }
+    return {
+      x: +(1 - x).toFixed(8),
+      y: +(1 - y).toFixed(8)
+    }
   }
 
   constructor(width: number, height: number) {
@@ -69,8 +72,8 @@ export class AreaContent extends G {
   moveTo(xPercentage: number, yPercentage: number) {
     const box = this.moveableRange
 
-    const x = box.left + xPercentage * box.width
-    const y = box.top + yPercentage * box.height
+    const x = box.left + (1 - xPercentage) * box.width
+    const y = box.top + (1 - yPercentage) * box.height
 
     this.move(x, y)
   }
