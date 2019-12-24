@@ -63,7 +63,7 @@
       area.background.dom.style.fill = `url(#${gridPattern.id})`
 
       area.events.on('move', (dx, dy) => {
-        gridPattern.dmove(dx, dy)
+        gridPattern.dmove(-dx, -dy)
       })
 
       // Performance test
