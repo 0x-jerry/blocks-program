@@ -20,7 +20,6 @@ describe('Text', () => {
     expect(text.y).toBe(10)
 
     expect(text.attr('x')).toBe(10)
-    expect(text.attr('y')).toBe(10)
 
     text.move(-10, -110)
 
@@ -28,7 +27,6 @@ describe('Text', () => {
     expect(text.y).toBe(-110)
 
     expect(text.attr('x')).toBe(-10)
-    expect(text.attr('y')).toBe(-110)
   })
 
   it('text', () => {

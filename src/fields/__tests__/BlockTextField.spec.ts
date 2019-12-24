@@ -1,5 +1,6 @@
 import { BlockTextField } from '../BlockTextField'
 import { Block } from '@/core'
+import { FIELD_TYPES } from '../const'
 
 describe('BlockTextField', () => {
   let field: BlockTextField
@@ -27,6 +28,6 @@ describe('BlockTextField', () => {
   })
 
   it('type', () => {
-    expect(field.type).toBe('Text')
+    expect(field.type).toBe(FIELD_TYPES.TEXT)
   })
 })
