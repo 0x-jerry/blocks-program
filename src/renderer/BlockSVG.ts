@@ -1,8 +1,9 @@
 import { Block } from '@/core'
-import { G, Path, SElement } from './lib'
 import { FIELD_TYPES } from '@/fields'
-import { SArray, Configuration } from '@/shared'
+import { Configuration, SArray } from '@/shared'
 import { BlockTextFieldSVG } from './fields'
+import { FieldSVG } from './fields/FieldSVG'
+import { G, Path } from './lib'
 import { Renderer } from './Renderer'
 import { Dragger } from './utils'
 
@@ -21,7 +22,7 @@ export class BlockSVG extends G {
   options: Configuration<BlockSVGOption>
 
   background: Path
-  fields: SArray<SElement>
+  fields: SArray<FieldSVG>
   totalWidth: number
   totalHeight: number
 
@@ -50,10 +51,9 @@ export class BlockSVG extends G {
     this.move(this.options.get('x'), this.options.get('y'))
 
     this._initBackground()
-
+    this._initFieldsSVG()
     this._initDragger()
 
-    this._initFieldsSVG()
     this.updateShape()
   }
 
@@ -68,7 +68,9 @@ export class BlockSVG extends G {
       return
     }
 
-    this.dragger = new Dragger(this.background.dom)
+    const textFields = this.fields.filter((f) => f.$f.type === FIELD_TYPES.TEXT).map((f) => f.svg.dom)
+    this.dragger = new Dragger(this.background.dom, ...textFields)
+
     this.dragger.on('dragging', (dx, dy) => {
       this.dmove(dx, dy)
     })
@@ -80,7 +82,7 @@ export class BlockSVG extends G {
 
   private _initFieldsSVG() {
     for (const field of this.$b.fieldManager.fields) {
-      let fieldEl: SElement | null = null
+      let fieldEl: FieldSVG | null = null
 
       switch (field.type) {
         case FIELD_TYPES.TEXT:
@@ -93,7 +95,7 @@ export class BlockSVG extends G {
 
       if (fieldEl) {
         this.fields.pushDistinct(fieldEl)
-        this.append(fieldEl)
+        this.append(fieldEl.svg)
       }
     }
   }
@@ -106,15 +108,15 @@ export class BlockSVG extends G {
       const field = this.fields[idx]
       const previousField = this.fields[idx - 1]
       x = 0
-      y = (this.totalHeight - field.bbox.height) / 2
+      y = (this.totalHeight - field.svg.bbox.height) / 2
 
       if (previousField) {
-        x = previousField.x + previousField.bbox.width
+        x = previousField.svg.x + previousField.svg.bbox.width
       }
 
       x += this.options.get('fieldGap')
 
-      field.move(x, y)
+      field.svg.move(x, y)
     }
   }
 
@@ -133,11 +135,11 @@ export class BlockSVG extends G {
     this.background.d.M(0, 0)
 
     const width =
-      this.fields.reduce((pre, cur) => pre + cur.bbox.width, 0) +
+      this.fields.reduce((pre, cur) => pre + cur.svg.bbox.width, 0) +
       (this.fields.length - 1) * this.options.get('fieldGap') +
       this.options.get('horizontalPadding') * 2
 
-    const height = Math.max(...this.fields.map((f) => f.bbox.height)) + this.options.get('verticalPadding') * 2
+    const height = Math.max(...this.fields.map((f) => f.svg.bbox.height)) + this.options.get('verticalPadding') * 2
 
     this.totalWidth = width
     this.totalHeight = height

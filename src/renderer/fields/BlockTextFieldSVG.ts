@@ -1,15 +1,12 @@
 import { BlockTextField } from '@/fields'
 import { Text } from '../lib'
+import { FieldSVG } from './FieldSVG'
 
-export class BlockTextFieldSVG extends Text {
-  $f: BlockTextField
-
+export class BlockTextFieldSVG extends FieldSVG<BlockTextField, Text> {
   constructor(field: BlockTextField) {
-    super()
+    super(field, new Text())
 
-    this.$f = field
-    this.addClasses('s_field_text')
-
-    this.text(this.$f.value() || '')
+    this.svg.addClasses('s_field_text')
+    this.svg.text(this.$f.value() || '')
   }
 }

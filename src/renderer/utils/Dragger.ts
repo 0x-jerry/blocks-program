@@ -17,18 +17,16 @@ type IDraggableEventsMap = {
 }
 
 export class Dragger extends EventEmitter<IDraggableEventsMap> {
-  private dom: HTMLElement | SVGElement
+  private doms: (HTMLElement | SVGElement)[]
   private _isDragging: boolean
 
   get isDragging() {
     return this._isDragging
   }
 
-  constructor(dom: HTMLElement | SVGElement) {
+  constructor(...doms: (HTMLElement | SVGElement)[]) {
     super()
-    this.dom = dom
-
-    this.dom.style.cursor = 'grab'
+    this.doms = doms
 
     this._isDragging = false
 
@@ -36,7 +34,10 @@ export class Dragger extends EventEmitter<IDraggableEventsMap> {
     this._pointerup = this._pointerup.bind(this)
     this._pointermove = this._pointermove.bind(this)
 
-    this.dom.addEventListener('pointerdown', this._pointerdown)
+    for (const dom of this.doms) {
+      dom.style.cursor = 'grab'
+      dom.addEventListener('pointerdown', this._pointerdown)
+    }
 
     globalDomEvent.on('pointermove', this._pointermove)
     globalDomEvent.on('pointerup', this._pointerup)
@@ -47,7 +48,10 @@ export class Dragger extends EventEmitter<IDraggableEventsMap> {
     this.emit('dragstart', e)
 
     document.body.style.cursor = 'grabbing'
-    this.dom.style.cursor = ''
+
+    for (const dom of this.doms) {
+      dom.style.cursor = ''
+    }
   }
 
   private _pointermove(e: MouseEvent) {
@@ -63,11 +67,16 @@ export class Dragger extends EventEmitter<IDraggableEventsMap> {
     this.emit('dragend', e)
 
     document.body.style.cursor = ''
-    this.dom.style.cursor = 'grab'
+    for (const dom of this.doms) {
+      dom.style.cursor = 'grab'
+    }
   }
 
   destroy() {
-    this.dom.removeEventListener('pointerdown', this._pointerdown)
+    for (const dom of this.doms) {
+      dom.removeEventListener('pointerdown', this._pointerdown)
+    }
+
     globalDomEvent.off('pointerup', this._pointerup)
     globalDomEvent.off('pointermove', this._pointermove)
   }
