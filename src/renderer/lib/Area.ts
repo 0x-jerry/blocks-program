@@ -38,7 +38,7 @@ export class AreaContent extends G {
     return this.bbox.height + this.height
   }
 
-  get moveableRange() {
+  get moveRange() {
     const bbox = this.bbox
 
     const origin = {
@@ -57,7 +57,7 @@ export class AreaContent extends G {
   }
 
   get currentPercentage() {
-    const box = this.moveableRange
+    const box = this.moveRange
 
     let x = (this.x - box.left) / box.width
     let y = (this.y - box.top) / box.height
@@ -89,7 +89,7 @@ export class AreaContent extends G {
   }
 
   moveTo(xPercentage: number, yPercentage: number) {
-    const box = this.moveableRange
+    const box = this.moveRange
 
     const x = box.left + (1 - xPercentage) * box.width
     const y = box.top + (1 - yPercentage) * box.height
@@ -98,7 +98,7 @@ export class AreaContent extends G {
   }
 
   move(x: number, y: number) {
-    const box = this.moveableRange
+    const box = this.moveRange
 
     if (x < box.left) x = box.left
     if (x > box.right) x = box.right
@@ -151,7 +151,7 @@ export class Area extends G {
   }
 
   private _scrollCurrentChanged(now: Vec2) {
-    const moveableRange = this.content.moveableRange
+    const moveableRange = this.content.moveRange
     const currentPercentage = this.content.currentPercentage
 
     const dx = (now.x - currentPercentage.x) * moveableRange.width
@@ -177,7 +177,7 @@ export class Area extends G {
       this.scrolls.scrollTo(x, y)
 
       // Emit move event
-      const moveableRange = this.content.moveableRange
+      const moveableRange = this.content.moveRange
       const ddx = (x - beforeContentPercentage.x) * moveableRange.width
       const ddy = (y - beforeContentPercentage.y) * moveableRange.height
       this.events.emit('move', ddx, ddy)
