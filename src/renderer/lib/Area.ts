@@ -12,6 +12,24 @@ export class AreaContent extends G {
 
   events: EventEmitter
 
+  get bbox() {
+    const box = this.dom.getBBox()
+
+    if (this.width > box.width + this.width / 2) {
+      const contentWidth = this.width - box.width
+      box.x -= contentWidth / 2 - box.width / 2
+      box.width = contentWidth
+    }
+
+    if (this.height > box.height + this.height / 2) {
+      const contentHeight = this.height - box.height
+      box.y -= contentHeight / 2 - box.height / 2
+      box.height = contentHeight
+    }
+
+    return box
+  }
+
   get totalWidth(): number {
     return this.bbox.width + this.width
   }
@@ -41,16 +59,13 @@ export class AreaContent extends G {
   get currentPercentage() {
     const box = this.moveableRange
 
-    if (box.width <= 0 || box.height <= 0) {
-      return { x: 0, y: 0 }
-    }
+    let x = (this.x - box.left) / box.width
+    let y = (this.y - box.top) / box.height
 
-    const x = (this.x - box.left) / box.width
-    const y = (this.y - box.top) / box.height
-
-    if (x < 0 || y < 0 || x > 1 || y > 1) {
-      return { x: 0, y: 0 }
-    }
+    if (x < 0) x = 0
+    if (x > 1) x = 1
+    if (y < 0) y = 0
+    if (y > 1) y = 1
 
     return {
       x: +(1 - x).toFixed(8),
@@ -85,9 +100,12 @@ export class AreaContent extends G {
   move(x: number, y: number) {
     const box = this.moveableRange
 
-    if (x >= box.left && x <= box.right && y >= box.top && y <= box.bottom) {
-      super.move(x, y)
-    }
+    if (x < box.left) x = box.left
+    if (x > box.right) x = box.right
+    if (y < box.top) y = box.top
+    if (y > box.bottom) y = box.bottom
+
+    super.move(x, y)
   }
 }
 
@@ -171,7 +189,7 @@ export class Area extends G {
     this.scrolls.scrollTo(xPercentage, yPercentage)
   }
 
-  @Debounce(100, { trailing: true })
+  @Debounce(100)
   resize() {
     const { width, height } = this.size
 
