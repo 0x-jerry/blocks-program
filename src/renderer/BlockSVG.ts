@@ -1,30 +1,81 @@
 import { Block } from '@/core'
 import { G, Path, SElement } from './lib'
 import { FIELD_TYPES } from '@/fields'
-import { SArray } from '@/shared'
+import { SArray, Configuration } from '@/shared'
 import { BlockTextFieldSVG } from './fields'
 import { Renderer } from './Renderer'
+import { Dragger } from './utils'
+
+type BlockSVGOption = {
+  fieldGap: number
+  horizontalPadding: number
+  verticalPadding: number
+  x: number
+  y: number
+  draggable: boolean
+}
 
 export class BlockSVG extends G {
   readonly $b: Block
   readonly $r: Renderer
+  options: Configuration<BlockSVGOption>
 
   background: Path
   fields: SArray<SElement>
   totalWidth: number
   totalHeight: number
 
-  constructor(block: Block, renderer: Renderer) {
+  dragger: Dragger
+
+  constructor(block: Block, renderer: Renderer, options: Partial<BlockSVGOption> = {}) {
     super()
+    this.addClasses('s_block')
+
+    this.options = new Configuration({
+      fieldGap: 2,
+      horizontalPadding: 5,
+      verticalPadding: 5,
+      x: 0,
+      y: 0,
+      draggable: true,
+      ...options
+    })
+
     this.totalHeight = 0
     this.totalWidth = 0
     this.$r = renderer
     this.$b = block
-    this.background = new Path()
     this.fields = new SArray()
 
-    this.append(this.background)
+    this.move(this.options.get('x'), this.options.get('y'))
+
+    this._initBackground()
+
+    this._initDragger()
+
     this._initFieldsSVG()
+    this.updateShape()
+  }
+
+  private _initBackground() {
+    this.background = new Path()
+    this.background.addClasses('s_block_background')
+    this.append(this.background)
+  }
+
+  private _initDragger() {
+    if (!this.options.get('draggable')) {
+      return
+    }
+
+    this.dragger = new Dragger(this.background.dom)
+    this.dragger.on('dragging', (dx, dy) => {
+      this.dmove(dx, dy)
+    })
+
+    this.dragger.on('dragend', () => {
+      this.$r.workspaceSVG.resize()
+    })
   }
 
   private _initFieldsSVG() {
@@ -61,9 +112,7 @@ export class BlockSVG extends G {
         x = previousField.x + previousField.bbox.width
       }
 
-      const gap = 2
-
-      x += gap
+      x += this.options.get('fieldGap')
 
       field.move(x, y)
     }
@@ -82,31 +131,32 @@ export class BlockSVG extends G {
     this.background.d.clear()
 
     this.background.d.M(0, 0)
-    const widthGap = 2
-    const heightGap = 4
 
-    const width = this.fields.reduce((pre, cur) => pre + cur.bbox.width, 0) + (this.fields.length + 1) * widthGap
+    const width =
+      this.fields.reduce((pre, cur) => pre + cur.bbox.width, 0) +
+      (this.fields.length - 1) * this.options.get('fieldGap') +
+      this.options.get('horizontalPadding') * 2
 
-    const height = Math.max(...this.fields.map((f) => f.bbox.height)) + heightGap * 2
+    const height = Math.max(...this.fields.map((f) => f.bbox.height)) + this.options.get('verticalPadding') * 2
 
     this.totalWidth = width
     this.totalHeight = height
 
     if (this.$b.config.get('previous')) {
       this.background.d
-        .l(0, 1)
-        .v(1, 0)
-        .l(0, 1)
-        .v(-1, 0)
+        .h(1)
+        .v(1)
+        .h(1)
+        .v(-1)
     } else {
-      this.background.d.l(0, 3)
+      this.background.d.h(3)
     }
 
     this.background.d
-      .l(width - 3, 0)
+      .h(width - 3)
+      .v(height)
+      .h(-width)
       .v(-height)
-      .l(-(width - 3), 0)
-      .v(height, 0)
       .done()
   }
 
@@ -114,6 +164,8 @@ export class BlockSVG extends G {
     if (!this.rendered) {
       this.$r.workspaceSVG.appendContent(this)
     }
+
     this.updateBackgroundShape()
+    this.updateFieldsShape()
   }
 }

@@ -12,12 +12,13 @@ export class Renderer {
     this.$w = workspace
 
     this.workspaceSVG = new WorkspaceSVG(workspace, this, width, height)
+
+    this.svg.append(this.workspaceSVG)
   }
 
   mount(el: HTMLElement) {
     this.svg.mount(el)
   }
 
-  createBlock(type: string) {
-  }
+  createBlock(type: string) {}
 }

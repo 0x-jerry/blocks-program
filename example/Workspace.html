@@ -9,6 +9,7 @@
       * {
         margin: 0;
         padding: 0;
+        user-select: none;
       }
 
       #app {
@@ -39,17 +40,54 @@
         stroke: #eeeeee;
         stroke-width: 1px;
       }
+
+      .s_block_background {
+        fill: #6dcbf7;
+        stroke: #98c7f0;
+      }
     </style>
   </head>
   <body>
     <div id="app"></div>
-    <p>double click to add rect</p>
     <script src="../build/blocks-program.browser.min.js"></script>
+    <script src="https://cdn.bootcss.com/dat-gui/0.7.6/dat.gui.js"></script>
     <script>
       const workspace = new BlocksProgram.Workspace()
+
+      const block = new BlocksProgram.Block(null, 'testid')
+      const field = new BlocksProgram.BlockTextField('arg', 'hello')
+      block.addField(field)
+
+      workspace.addDefinedBlock(block)
       const renderer = new BlocksProgram.Renderer(workspace, 600, 400)
 
       renderer.mount(document.getElementById('app'))
+
+      // ---------------
+
+      const gui = new dat.GUI()
+      const guiConfig = {
+        x: 10,
+        y: 10,
+        addBlock() {
+          renderer.workspaceSVG.addBlock('testid', guiConfig.x, guiConfig.y)
+        },
+        removeBlock() {
+          const b = renderer.workspaceSVG.blocks[0]
+          if (b) {
+            console.log(b.$b.id)
+            renderer.workspaceSVG.removeBlock(b)
+          } else {
+            console.log('no block')
+          }
+        }
+      }
+
+      gui.add(guiConfig, 'x', 10, 200)
+      gui.add(guiConfig, 'y', 10, 100)
+
+      gui.add(guiConfig, 'addBlock')
+      gui.add(guiConfig, 'removeBlock')
     </script>
   </body>
 </html>
