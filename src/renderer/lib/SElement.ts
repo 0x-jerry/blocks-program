@@ -129,6 +129,14 @@ export class SElement<T extends SVGGraphicsElement = SVGGraphicsElement> extends
     this.y = 0
   }
 
+  visible(visibility?: boolean) {
+    if (visibility === undefined) {
+      return this.dom.style.visibility !== 'hidden'
+    }
+
+    this.dom.style.visibility = visibility ? '' : 'hidden'
+  }
+
   on<K extends keyof SVGElementEventMap>(
     type: K,
     listener: (this: SVGGElement, ev: SVGElementEventMap[K]) => any,

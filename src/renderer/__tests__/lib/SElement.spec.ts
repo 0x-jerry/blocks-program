@@ -9,6 +9,16 @@ describe('SElement', () => {
     el = new SElement(createSVGEl('g'))
   })
 
+  it('visible', () => {
+    const v = el.visible()
+    expect(v).toBe(true)
+    el.visible(false)
+    expect(el.dom.style.visibility).toBe('hidden')
+
+    el.visible(true)
+    expect(el.dom.style.visibility).toBe('')
+  })
+
   it('attr', () => {
     el.attr('test', 10)
 
