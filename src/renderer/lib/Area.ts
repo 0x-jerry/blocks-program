@@ -41,6 +41,10 @@ export class AreaContent extends G {
   get currentPercentage() {
     const box = this.moveableRange
 
+    if (box.width <= 0 || box.height <= 0) {
+      return { x: 0, y: 0 }
+    }
+
     const x = (this.x - box.left) / box.width
     const y = (this.y - box.top) / box.height
 
