@@ -54,28 +54,28 @@ class D {
   }
 
   /**
-   * Horizontal line to (x,y)+
+   * Horizontal line to (x)+
    */
   H(...lines: number[]) {
     return this.d('H', lines)
   }
 
   /**
-   * Horizontal line to (dx,dy)+
+   * Horizontal line to (dx)+
    */
   h(...lines: number[]) {
     return this.d('h', lines)
   }
 
   /**
-   * Vertical line to (x,y)+
+   * Vertical line to (y)+
    */
   V(...lines: number[]) {
     return this.d('V', lines)
   }
 
   /**
-   * Vertical line to (dx,dy)+
+   * Vertical line to (dy)+
    */
   v(...lines: number[]) {
     return this.d('v', lines)
@@ -204,6 +204,7 @@ export class Path extends SElement<SVGPathElement> {
   constructor() {
     super(createSVGEl('path'))
     this.d = new D(this)
+    this.addClasses('s_path')
   }
 
   updatePath(p: string) {
