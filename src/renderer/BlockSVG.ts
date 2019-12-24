@@ -162,7 +162,7 @@ export class BlockSVG extends G {
 
   updateShape() {
     if (!this.rendered) {
-      this.$r.workspaceSVG.appendContent(this)
+      return
     }
 
     this.updateBackgroundShape()

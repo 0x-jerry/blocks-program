@@ -133,6 +133,8 @@ export class Area extends G {
 
     this._initSVG(width, height)
     this._initDragger()
+
+    this.resize()
   }
 
   private _initSVG(width: number, height: number) {

@@ -44,6 +44,7 @@ export class WorkspaceSVG extends Area {
     this.blocks.pushDistinct(blockSVG)
 
     this.appendContent(blockSVG)
+    blockSVG.updateShape()
   }
 
   removeBlock(blockSVGOrId: BlockSVG | string) {
