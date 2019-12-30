@@ -186,6 +186,10 @@ export class Area extends G {
     })
   }
 
+  displayAtTop(el: SElement) {
+    this.content.append(el)
+  }
+
   scrollTo(xPercentage: number, yPercentage: number) {
     this.content.moveTo(xPercentage, yPercentage)
     this.scrolls.scrollTo(xPercentage, yPercentage)
