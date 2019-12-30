@@ -1,4 +1,4 @@
-import { Area, PatternGrid } from './lib'
+import { Area } from './lib'
 import { Workspace } from '@/core'
 import { Renderer } from './Renderer'
 import { warn, SArray } from '@/shared'
@@ -20,12 +20,11 @@ export class WorkspaceSVG extends Area {
   }
 
   private _initGrid() {
-    const gridPattern = new PatternGrid(40, 40)
-    this.$r.svg.defs.append(gridPattern)
+    const gridEffect = this.$r.effects.grid
 
-    this.background.dom.style.fill = `url(#${gridPattern.id})`
+    this.background.dom.style.fill = `url(#${gridEffect.id})`
     this.events.on('move', (dx, dy) => {
-      gridPattern.dmove(-dx, -dy)
+      gridEffect.dmove(-dx, -dy)
     })
   }
 

@@ -74,8 +74,18 @@ export class BlockSVG extends G {
       this.dmove(dx, dy)
     })
 
+    this.dragger.on('dragstart', () => {
+      const id = this.$r.effects.dragging.id
+      this.dom.style.filter = `url(#${id})`
+
+      this.addClasses('s_block_dragging')
+      this.$r.workspaceSVG.displayAtTop(this)
+    })
+
     this.dragger.on('dragend', () => {
       this.$r.workspaceSVG.resize()
+      this.dom.style.filter = ''
+      this.removeClasses('s_block_dragging')
     })
   }
 
@@ -83,14 +93,12 @@ export class BlockSVG extends G {
     for (const field of this.$b.fieldManager.fields) {
       const Ctor = this.$r.getFieldCtor(field.type)
 
-      if (!Ctor) {
-        continue
+      if (Ctor) {
+        const fieldSVG = new Ctor(field)
+
+        this.fields.pushDistinct(fieldSVG)
+        this.append(fieldSVG.svg)
       }
-
-      const fieldSVG = new Ctor(field)
-
-      this.fields.pushDistinct(fieldSVG)
-      this.append(fieldSVG.svg)
     }
   }
 
