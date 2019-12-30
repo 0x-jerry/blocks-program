@@ -22,8 +22,8 @@ export class BlockSVG extends G {
 
   background: Path
   fields: SArray<FieldSVG>
-  totalWidth: number
-  totalHeight: number
+  contentWidth: number
+  contentHeight: number
 
   dragger: Dragger
 
@@ -32,8 +32,8 @@ export class BlockSVG extends G {
     this.addClasses('s_block')
 
     this.options = new Configuration({
-      fieldGap: 2,
-      horizontalPadding: 5,
+      fieldGap: 5,
+      horizontalPadding: 8,
       verticalPadding: 5,
       x: 0,
       y: 0,
@@ -41,8 +41,8 @@ export class BlockSVG extends G {
       ...options
     })
 
-    this.totalHeight = 0
-    this.totalWidth = 0
+    this.contentHeight = 0
+    this.contentWidth = 0
     this.$r = renderer
     this.$b = block
     this.fields = new SArray()
@@ -109,14 +109,16 @@ export class BlockSVG extends G {
     for (let idx = 0; idx < this.fields.length; idx++) {
       const field = this.fields[idx]
       const previousField = this.fields[idx - 1]
-      x = 0
-      y = (this.totalHeight - field.svg.bbox.height) / 2
+      const isFirstField = idx === 0
+
+      x = isFirstField ? this.options.get('horizontalPadding') : this.options.get('fieldGap')
+      y = this.options.get('verticalPadding')
+
+      y += (this.contentHeight - field.svg.bbox.height) / 2
 
       if (previousField) {
-        x = previousField.svg.x + previousField.svg.bbox.width
+        x += previousField.svg.x + previousField.svg.bbox.width
       }
-
-      x += this.options.get('fieldGap')
 
       field.svg.move(x, y)
     }
@@ -132,36 +134,52 @@ export class BlockSVG extends G {
       this.updateOutputShape()
       return
     }
-    this.background.d.clear()
 
-    this.background.d.M(0, 0)
-
-    const width =
+    this.contentWidth =
       this.fields.reduce((pre, cur) => pre + cur.svg.bbox.width, 0) +
-      (this.fields.length - 1) * this.options.get('fieldGap') +
-      this.options.get('horizontalPadding') * 2
+      (this.fields.length - 1) * this.options.get('fieldGap')
 
-    const height = Math.max(...this.fields.map((f) => f.svg.bbox.height)) + this.options.get('verticalPadding') * 2
+    this.contentHeight = Math.max(...this.fields.map((f) => f.svg.bbox.height))
 
-    this.totalWidth = width
-    this.totalHeight = height
+    const totalWidth = this.contentWidth + this.options.get('horizontalPadding') * 2
+    const totalHeight = this.contentHeight + this.options.get('verticalPadding') * 2
 
+    const joinHeight = 5
+    const joinWidth = 10
+    const joinStartWidth = 5
+
+    // Start update shape
+    this.background.d.clear()
+    this.background.d.M(0, 0).h(joinStartWidth)
+
+    // Draw previous connection
     if (this.$b.config.get('previous')) {
       this.background.d
-        .h(1)
-        .v(1)
-        .h(1)
-        .v(-1)
+        .v(-joinHeight)
+        .h(joinWidth)
+        .v(joinHeight)
     } else {
-      this.background.d.h(3)
+      this.background.d.h(joinWidth)
     }
 
+    // Draw right component
+    const extraHeight = this.$b.config.get('next') ? joinHeight : 0
     this.background.d
-      .h(width - 3)
-      .v(height)
-      .h(-width)
-      .v(-height)
-      .done()
+      .h(totalWidth - joinStartWidth - joinWidth)
+      .v(totalHeight + extraHeight)
+      .h(-(totalWidth - joinStartWidth - joinWidth))
+
+    // Draw next connection
+    if (this.$b.config.get('next')) {
+      this.background.d
+        .v(-joinHeight)
+        .h(-joinWidth)
+        .v(joinHeight)
+    } else {
+      this.background.d.h(-joinWidth)
+    }
+
+    this.background.d.h(-joinStartWidth).z()
   }
 
   updateShape() {

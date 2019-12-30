@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Workspace</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        user-select: none;
+      }
+
+      #app {
+        width: fit-content;
+        margin: 50px auto;
+        box-shadow: 0 0 10px #757575;
+        line-height: 0;
+      }
+
+      .s_area_background {
+        fill: white;
+      }
+
+      .s_scroll_background {
+        fill: lightblue;
+      }
+
+      .s_scroll_bar {
+        fill: blue;
+      }
+
+      .s_scroll_disabled > .s_scroll_bar {
+        fill: gray;
+      }
+
+      .s_pattern_grid {
+        fill: #f9f9f9;
+        stroke: #eeeeee;
+        stroke-width: 1px;
+      }
+
+      .s_block_background {
+        fill: #6dcbf7;
+        stroke: #98c7f0;
+      }
+
+      .s_dragger {
+        cursor: grab;
+      }
+
+      .s_dragger_dragging {
+        cursor: grabbing;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script src="../build/blocks-program.browser.min.js"></script>
+    <script src="https://cdn.bootcss.com/dat-gui/0.7.6/dat.gui.js"></script>
+    <script>
+      const workspace = new BlocksProgram.Workspace()
+
+      const block = new BlocksProgram.Block(null, 'p-n')
+      const field = new BlocksProgram.BlockTextField('arg', 'hello')
+      block.addField(field)
+
+      workspace.addDefinedBlock(createBlock({}, 'p-n'))
+      workspace.addDefinedBlock(createBlock({ previous: false }, 'n'))
+      workspace.addDefinedBlock(createBlock({ next: false }, 'p'))
+      const renderer = new BlocksProgram.Renderer(workspace, 600, 400)
+
+      renderer.mount(document.getElementById('app'))
+
+      renderer.workspaceSVG.addBlock('n', 100, 50)
+      renderer.workspaceSVG.addBlock('p-n', 100, 100)
+      renderer.workspaceSVG.addBlock('p', 100, 150)
+
+      function createBlock(opt = {}, id) {
+        const block = new BlocksProgram.Block(opt, id)
+
+        const field = new BlocksProgram.BlockTextField('arg', 'hello')
+        const field1 = new BlocksProgram.BlockTextField('arg', 'world')
+        block.addField(field)
+        block.addField(field1)
+
+        return block
+      }
+    </script>
+  </body>
+</html>

@@ -15,8 +15,8 @@ export class BlockConfig extends Configuration<BlockConfigOption> {
     const defaultOpts: BlockConfigOption = {
       name: '',
       output: [],
-      next: false,
-      previous: false
+      next: true,
+      previous: true
     }
 
     super(Object.assign(defaultOpts, opts))
