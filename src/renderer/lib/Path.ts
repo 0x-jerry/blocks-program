@@ -10,7 +10,7 @@ class D {
     this.clear()
   }
 
-  pushCoords(coords: number[]) {
+  private pushCoords(coords: number[]) {
     const step = 2
 
     for (let i = 0; i < coords.length; i += step) {
@@ -22,7 +22,7 @@ class D {
     }
   }
 
-  d(cmd: string, params: number[], pairCount = 1) {
+  private d(cmd: string, params: number[], pairCount = 1) {
     this.path.push(cmd)
 
     for (let i = 0; i < params.length; i += pairCount) {
