@@ -4,29 +4,23 @@ Visual programming editor. Inspire by [blockly](https://github.com/google/blockl
 
 ## TODO
 
-**Core**
-
 - [x] Workspace
-- [ ] WorkspaceToolbox
 - [x] Block
 - [x] BlockField
-- [ ] BlockConnection
+- [ ] fields
+  - [x] BlockTextField
+  - [x] BlockSlotField
+  - [ ] BlockDropdownField
 - [ ] Renderer
-  - [ ] Workspace
-  - [ ] Block
-  - [ ] BlockField
+  - [x] Render lib
+  - [x] Workspace
+  - [x] Block
+  - [x] BlockField
 - [ ] CodeGenerator
   - [x] CodeGenerator
-  - [ ] Python
-- [ ] Language
+  - [ ] PythonGenerator
+- [ ] parser
 
-**Renderer Utils**
+  - [ ] BlockJSONParser
 
-- [ ] SVG
-- [ ] SVGElement
-- [ ] SVGEffect
-- [ ] SVGArea
-
-**Other Utils**
-
-- [ ] BlockFormatParser
+- [ ] Docs
