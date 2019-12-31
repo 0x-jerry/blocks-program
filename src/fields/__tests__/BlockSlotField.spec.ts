@@ -34,4 +34,11 @@ describe('BlockSlotField', () => {
     expect(field.isSlot).toBe(true)
     expect(field.type).toBe(FIELD_TYPES.BLOCK_SLOT)
   })
+
+  it('clone', () => {
+    const newField = field.clone()
+
+    expect(newField).not.toBe(field)
+    expect(newField.name).toBe(field.name)
+  })
 })

@@ -75,4 +75,23 @@ describe('Block', () => {
     expect(a.next.value).toBeNull()
     expect(a.isRoot).toBe(true)
   })
+
+  it('clone', () => {
+    const b = new Block({ previous: false })
+    const field = new BlockField('test', 123)
+    b.addField(field)
+
+    const clone = b.clone()
+
+    expect(clone).not.toBe(b)
+    expect(clone.config).toEqual(b.config)
+    expect(clone.fieldManager.fields.length).toEqual(b.fieldManager.fields.length)
+
+    clone.fieldManager.fields.forEach((field, idx) => {
+      const bField = b.fieldManager.fields[idx]
+      expect(field.name).toEqual(bField.name)
+      expect(field.value()).toEqual(bField.value())
+      expect(field.type).toEqual(bField.type)
+    })
+  })
 })

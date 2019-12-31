@@ -30,4 +30,11 @@ describe('BlockTextField', () => {
   it('type', () => {
     expect(field.type).toBe(FIELD_TYPES.TEXT)
   })
+
+  it('clone', () => {
+    const newField = field.clone()
+
+    expect(newField).not.toBe(field)
+    expect(newField.value()).toBe(field.value())
+  })
 })
