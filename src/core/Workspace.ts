@@ -1,9 +1,47 @@
 import { uuid, getId, SArray } from '@/shared'
 import { Block } from './Block'
 
+class DefinedBlocks {
+  blocks: SArray<Block>
+
+  constructor() {
+    this.blocks = new SArray()
+  }
+
+  add(block: Block) {
+    this.blocks.pushDistinct(block)
+  }
+
+  remove(blockOrId: Block | string): Block | null {
+    return typeof blockOrId === 'string'
+      ? this.blocks.remove((b) => b.id === blockOrId)
+      : this.blocks.removeItem(blockOrId)
+  }
+
+  get(id: string): Block | null {
+    return this.blocks.find((b) => b.id === id) || null
+  }
+
+  clear(destroyOldBlocks = true): SArray<Block> {
+    if (destroyOldBlocks) {
+      this.destroy()
+    }
+
+    const olds = this.blocks
+
+    this.blocks = new SArray()
+
+    return olds
+  }
+
+  destroy() {
+    this.blocks.forEach((b) => b.destroy())
+  }
+}
+
 export class Workspace {
   readonly id: string
-  definedBlocks: SArray<Block>
+  definedBlocks: DefinedBlocks
 
   blockDB: SArray<Block>
 
@@ -12,7 +50,7 @@ export class Workspace {
   constructor(id: string = uuid()) {
     this.id = id
 
-    this.definedBlocks = new SArray()
+    this.definedBlocks = new DefinedBlocks()
     this.blockDB = new SArray()
     this.blockRoots = new SArray()
   }
@@ -27,18 +65,6 @@ export class Workspace {
     if (!this.isRootBlock(block)) {
       this.blockRoots.push(block)
     }
-  }
-
-  addDefinedBlock(block: Block) {
-    this.definedBlocks.pushDistinct(block)
-  }
-
-  removeDefinedBlock(block: Block) {
-    this.definedBlocks.removeItem(block)
-  }
-
-  clearDefinedBlocks() {
-    this.definedBlocks = new SArray()
   }
 
   hasBlock(block: Block | string): false | Block {

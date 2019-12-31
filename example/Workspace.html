@@ -66,7 +66,7 @@
       const field = new BlocksProgram.BlockTextField('arg', 'hello')
       block.addField(field)
 
-      workspace.addDefinedBlock(block)
+      workspace.definedBlocks.add(block)
       const renderer = new BlocksProgram.Renderer(workspace, 600, 400)
 
       renderer.mount(document.getElementById('app'))

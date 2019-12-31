@@ -29,7 +29,7 @@ export class WorkspaceSVG extends Area {
   }
 
   addBlock(defineId: string, x = 0, y = 0) {
-    const block = this.$w.definedBlocks.find((b) => b.id === defineId)
+    const block = this.$w.definedBlocks.get(defineId)
 
     if (!block) {
       warn('Not found block definition: ', defineId)

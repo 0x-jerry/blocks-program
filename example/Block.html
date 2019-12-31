@@ -66,9 +66,9 @@
       const field = new BlocksProgram.BlockTextField('arg', 'hello')
       block.addField(field)
 
-      workspace.addDefinedBlock(createBlock({}, 'p-n'))
-      workspace.addDefinedBlock(createBlock({ previous: false }, 'n'))
-      workspace.addDefinedBlock(createBlock({ next: false }, 'p'))
+      workspace.definedBlocks.add(createBlock({}, 'p-n'))
+      workspace.definedBlocks.add(createBlock({ previous: false }, 'n'))
+      workspace.definedBlocks.add(createBlock({ next: false }, 'p'))
       const renderer = new BlocksProgram.Renderer(workspace, 600, 400)
 
       renderer.mount(document.getElementById('app'))

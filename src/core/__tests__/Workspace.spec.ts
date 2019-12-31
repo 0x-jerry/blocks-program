@@ -97,4 +97,31 @@ describe('Workspace', () => {
     toBeTheSameIds($w.blockDB, [a])
     toBeTheSameIds($w.blockRoots, [a])
   })
+
+  it('defined block', () => {
+    const a = new Block({}, 'test')
+
+    $w.definedBlocks.add(a)
+    let block = $w.definedBlocks.blocks.find((b) => b.id === a.id)
+
+    expect(block).toBe(a)
+
+    $w.definedBlocks.remove(a)
+    block = $w.definedBlocks.blocks.find((b) => b.id === a.id)
+    expect(block).toBeFalsy()
+
+    $w.definedBlocks.add(new Block())
+    $w.definedBlocks.add(new Block())
+    $w.definedBlocks.add(new Block())
+    $w.definedBlocks.add(new Block())
+    $w.definedBlocks.clear()
+
+    expect($w.definedBlocks.blocks.length).toBe(0)
+
+    const b = new Block({}, 'test1234')
+    $w.definedBlocks.add(b)
+    const expectB = $w.definedBlocks.get('test1234')
+
+    expect(expectB).toBe(b)
+  })
 })
