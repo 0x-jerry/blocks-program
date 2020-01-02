@@ -1,8 +1,9 @@
 import { Rect } from './Shape'
 import { G } from './G'
 import { Sizeable, Dragger } from '../utils'
-import { EventEmitter, Observer, ObserverCallbackFunc, Vec2 } from '@/shared'
+import { EventEmitter, Observer, ObserverCallbackFunc } from '@/shared'
 import { Throttle } from '@/shared/decrators'
+import { IVec2 } from '@/typedef'
 
 type IScrollBarEventMap = {
   'scroll'(posPercentage: number): void
@@ -155,7 +156,7 @@ export class ScrollBar extends G {
 }
 
 type IScrollPairEventsMap = {
-  'scroll'(current: Vec2): void
+  'scroll'(current: IVec2): void
 }
 
 export class ScrollPair extends G {
@@ -166,7 +167,7 @@ export class ScrollPair extends G {
   readonly thickness: number
 
   size: Sizeable
-  currentPercentage: Vec2
+  currentPercentage: IVec2
   events: EventEmitter<IScrollPairEventsMap>
 
   /**
@@ -181,7 +182,7 @@ export class ScrollPair extends G {
     this.events = new EventEmitter()
     this.thickness = thickness
     this.size = new Sizeable(width, height)
-    this.currentPercentage = new Vec2()
+    this.currentPercentage = { x: 0, y: 0 }
 
     this._initSVG(vRatio, height, hRatio, width)
 

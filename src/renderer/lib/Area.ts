@@ -3,8 +3,9 @@ import { G } from './G'
 import { SElement } from './SElement'
 import { Sizeable, Dragger } from '../utils'
 import { ScrollPair } from './ScrollBar'
-import { EventEmitter, Vec2 } from '@/shared'
+import { EventEmitter  } from '@/shared'
 import { Debounce } from '@/shared/decrators'
+import { IVec2 } from '@/typedef'
 
 export class AreaContent extends G {
   width: number
@@ -152,7 +153,7 @@ export class Area extends G {
     this.append(this.scrolls)
   }
 
-  private _scrollCurrentChanged(now: Vec2) {
+  private _scrollCurrentChanged(now: IVec2) {
     const moveableRange = this.content.moveRange
     const currentPercentage = this.content.currentPercentage
 
