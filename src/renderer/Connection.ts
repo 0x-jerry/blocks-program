@@ -80,10 +80,11 @@ export class Connection {
 
       oldTargetConnection?.connectTo(null)
     } else {
-      this.targetConnection = destConn
       if (execAction) {
         this.connectAction(destConn)
       }
+
+      this.targetConnection = destConn
 
       destConn.connectTo(this, false)
     }

@@ -90,9 +90,23 @@ export class BlockSVG extends G {
         connectAction: (destConn) => {
           this.$r.$w.connectBlock(destConn.sourceBlock, this)
 
+          const rootBlock = this.getRootBlock()
+
+          const getBlockBoxHeight = (topBlock: BlockSVG) => {
+            let block = topBlock
+            let height = topBlock.contentHeight + block.options.get('verticalPadding') * 2
+
+            while (block.nextConnection?.targetConnection?.sourceBlock) {
+              block = block.nextConnection.targetConnection.sourceBlock
+              height += block.contentHeight + block.options.get('verticalPadding') * 2
+            }
+            return height
+          }
+
           const destPos = this.$r.$w.getWorldPosition(destConn.sourceBlock)
-          destPos.y -= this.contentHeight + this.options.get('verticalPadding') * 2
-          this.move(destPos.x, destPos.y)
+          destPos.y -= getBlockBoxHeight(rootBlock)
+
+          rootBlock.move(destPos.x, destPos.y)
 
           this.append(destConn.sourceBlock)
           destConn.sourceBlock.move(this.nextConnection!.dx, this.nextConnection!.dy)
@@ -162,13 +176,23 @@ export class BlockSVG extends G {
   }
 
   getRootBlock() {
-    let b: BlockSVG = this
+    let block: BlockSVG = this
 
-    while (b.previousConnection?.targetConnection) {
-      b = b.previousConnection.targetConnection.sourceBlock
+    while (block.previousConnection?.targetConnection) {
+      block = block.previousConnection.targetConnection.sourceBlock
     }
 
-    return b === this ? null : b
+    return block
+  }
+
+  getTrialBlock() {
+    let block: BlockSVG = this
+
+    while (block.nextConnection?.targetConnection?.sourceBlock) {
+      block = block.nextConnection?.targetConnection?.sourceBlock
+    }
+
+    return block
   }
 
   updateFieldsShape() {

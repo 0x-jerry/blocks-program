@@ -88,8 +88,10 @@
 
         const field = new BlocksProgram.BlockTextField('arg', 'hello')
         const field1 = new BlocksProgram.BlockTextField('arg', 'world')
+        const field2 = new BlocksProgram.BlockTextField('arg', id)
         block.addField(field)
         block.addField(field1)
+        block.addField(field2)
 
         return block
       }

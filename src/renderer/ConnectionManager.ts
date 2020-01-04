@@ -25,8 +25,8 @@ export class ConnectionManager {
     return conn
   }
 
-  getNearestConn(conn?: Connection) {
-    if (!conn) {
+  getNearestConn(conn: Connection) {
+    if (conn.isConnected) {
       return null
     }
 

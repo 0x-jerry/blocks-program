@@ -61,9 +61,10 @@ export class Renderer {
       this.currentActiveConnPair?.to?.setActive(false)
       this.currentActiveConnPair = this.connectionManager.getNearestConnPair(
         block.previousConnection,
-        block.nextConnection,
-        block.outputConnection
+        block.outputConnection,
+        block.getTrialBlock().nextConnection
       )
+
       this.currentActiveConnPair?.to.setActive(true)
     })
 
