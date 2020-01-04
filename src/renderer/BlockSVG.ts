@@ -5,6 +5,7 @@ import { FieldSVG } from './fields/FieldSVG'
 import { G, Path } from './lib'
 import { Renderer } from './Renderer'
 import { Dragger } from './utils'
+import { Connection, ConnectionType } from './Connection'
 
 type BlockSVGOption = {
   fieldGap: number
@@ -24,6 +25,10 @@ export class BlockSVG extends G {
   fields: SArray<FieldSVG>
   contentWidth: number
   contentHeight: number
+
+  previousConnection: Connection
+  nextConnection: Connection
+  outputConnection: Connection
 
   dragger: Dragger
 
@@ -52,8 +57,35 @@ export class BlockSVG extends G {
     this._initBackground()
     this._initFieldSVG()
     this._initDragger()
+    this._initConnections()
 
     this.updateShape()
+  }
+
+  private _initConnections() {
+    if (this.$b.config.get('previous')) {
+      this.previousConnection = this.$r.connectionManger.createConnection(this, {
+        x: this.x,
+        y: this.y,
+        type: ConnectionType.blockPrevious
+      })
+    }
+
+    if (this.$b.config.get('next')) {
+      this.nextConnection = this.$r.connectionManger.createConnection(this, {
+        x: this.x,
+        y: this.y,
+        type: ConnectionType.blockNext
+      })
+    }
+
+    if (this.$b.config.get('output').length) {
+      this.outputConnection = this.$r.connectionManger.createConnection(this, {
+        x: this.x,
+        y: this.y,
+        type: ConnectionType.blockOutput
+      })
+    }
   }
 
   private _initBackground() {

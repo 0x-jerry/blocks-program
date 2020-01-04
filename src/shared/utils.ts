@@ -1,3 +1,5 @@
+import { IVec2 } from '@/typedef'
+
 export function uuid() {
   let uuid = ''
 
@@ -151,7 +153,7 @@ export function debounce<T extends (...args: any[]) => void>(
   const opt: IDebounceConfig = Object.assign({ leading: false, trailing: true, maxWait: time }, options)
 
   //@ts-ignore
-  return function(this:T, ...params: any[]) {
+  return function(this: T, ...params: any[]) {
     const wrapperFunc = func.bind(this)
     const now = new Date().getTime()
 
@@ -180,4 +182,8 @@ export function debounce<T extends (...args: any[]) => void>(
       trailingHandle = setTimeout(() => wrapperFunc(...params), opt.maxWait)
     }
   }
+}
+
+export function distance(p1: IVec2, p2: IVec2) {
+  return Math.sqrt((p1.x - p2.x) ** 2 + (p1.y - p2.y) ** 2)
 }

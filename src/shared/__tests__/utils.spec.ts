@@ -1,4 +1,4 @@
-import { uuid, getId, oneOf, toArray, SArray, debounce, throttle } from '../utils'
+import { uuid, getId, oneOf, toArray, SArray, debounce, throttle, distance } from '../utils'
 
 describe('utils', () => {
   it('uid', () => {
@@ -293,5 +293,11 @@ describe('throttle', () => {
       expect(c).toBe('hi')
       done()
     }, 220)
+  })
+
+  it('distance', () => {
+    const d = distance({ x: 0, y: 0 }, { x: 3, y: 4 })
+
+    expect(d).toBe(5)
   })
 })

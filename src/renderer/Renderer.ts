@@ -3,6 +3,7 @@ import { SVG, DropShadowEffect, PatternGrid } from './lib'
 import { WorkspaceSVG } from './WorkspaceSVG'
 import { FieldSVGCtor, BlockTextFieldSVG } from './fields'
 import { FIELD_TYPES } from '@/fields'
+import { ConnectionManager } from './Connection'
 
 interface IEffect {
   readonly id: string
@@ -23,6 +24,8 @@ export class Renderer {
   svg: SVG
   workspaceSVG: WorkspaceSVG
 
+  connectionManger: ConnectionManager
+
   fieldCtors: {
     [type: string]: FieldSVGCtor
   }
@@ -33,6 +36,8 @@ export class Renderer {
     //@ts-ignore
     this.effects = {}
     this.fieldCtors = {}
+
+    this.connectionManger = new ConnectionManager()
 
     this.$w = workspace
     this._registerAllFields()
