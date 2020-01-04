@@ -110,13 +110,13 @@ export class AreaContent extends G {
   }
 }
 
-type IAreaEventMap = {
+export type IAreaEventsMap = {
   click: (e: MouseEvent, el?: SElement) => void
   move: (dx: number, dy: number) => void
 }
 
 export class Area extends G {
-  events: EventEmitter<IAreaEventMap>
+  events: EventEmitter<IAreaEventsMap>
   dragger: Dragger
 
   background: Rect

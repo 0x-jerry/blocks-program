@@ -13,7 +13,7 @@ window.addEventListener('pointermove', (e) => globalDomEvent.emit('pointermove',
 
 // init global events --- end
 
-type IDraggableEventsMap = {
+export type IDraggableEventsMap = {
   dragstart(e: MouseEvent): void
   dragging(dx: number, dy: number, e: MouseEvent): void
   dragend(e: MouseEvent): void
