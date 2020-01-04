@@ -78,13 +78,13 @@
         x: 10,
         y: 10,
         addBlock() {
-          renderer.workspaceSVG.addBlock('testid', guiConfig.x, guiConfig.y)
+          renderer.$w.addBlock('testid', guiConfig.x, guiConfig.y)
         },
         removeBlock() {
-          const b = renderer.workspaceSVG.blocks[0]
+          const b = renderer.$w.blocks[0]
           if (b) {
             console.log(b.$b.id)
-            renderer.workspaceSVG.removeBlock(b)
+            renderer.$w.removeBlock(b)
           } else {
             console.log('no block')
           }
