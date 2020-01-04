@@ -106,7 +106,7 @@ export class Workspace {
     }
   }
 
-  connectBlock(parent: Block, block: Block) {
+  connectBlock(block: Block, parent: Block) {
     if (block.isRoot) {
       this.blockRoots.removeItem(block)
     }

@@ -77,6 +77,10 @@ export class WorkspaceSVG extends Area {
     }
   }
 
+  connectBlock(block: BlockSVG, parentBlock: BlockSVG) {
+    this.$w.connectBlock(block.$b, parentBlock.$b)
+  }
+
   getWorldPosition(el: BlockSVG) {
     let block: BlockSVG | null = el
 
