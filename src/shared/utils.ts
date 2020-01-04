@@ -184,6 +184,20 @@ export function debounce<T extends (...args: any[]) => void>(
   }
 }
 
-export function distance(p1: IVec2, p2: IVec2) {
-  return Math.sqrt((p1.x - p2.x) ** 2 + (p1.y - p2.y) ** 2)
+export const vecUtils = {
+  distance(v1: IVec2, v2: IVec2) {
+    return Math.sqrt((v1.x - v2.x) ** 2 + (v1.y - v2.y) ** 2)
+  },
+  plus(v1: IVec2, v2: IVec2) {
+    return {
+      x: v1.x + v2.x,
+      y: v1.y + v2.y
+    }
+  },
+  minus(v1: IVec2, v2: IVec2) {
+    return {
+      x: v1.x - v2.x,
+      y: v1.y - v2.y
+    }
+  }
 }

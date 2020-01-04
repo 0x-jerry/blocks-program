@@ -1,4 +1,4 @@
-import { uuid, getId, oneOf, toArray, SArray, debounce, throttle, distance } from '../utils'
+import { uuid, getId, oneOf, toArray, SArray, debounce, throttle, vecUtils } from '../utils'
 
 describe('utils', () => {
   it('uid', () => {
@@ -295,9 +295,15 @@ describe('throttle', () => {
     }, 220)
   })
 
-  it('distance', () => {
-    const d = distance({ x: 0, y: 0 }, { x: 3, y: 4 })
+  it('vecUtils', () => {
+    const distance = vecUtils.distance({ x: 0, y: 0 }, { x: 3, y: 4 })
 
-    expect(d).toBe(5)
+    expect(distance).toBe(5)
+    const v1 = vecUtils.plus({ x: 0, y: 0 }, { x: 3, y: 4 })
+
+    expect(v1).toEqual({ x: 3, y: 4 })
+    const v2 = vecUtils.minus({ x: 0, y: 0 }, { x: 3, y: 4 })
+
+    expect(v2).toEqual({ x: -3, y: -4 })
   })
 })
