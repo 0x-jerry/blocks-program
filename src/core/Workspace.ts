@@ -111,6 +111,6 @@ export class Workspace {
       this.blockRoots.removeItem(block)
     }
 
-    block.connectTo(parent)
+    block.previous.update(parent)
   }
 }

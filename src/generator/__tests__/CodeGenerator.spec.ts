@@ -103,7 +103,7 @@ describe('CodeGenerator', () => {
       }
     })
 
-    b.connectTo(a)
+    b.previous.update(a)
 
     expect(generator.getTopBlockCode(a)).toBe(['hello', 'world'].join('\n'))
   })

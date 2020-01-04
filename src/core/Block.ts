@@ -108,13 +108,6 @@ export class Block {
   }
 
   /**
-   * @param block Null to break
-   */
-  connectTo(block: Block | null) {
-    this.previous.update(block)
-  }
-
-  /**
    * @param field Null to break
    */
   connectToField(field: BlockField | null) {

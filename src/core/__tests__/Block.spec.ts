@@ -7,7 +7,7 @@ describe('Block', () => {
     const a = new Block()
     const b = new Block()
 
-    a.connectTo(b)
+    a.previous.update(b)
 
     expect(b.next.value).toBe(a)
     expect(b.previous.value).toBeNull()
@@ -17,7 +17,7 @@ describe('Block', () => {
     expect(a.previous.value).toBe(b)
     expect(a.isRoot).toBe(false)
 
-    a.connectTo(null)
+    a.previous.update(null)
 
     expect(b.next.value).toBeNull()
     expect(b.previous.value).toBeNull()
@@ -63,7 +63,7 @@ describe('Block', () => {
     const a = new Block()
     const b = new Block()
 
-    a.connectTo(b)
+    a.previous.update(b)
 
     a.destroy()
 
