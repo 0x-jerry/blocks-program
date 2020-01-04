@@ -14,6 +14,10 @@ type BlockSVGOption = {
   x: number
   y: number
   draggable: boolean
+  /**
+   * Block defined id
+   */
+  type: string
 }
 
 export class BlockSVG extends G {
@@ -26,9 +30,9 @@ export class BlockSVG extends G {
   contentWidth: number
   contentHeight: number
 
-  previousConnection: Connection
-  nextConnection: Connection
-  outputConnection: Connection
+  previousConnection?: Connection
+  nextConnection?: Connection
+  outputConnection?: Connection
 
   dragger: Dragger
 
@@ -43,6 +47,7 @@ export class BlockSVG extends G {
       x: 0,
       y: 0,
       draggable: true,
+      type: '',
       ...options
     })
 
@@ -64,26 +69,48 @@ export class BlockSVG extends G {
 
   private _initConnections() {
     if (this.$b.config.get('previous')) {
-      this.previousConnection = this.$r.connectionManger.createConnection(this, {
-        x: this.x,
-        y: this.y,
-        type: ConnectionType.blockPrevious
+      // Initialize previous connection
+      this.previousConnection = this.$r.connectionManager.createConnection(this, {
+        type: ConnectionType.blockPrevious,
+        acceptTypes: [ConnectionType.blockNext],
+        connectAction: (destConn) => {
+          this.$r.$w.connectBlock(this, destConn.sourceBlock)
+
+          destConn.sourceBlock.append(this)
+          this.move(destConn.dx, destConn.dy)
+        }
       })
     }
 
     if (this.$b.config.get('next')) {
-      this.nextConnection = this.$r.connectionManger.createConnection(this, {
-        x: this.x,
-        y: this.y,
-        type: ConnectionType.blockNext
+      // Initialize next connection
+      this.nextConnection = this.$r.connectionManager.createConnection(this, {
+        type: ConnectionType.blockNext,
+        acceptTypes: [ConnectionType.blockPrevious],
+        connectAction: (destConn) => {
+          this.$r.$w.connectBlock(destConn.sourceBlock, this)
+
+          const destPos = this.$r.$w.getWorldPosition(destConn.sourceBlock)
+          destPos.y -= this.contentHeight + this.options.get('verticalPadding') * 2
+          this.move(destPos.x, destPos.y)
+
+          this.append(destConn.sourceBlock)
+          destConn.sourceBlock.move(this.nextConnection!.dx, this.nextConnection!.dy)
+        }
       })
     }
 
     if (this.$b.config.get('output').length) {
-      this.outputConnection = this.$r.connectionManger.createConnection(this, {
-        x: this.x,
-        y: this.y,
-        type: ConnectionType.blockOutput
+      // Initialize output connection
+      this.outputConnection = this.$r.connectionManager.createConnection(this, {
+        type: ConnectionType.blockOutput,
+        acceptTypes: [],
+        // todo
+        connectAction: (destConn) => {
+          // this.previousConnection?.sourceBlock.$b.connectTo(destConn.sourceBlock.$b)
+          // destConn.sourceBlock.append(this)
+          // this.move(destConn.dx, destConn.dy)
+        }
       })
     }
   }
@@ -111,11 +138,11 @@ export class BlockSVG extends G {
       this.dom.style.filter = `url(#${id})`
 
       this.addClasses('s_block_dragging')
-      this.$r.workspaceSVG.displayAtTop(this)
+      this.$r.$w.displayAtTop(this)
     })
 
     this.dragger.on('dragend', () => {
-      this.$r.workspaceSVG.resize()
+      this.$r.$w.resize()
       this.dom.style.filter = ''
       this.removeClasses('s_block_dragging')
     })
@@ -132,6 +159,16 @@ export class BlockSVG extends G {
         this.append(fieldSVG.svg)
       }
     }
+  }
+
+  getRootBlock() {
+    let b: BlockSVG = this
+
+    while (b.previousConnection?.targetConnection) {
+      b = b.previousConnection.targetConnection.sourceBlock
+    }
+
+    return b === this ? null : b
   }
 
   updateFieldsShape() {
@@ -221,5 +258,22 @@ export class BlockSVG extends G {
 
     this.updateBackgroundShape()
     this.updateFieldsShape()
+    this.updateConnectionPosition()
+  }
+
+  updateConnectionPosition() {
+    if (this.previousConnection) {
+      this.previousConnection.dx = 0
+      this.previousConnection.dy = 0
+    }
+    if (this.nextConnection) {
+      this.nextConnection.dx = 0
+      this.nextConnection.dy = this.contentHeight + this.options.get('verticalPadding') * 2
+    }
+
+    if (this.outputConnection) {
+      this.outputConnection.dx = 0
+      this.outputConnection.dy = 0
+    }
   }
 }

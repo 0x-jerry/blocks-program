@@ -3,7 +3,7 @@ import { SVG, DropShadowEffect, PatternGrid } from './lib'
 import { WorkspaceSVG } from './WorkspaceSVG'
 import { FieldSVGCtor, BlockTextFieldSVG } from './fields'
 import { FIELD_TYPES } from '@/fields'
-import { ConnectionManager } from './Connection'
+import { ConnectionManager, IConnectionPair } from './ConnectionManager'
 
 interface IEffect {
   readonly id: string
@@ -20,11 +20,11 @@ export interface IRendererEffects extends IRendererEffectMaps {
 }
 
 export class Renderer {
-  readonly $w: Workspace
   svg: SVG
-  workspaceSVG: WorkspaceSVG
+  $w: WorkspaceSVG
 
-  connectionManger: ConnectionManager
+  connectionManager: ConnectionManager
+  currentActiveConnPair: IConnectionPair | null
 
   fieldCtors: {
     [type: string]: FieldSVGCtor
@@ -37,17 +37,40 @@ export class Renderer {
     this.effects = {}
     this.fieldCtors = {}
 
-    this.connectionManger = new ConnectionManager()
+    this.currentActiveConnPair = null
+    this.connectionManager = new ConnectionManager(this)
 
-    this.$w = workspace
     this._registerAllFields()
 
+    this._initWorkspaceSVG(workspace, width, height)
+  }
+
+  private _initWorkspaceSVG(workspace: Workspace, width: number, height: number) {
     this.svg = new SVG(width, height)
     this._initEffects()
 
-    this.workspaceSVG = new WorkspaceSVG(workspace, this, width, height)
+    this.$w = new WorkspaceSVG(workspace, this, width, height)
 
-    this.svg.append(this.workspaceSVG)
+    this.svg.append(this.$w)
+
+    this.$w.events.on('block-move', (block) => {
+      if (block.previousConnection) {
+        block.previousConnection.connectTo(null)
+      }
+
+      this.currentActiveConnPair?.to?.setActive(false)
+      this.currentActiveConnPair = this.connectionManager.getNearestConnPair(
+        block.previousConnection,
+        block.nextConnection,
+        block.outputConnection
+      )
+      this.currentActiveConnPair?.to.setActive(true)
+    })
+
+    this.$w.dragger.on('dragend', () => {
+      this.currentActiveConnPair?.from.connectTo(this.currentActiveConnPair.to)
+      this.currentActiveConnPair?.to.setActive(false)
+    })
   }
 
   private _initEffects() {

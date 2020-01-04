@@ -1,11 +1,4 @@
-import { SArray, distance } from '@/shared'
 import { BlockSVG } from './BlockSVG'
-
-export interface IConnectionOption {
-  x: number
-  y: number
-  type: ConnectionType 
-}
 
 export enum ConnectionType {
   blockPrevious = 'block-previous',
@@ -14,66 +7,85 @@ export enum ConnectionType {
   field = 'field'
 }
 
-export class Connection {
-  readonly x: number
-  readonly y: number
-  readonly type: ConnectionType
-  readonly $b: BlockSVG
+export interface IConnectionOption {
+  dx?: number
+  dy?: number
+  type: ConnectionType
+  connectAction: (destConn: Connection) => void
+  acceptTypes?: ConnectionType[]
+}
 
-  acceptTypes: string[]
+export class Connection {
+  readonly type: ConnectionType
+  readonly sourceBlock: BlockSVG
+  readonly connectAction: (destConn: Connection) => void
+
+  dx: number
+  dy: number
+  targetConnection: Connection | null
+
+  isActive: boolean
+
+  acceptTypes: ConnectionType[]
+
+  get isConnected() {
+    return !!this.targetConnection
+  }
 
   constructor(block: BlockSVG, opt: IConnectionOption) {
     this.acceptTypes = []
+    this.isActive = false
+    this.targetConnection = null
 
-    this.x = opt.x
-    this.y = opt.y
-    this.$b = block
+    this.connectAction = opt.connectAction
+    this.dx = opt.dx || 0
+    this.dy = opt.dy || 0
+    this.sourceBlock = block
     this.type = opt.type
+    this.acceptTypes = opt.acceptTypes || []
+  }
+
+  setActive(active: boolean) {
+    this.isActive = active
+    if (this.isActive) {
+      this.sourceBlock.addClasses('s_conn_active')
+    } else {
+      this.sourceBlock.removeClasses('s_conn_active')
+    }
   }
 
   /**
    * Whether can connect
    * @param conn
    */
-  check(destConn: Connection) {
-    return !!this.acceptTypes.find((t) => t === destConn.type)
+  checkDestConn(destConn: Connection) {
+    const isAcceptType = !!this.acceptTypes.find((t) => t === destConn.type)
+    const isConnected = destConn.isConnected
+
+    return isAcceptType && !isConnected
   }
 
-  connectTo(destConn: Connection) {
-    this.$b.$b.connectTo(destConn.$b.$b)
-    this.$b.move(destConn.x, destConn.y)
-  }
-}
+  /**
+   * Null to disconnect
+   */
+  connectTo(destConn: Connection | null, execAction = true) {
+    const oldTargetConnection = this.targetConnection
 
-export class ConnectionManager {
-  connections: SArray<Connection>
-
-  readonly maxRange: number
-
-  constructor(range = 10) {
-    this.connections = new SArray()
-    this.maxRange = range
-  }
-
-  createConnection(b: BlockSVG, opt: IConnectionOption) {
-    const conn = new Connection(b, opt)
-    this.connections.push(conn)
-
-    return conn
-  }
-
-  getNearestConn(conn: Connection) {
-    let nearestOne: Connection | null = null
-    let minDistance = Infinity
-
-    for (const c of this.connections) {
-      const d = distance(c, conn)
-      if (d < this.maxRange && d < minDistance) {
-        minDistance = d
-        nearestOne = c
-      }
+    if (destConn === oldTargetConnection) {
+      return
     }
 
-    return nearestOne
+    if (!destConn) {
+      this.targetConnection = null
+
+      oldTargetConnection?.connectTo(null)
+    } else {
+      this.targetConnection = destConn
+      if (execAction) {
+        this.connectAction(destConn)
+      }
+
+      destConn.connectTo(this, false)
+    }
   }
 }
