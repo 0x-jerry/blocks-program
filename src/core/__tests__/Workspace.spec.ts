@@ -44,8 +44,8 @@ describe('Workspace', () => {
     $w.addBlock(b)
     $w.addBlock(c)
 
-    $w.connectBlock(a, b)
-    $w.connectBlock(b, c)
+    $w.connectBlock(b, a)
+    $w.connectBlock(c, b)
 
     toBeTheSameIds($w.blockDB, [a, b, c])
 
@@ -65,7 +65,7 @@ describe('Workspace', () => {
     const b = new Block()
     const c = new Block()
 
-    $w.connectBlock(a, b)
+    $w.connectBlock(b, a)
 
     $w.addBlock(a)
     $w.addBlock(c)
@@ -81,13 +81,13 @@ describe('Workspace', () => {
     const c = new Block()
     const d = new Block()
 
-    $w.connectBlock(c, d)
+    $w.connectBlock(d, c)
 
     $w.addBlock(a)
     $w.addBlock(b)
     $w.addBlock(c)
 
-    $w.connectBlock(a, b)
+    $w.connectBlock(b, a)
 
     $w.removeBlock(b)
     toBeTheSameIds($w.blockDB, [a, c, d])
