@@ -1,4 +1,4 @@
-import { SVG } from '@/renderer'
+import { SVG } from '../../lib'
 
 describe('SVG', () => {
   let svg: SVG

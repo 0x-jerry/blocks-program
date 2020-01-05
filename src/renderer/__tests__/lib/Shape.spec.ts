@@ -1,4 +1,4 @@
-import { Rect } from '@/renderer/lib'
+import { Rect } from '../../lib'
 
 describe('Shape', () => {
   it('Rect', () => {

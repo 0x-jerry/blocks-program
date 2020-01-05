@@ -1,5 +1,5 @@
 import '../jest.setup'
-import { Area, Rect } from '@/renderer/lib'
+import { Area, Rect } from '../../lib'
 
 describe('Area', () => {
   let area: Area

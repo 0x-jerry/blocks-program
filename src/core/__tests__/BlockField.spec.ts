@@ -27,13 +27,6 @@ describe('BlockField', () => {
     expect(field.parent).toBe(a)
   })
 
-  it('setIndex', () => {
-    expect(field.index).toBe(0)
-
-    field.setIndex(12)
-    expect(field.index).toBe(12)
-  })
-
   it('checkConnection', () => {
     const a = new Block()
 

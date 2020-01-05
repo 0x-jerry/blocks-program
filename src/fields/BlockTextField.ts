@@ -1,14 +1,20 @@
 import { BlockField } from '@/core'
 import { FIELD_TYPES } from './const'
 
+export interface IBlockTextFieldOption {
+  id?: string
+  colIdx?: number
+  rowIdx?: number
+}
+
 export class BlockTextField extends BlockField<string> {
-  constructor(name: string, value = '', idx = 0) {
-    super(name, value, idx)
-    this.type = FIELD_TYPES.TEXT
-    this.input = []
+  constructor(name: string, value = '', opt: IBlockTextFieldOption = {}) {
+    super(name, value, { type: FIELD_TYPES.TEXT, ...opt })
   }
 
   clone() {
-    return new BlockTextField(this.name, this.value() || '', this.index)
+    const { id, ...otherOptions } = this.getOptions()
+
+    return new BlockTextField(this.name, this.value() || '', otherOptions)
   }
 }

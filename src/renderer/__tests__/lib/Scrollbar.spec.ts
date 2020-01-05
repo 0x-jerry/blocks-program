@@ -1,4 +1,4 @@
-import { ScrollBar, ScrollPair } from '@/renderer/lib'
+import { ScrollBar, ScrollPair } from '../../lib'
 
 describe('ScrollBar', () => {
   let bar: ScrollBar

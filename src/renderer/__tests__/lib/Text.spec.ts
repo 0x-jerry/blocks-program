@@ -1,5 +1,4 @@
-import { Text } from '@/renderer'
-import { SVG } from '@/renderer/lib'
+import { Text, SVG } from '../../lib'
 import { mockBBoxRect } from '../jest.setup'
 
 describe('Text', () => {

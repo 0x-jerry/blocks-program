@@ -36,12 +36,13 @@ export class BlockFieldManager {
     return this.fields.find((f) => f.id === id) || false
   }
 
-  add(field: BlockField) {
+  add(field: BlockField, rowIdx = 0) {
     if (this.has(field)) {
       return
     }
 
-    field.setIndex(this.count + 1)
+    field.colIdx = this.count + 1
+    field.rowIdx = rowIdx
 
     this.fields.push(field)
   }

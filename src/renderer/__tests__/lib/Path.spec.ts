@@ -1,4 +1,4 @@
-import { Path, SVG } from '@/renderer/lib'
+import { Path, SVG } from '../../lib'
 import { mockBBoxRect } from '../jest.setup'
 
 describe('Path', () => {

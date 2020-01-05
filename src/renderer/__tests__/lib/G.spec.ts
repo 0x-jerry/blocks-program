@@ -1,4 +1,4 @@
-import { G } from '@/renderer/lib'
+import { G } from '../../lib'
 
 describe('G', () => {
   let g: G
