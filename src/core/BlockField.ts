@@ -34,7 +34,13 @@ export class BlockField<T = any> {
   block: Observer<Block | null>
 
   type: string
+  /**
+   * Start with 0
+   */
   colIdx: number
+  /**
+   * Start with 0
+   */
   rowIdx: number
 
   get hasInput() {

@@ -181,6 +181,23 @@ export class BlockSVG extends G {
     }
   }
 
+  getFieldRowCount() {
+    let rowCount = 0
+    for (const field of this.fields) {
+      rowCount = Math.max(field.$f.rowIdx, rowCount)
+    }
+
+    return rowCount
+  }
+
+  getFieldByRow(rowIdx = 0) {
+    const fields = this.fields.filter((f) => f.$f.rowIdx === rowIdx)
+
+    fields.sort((a, b) => a.$f.colIdx - b.$f.colIdx)
+
+    return fields
+  }
+
   getRootBlock() {
     let block: BlockSVG = this
 
@@ -202,27 +219,39 @@ export class BlockSVG extends G {
   }
 
   updateFieldsShape() {
-    let x = 0
-    let y = 0
+    // todo, support multi row
+    const updateFieldsShapeByRow = (rowIdx: number) => {
+      let x = 0
+      let y = 0
 
-    for (let idx = 0; idx < this.fields.length; idx++) {
-      const field = this.fields[idx]
-      const previousField = this.fields[idx - 1]
-      const isFirstField = idx === 0
+      const fields = this.getFieldByRow(rowIdx)
 
-      x = isFirstField ? this.options.get('horizontalPadding') : this.options.get('fieldGap')
-      y = this.options.get('verticalPadding')
+      for (let colIdx = 0; colIdx < fields.length; colIdx++) {
+        const field = fields[colIdx]
+        const previousField = fields[colIdx - 1]
+        const isFirstField = colIdx === 0
 
-      y += (this.contentHeight - field.svg.bbox.height) / 2
+        x = isFirstField ? this.options.get('horizontalPadding') : this.options.get('fieldGap')
+        y = this.options.get('verticalPadding')
 
-      if (previousField) {
-        x += previousField.svg.x + previousField.svg.bbox.width
+        y += (this.contentHeight - field.svg.bbox.height) / 2
+
+        if (previousField) {
+          x += previousField.svg.x + previousField.svg.bbox.width
+        }
+
+        field.svg.move(x, y)
       }
+    }
 
-      field.svg.move(x, y)
+    const rowCount = this.getFieldRowCount()
+
+    for (let rowIdx = 0; rowIdx <= rowCount; rowIdx++) {
+      updateFieldsShapeByRow(rowIdx)
     }
   }
 
+  // todo
   updateOutputShape() {
     this.background.d.clear()
     this.background.d.M(0, 0).done()
