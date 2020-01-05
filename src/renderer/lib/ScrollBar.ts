@@ -1,8 +1,7 @@
 import { Rect } from './Shape'
 import { G } from './G'
 import { Sizeable, Dragger } from '../utils'
-import { EventEmitter, Observer, ObserverCallbackFunc } from '@/shared'
-import { Throttle } from '@/shared/decrators'
+import { EventEmitter, Observer, ObserverCallbackFunc, throttle } from '@/shared'
 import { IVec2 } from '@/typedef'
 
 type IScrollBarEventMap = {
@@ -179,6 +178,9 @@ export class ScrollPair extends G {
    */
   constructor(hRatio: number, vRatio: number, width: number, height: number, thickness = 2) {
     super()
+
+    this._positionChanged = throttle(this._positionChanged, 1000 / 60, { trailing: true })
+
     this.events = new EventEmitter()
     this.thickness = thickness
     this.size = new Sizeable(width, height)
@@ -203,7 +205,6 @@ export class ScrollPair extends G {
     this.setVisible()
   }
 
-  @Throttle(1000 / 60, { leading: true, trailing: true })
   private _positionChanged(type: 'x' | 'y', posPercentage: number) {
     this.currentPercentage[type] = posPercentage
     this.events.emit('scroll', this.currentPercentage)

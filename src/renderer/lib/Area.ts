@@ -3,8 +3,7 @@ import { G } from './G'
 import { SElement } from './SElement'
 import { Sizeable, Dragger } from '../utils'
 import { ScrollPair } from './ScrollBar'
-import { EventEmitter  } from '@/shared'
-import { Debounce } from '@/shared/decrators'
+import { EventEmitter, debounce } from '@/shared'
 import { IVec2 } from '@/typedef'
 
 export class AreaContent extends G {
@@ -127,6 +126,9 @@ export class Area extends G {
 
   constructor(width: number, height: number) {
     super()
+
+    this.resize = debounce(this.resize, 100)
+
     this.addClasses('s_area')
 
     this.size = new Sizeable(width, height)
@@ -196,7 +198,6 @@ export class Area extends G {
     this.scrolls.scrollTo(xPercentage, yPercentage)
   }
 
-  @Debounce(100)
   resize() {
     const { width, height } = this.size
 
