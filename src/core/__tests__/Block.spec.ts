@@ -50,13 +50,22 @@ describe('Block', () => {
     const a = new Block()
     const b = new BlockField('arg')
 
-    a.addField(b)
+    a.pushField(b)
 
     expect(a.getField('arg')).toBe(b)
 
     expect(a.getField(b.id)).toBe(b)
 
     expect(a.getField('')).toBeNull()
+  })
+
+  it('pushField', () => {
+    const block = new Block()
+    const field = new BlockField('test')
+    block.pushField(field)
+
+    expect(field.$b).toBe(block)
+    expect(block.fields).toEqual([field])
   })
 
   it('destroy', () => {
@@ -79,7 +88,7 @@ describe('Block', () => {
   it('clone', () => {
     const b = new Block({ previous: false })
     const field = new BlockField('test', 123)
-    b.addField(field)
+    b.pushField(field)
 
     const clone = b.clone()
 

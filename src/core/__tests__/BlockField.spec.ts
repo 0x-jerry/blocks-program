@@ -18,15 +18,6 @@ describe('BlockField', () => {
     expect(field.value()).toBe('1')
   })
 
-  it('setParent', () => {
-    const a = new Block()
-
-    expect(field.parent).toBe(null)
-
-    field.setParent(a)
-    expect(field.parent).toBe(a)
-  })
-
   it('checkConnection', () => {
     const a = new Block()
 

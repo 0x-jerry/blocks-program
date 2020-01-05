@@ -18,10 +18,10 @@ describe('CodeGenerator', () => {
   it('getFieldCode', () => {
     const field = new BlockTextField('test')
     field.value('this is a text')
-    block.addField(field)
+    block.pushField(field)
 
     const sField = new BlockSlotField('sfield')
-    block.addField(sField)
+    block.pushField(sField)
 
     let code = generator.getFieldCode(block, 'test')
 
@@ -50,14 +50,14 @@ describe('CodeGenerator', () => {
 
     const slotBlock = new Block({ name: 'slotBlock' })
     const slotField = new BlockSlotField('slotField')
-    slotBlock.addField(slotField)
+    slotBlock.pushField(slotField)
     block.connectToField(slotField)
 
     let code = generator.getBlockCode(slotBlock)
     expect(code).toBe(['if () {', '  new Time()', '}'].join('\n'))
 
     const field = new BlockTextField('field')
-    block.addField(field)
+    block.pushField(field)
 
     const spyWarn = jest.spyOn(global.console, 'warn')
     spyWarn.mockReset()

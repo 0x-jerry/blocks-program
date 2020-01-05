@@ -5,6 +5,8 @@ export interface IBlockFieldOption {
   id?: string
   acceptInput?: string[]
   type?: string
+  colIdx?: number
+  rowIdx?: number
 }
 
 /**
@@ -14,7 +16,7 @@ export class BlockField<T = any> {
   /**
    * Parent Block
    */
-  private $b: Block | null
+  $b: Block | null
 
   readonly id: string
   readonly name: string
@@ -32,13 +34,11 @@ export class BlockField<T = any> {
   block: Observer<Block | null>
 
   type: string
+  colIdx: number
+  rowIdx: number
 
   get hasInput() {
     return this.acceptInput.length > 0
-  }
-
-  get parent() {
-    return this.$b
   }
 
   get isBlock(): boolean {
@@ -53,6 +53,8 @@ export class BlockField<T = any> {
     this.$b = null
     this.acceptInput = opt.acceptInput || []
     this._value = value
+    this.colIdx = opt.colIdx || 0
+    this.rowIdx = opt.rowIdx || 0
 
     this.block = new Observer(null)
     this.block.sub(this.blockUpdate)
@@ -63,16 +65,14 @@ export class BlockField<T = any> {
     now?.parent.update(this)
   }
 
-  getOptions() {
+  getOptions(): IBlockFieldOption {
     return {
       acceptInput: this.acceptInput,
       type: this.type,
-      id: this.id
+      id: this.id,
+      colIdx: this.colIdx,
+      rowIdx: this.rowIdx
     }
-  }
-
-  setParent(block: Block) {
-    this.$b = block
   }
 
   /**

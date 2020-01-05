@@ -1,17 +1,13 @@
-import { Block, BlockField } from '@/core'
+import { Block, BlockField, IBlockFieldOption } from '@/core'
 import { ObserverCallbackFunc } from '@/shared'
 import { FIELD_TYPES } from './const'
-
-export interface IBlockSlotFieldOption {
-  id?: string
-}
 
 export class BlockSlotField extends BlockField<Block> {
   get isSlot() {
     return true
   }
 
-  constructor(name: string, value: Block | null = null, opt: IBlockSlotFieldOption = {}) {
+  constructor(name: string, value: Block | null = null, opt: IBlockFieldOption = {}) {
     super(name, value, {
       type: FIELD_TYPES.BLOCK_SLOT,
       ...opt
@@ -36,7 +32,9 @@ export class BlockSlotField extends BlockField<Block> {
   }
 
   clone() {
-    const newField = new BlockSlotField(this.name, null)
+    const { id, ...otherOption } = this.getOptions()
+
+    const newField = new BlockSlotField(this.name, null, otherOption)
 
     const block = this.value()?.clone()
 

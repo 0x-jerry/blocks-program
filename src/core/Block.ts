@@ -101,7 +101,19 @@ export class Block {
     this.$w = w
   }
 
-  addField(field: BlockField) {
+  getFieldByRow(rowIdx = 0) {
+    const fields = this.fields.filter((f) => f.rowIdx === rowIdx)
+    fields.sort((a, b) => a.colIdx - b.colIdx)
+
+    return fields
+  }
+
+  pushField(field: BlockField, rowIdx = 0) {
+    const colCount = this.getFieldByRow(rowIdx).length
+    field.rowIdx = rowIdx
+    field.colIdx = colCount
+    field.$b = this
+
     this.fields.pushDistinct(field)
   }
 
@@ -122,7 +134,7 @@ export class Block {
   clone() {
     const block = new Block(this.config.raw)
     for (const field of this.fields) {
-      block.addField(field.clone())
+      block.pushField(field.clone())
     }
 
     return block
