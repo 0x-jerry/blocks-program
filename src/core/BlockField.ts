@@ -1,5 +1,6 @@
 import { Observer, uuid, ObserverCallbackFunc, oneOf } from '@/shared'
-import { FIELD_TYPES } from '@/fields'
+// Fix circular reference
+import { FIELD_TYPES } from '@/fields/const'
 import { Block } from './Block'
 
 export interface IBlockFieldOption {
