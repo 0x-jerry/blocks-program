@@ -1,14 +1,10 @@
 import { Observer, uuid, ObserverCallbackFunc, oneOf } from '@/shared'
-// Fix circular reference
-import { FIELD_TYPES } from '@/fields/const'
 import { Block } from './Block'
 
 export interface IBlockFieldOption {
   id?: string
-  colIdx?: number
-  rowIdx?: number
   acceptInput?: string[]
-  type: FIELD_TYPES | string
+  type?: string
 }
 
 /**
@@ -35,10 +31,7 @@ export class BlockField<T = any> {
    */
   block: Observer<Block | null>
 
-  type: FIELD_TYPES | string
-
-  colIdx: number
-  rowIdx: number
+  type: string
 
   get hasInput() {
     return this.acceptInput.length > 0
@@ -52,11 +45,9 @@ export class BlockField<T = any> {
     return !!this.block.value
   }
 
-  constructor(name: string, value: T | null = null, opt: IBlockFieldOption = { type: FIELD_TYPES.TEXT }) {
+  constructor(name: string, value: T | null = null, opt: IBlockFieldOption = {}) {
     this.name = name
-    this.type = opt.type
-    this.colIdx = opt.colIdx || 0
-    this.rowIdx = opt.rowIdx || 0
+    this.type = opt.type || ''
 
     this.id = opt.id || uuid()
     this.$b = null
@@ -74,8 +65,6 @@ export class BlockField<T = any> {
 
   getOptions() {
     return {
-      colIdx: this.colIdx,
-      rowIdx: this.rowIdx,
       acceptInput: this.acceptInput,
       type: this.type,
       id: this.id

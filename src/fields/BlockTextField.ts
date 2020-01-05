@@ -3,8 +3,6 @@ import { FIELD_TYPES } from './const'
 
 export interface IBlockTextFieldOption {
   id?: string
-  colIdx?: number
-  rowIdx?: number
 }
 
 export class BlockTextField extends BlockField<string> {
@@ -13,8 +11,6 @@ export class BlockTextField extends BlockField<string> {
   }
 
   clone() {
-    const { id, ...otherOptions } = this.getOptions()
-
-    return new BlockTextField(this.name, this.value() || '', otherOptions)
+    return new BlockTextField(this.name, this.value() || '')
   }
 }

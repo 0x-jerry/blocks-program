@@ -4,8 +4,6 @@ import { FIELD_TYPES } from './const'
 
 export interface IBlockSlotFieldOption {
   id?: string
-  colIdx?: number
-  rowIdx?: number
 }
 
 export class BlockSlotField extends BlockField<Block> {
@@ -38,9 +36,7 @@ export class BlockSlotField extends BlockField<Block> {
   }
 
   clone() {
-    const { id, ...otherOptions } = this.getOptions()
-
-    const newField = new BlockSlotField(this.name, null, otherOptions)
+    const newField = new BlockSlotField(this.name, null)
 
     const block = this.value()?.clone()
 

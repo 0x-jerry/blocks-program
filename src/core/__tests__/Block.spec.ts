@@ -85,10 +85,10 @@ describe('Block', () => {
 
     expect(clone).not.toBe(b)
     expect(clone.config).toEqual(b.config)
-    expect(clone.fieldManager.fields.length).toEqual(b.fieldManager.fields.length)
+    expect(clone.fields.length).toEqual(b.fields.length)
 
-    clone.fieldManager.fields.forEach((field, idx) => {
-      const bField = b.fieldManager.fields[idx]
+    clone.fields.forEach((field, idx) => {
+      const bField = b.fields[idx]
       expect(field.name).toEqual(bField.name)
       expect(field.value()).toEqual(bField.value())
       expect(field.type).toEqual(bField.type)

@@ -5,6 +5,9 @@ export class FieldSVG<T extends BlockField = BlockField, S extends SElement = SE
   $f: T
   svg: S
 
+  colIdx: number
+  rowIdx: number
+
   constructor(field: T, svg: S) {
     this.$f = field
     this.svg = svg

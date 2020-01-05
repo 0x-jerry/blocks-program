@@ -1,7 +1,6 @@
 import { Workspace } from './Workspace'
-import { BlockFieldManager } from './BlockFieldsManager'
 import { BlockField } from './BlockField'
-import { Observer, ObserverCallbackFunc, uuid, Configuration } from '@/shared'
+import { Observer, ObserverCallbackFunc, uuid, Configuration, SArray } from '@/shared'
 
 export interface BlockConfigOption {
   name: string
@@ -39,7 +38,7 @@ export class Block {
 
   config: BlockConfig
 
-  fieldManager: BlockFieldManager
+  fields: SArray<BlockField>
 
   readonly id: string
 
@@ -67,8 +66,7 @@ export class Block {
 
     this.config = new BlockConfig(config)
 
-    this.fieldManager = new BlockFieldManager()
-    this.fieldManager.setBlock(this)
+    this.fields = new SArray()
 
     this.next = new Observer(null)
     this.next.sub(this.nextUpdate)
@@ -96,7 +94,7 @@ export class Block {
   }
 
   getField(nameOrId: string): BlockField | null {
-    return this.fieldManager.fields.find((f) => f.name === nameOrId || f.id === nameOrId) ?? null
+    return this.fields.find((f) => f.id === nameOrId || f.name === nameOrId) || null
   }
 
   setWorkspace(w: Workspace | null) {
@@ -104,7 +102,7 @@ export class Block {
   }
 
   addField(field: BlockField) {
-    this.fieldManager.add(field)
+    this.fields.pushDistinct(field)
   }
 
   /**
@@ -123,7 +121,7 @@ export class Block {
 
   clone() {
     const block = new Block(this.config.raw)
-    for (const field of this.fieldManager.fields) {
+    for (const field of this.fields) {
       block.addField(field.clone())
     }
 
