@@ -73,12 +73,7 @@ export class BlockSVG extends G {
       this.previousConnection = this.$r.connectionManager.createConnection(this, {
         type: ConnectionType.blockPrevious,
         acceptTypes: [ConnectionType.blockNext],
-        connectAction: (destConn) => {
-          this.$r.$w.connectBlock(this, destConn.sourceBlock)
-
-          destConn.sourceBlock.append(this)
-          this.move(destConn.dx, destConn.dy)
-        }
+        connectAction: this._previousConnAction.bind(this)
       })
     }
 
@@ -87,30 +82,7 @@ export class BlockSVG extends G {
       this.nextConnection = this.$r.connectionManager.createConnection(this, {
         type: ConnectionType.blockNext,
         acceptTypes: [ConnectionType.blockPrevious],
-        connectAction: (destConn) => {
-          this.$r.$w.connectBlock(destConn.sourceBlock, this)
-
-          const rootBlock = this.getRootBlock()
-
-          const getBlockBoxHeight = (topBlock: BlockSVG) => {
-            let block = topBlock
-            let height = topBlock.contentHeight + block.options.get('verticalPadding') * 2
-
-            while (block.nextConnection?.targetConnection?.sourceBlock) {
-              block = block.nextConnection.targetConnection.sourceBlock
-              height += block.contentHeight + block.options.get('verticalPadding') * 2
-            }
-            return height
-          }
-
-          const destPos = this.$r.$w.getWorldPosition(destConn.sourceBlock)
-          destPos.y -= getBlockBoxHeight(rootBlock)
-
-          rootBlock.move(destPos.x, destPos.y)
-
-          this.append(destConn.sourceBlock)
-          destConn.sourceBlock.move(this.nextConnection!.dx, this.nextConnection!.dy)
-        }
+        connectAction: this._nextConnAction.bind(this)
       })
     }
 
@@ -119,14 +91,48 @@ export class BlockSVG extends G {
       this.outputConnection = this.$r.connectionManager.createConnection(this, {
         type: ConnectionType.blockOutput,
         acceptTypes: [],
-        // todo
-        connectAction: (destConn) => {
-          // this.previousConnection?.sourceBlock.$b.connectTo(destConn.sourceBlock.$b)
-          // destConn.sourceBlock.append(this)
-          // this.move(destConn.dx, destConn.dy)
-        }
+        connectAction: this._outputConnAction.bind(this)
       })
     }
+  }
+
+  private _outputConnAction(destConn: Connection) {
+    // todo
+    // this.previousConnection?.sourceBlock.$b.connectTo(destConn.sourceBlock.$b)
+    // destConn.sourceBlock.append(this)
+    // this.move(destConn.dx, destConn.dy)
+  }
+
+  private _nextConnAction(destConn: Connection) {
+    this.$r.$w.connectBlock(destConn.sourceBlock, this)
+
+    const rootBlock = this.getRootBlock()
+
+    const getBlockBoxHeight = (topBlock: BlockSVG) => {
+      let block = topBlock
+      let height = topBlock.contentHeight + block.options.get('verticalPadding') * 2
+
+      while (block.nextConnection?.targetConnection?.sourceBlock) {
+        block = block.nextConnection.targetConnection.sourceBlock
+        height += block.contentHeight + block.options.get('verticalPadding') * 2
+      }
+      return height
+    }
+
+    const destPos = this.$r.$w.getWorldPosition(destConn.sourceBlock)
+    destPos.y -= getBlockBoxHeight(rootBlock)
+
+    rootBlock.move(destPos.x, destPos.y)
+
+    this.append(destConn.sourceBlock)
+    destConn.sourceBlock.move(this.nextConnection!.dx, this.nextConnection!.dy)
+  }
+
+  private _previousConnAction(destConn: Connection) {
+    this.$r.$w.connectBlock(this, destConn.sourceBlock)
+
+    destConn.sourceBlock.append(this)
+    this.move(destConn.dx, destConn.dy)
   }
 
   private _initBackground() {
