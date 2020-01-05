@@ -68,7 +68,7 @@
 
       const block = new BlocksProgram.Block(null, 'p-n')
       const field = new BlocksProgram.BlockTextField('arg', 'hello')
-      block.addField(field)
+      block.pushField(field)
 
       workspace.definedBlocks.add(createBlock({}, 'p-n'))
       workspace.definedBlocks.add(createBlock({ previous: false }, 'n'))
@@ -89,9 +89,9 @@
         const field = new BlocksProgram.BlockTextField('arg', 'hello')
         const field1 = new BlocksProgram.BlockTextField('arg', 'world')
         const field2 = new BlocksProgram.BlockTextField('arg', id)
-        block.addField(field)
-        block.addField(field1)
-        block.addField(field2)
+        block.pushField(field)
+        block.pushField(field1)
+        block.pushField(field2)
 
         return block
       }

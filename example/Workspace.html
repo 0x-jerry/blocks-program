@@ -64,7 +64,7 @@
 
       const block = new BlocksProgram.Block(null, 'testid')
       const field = new BlocksProgram.BlockTextField('arg', 'hello')
-      block.addField(field)
+      block.pushField(field)
 
       workspace.definedBlocks.add(block)
       const renderer = new BlocksProgram.Renderer(workspace, 600, 400)
