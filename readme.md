@@ -1,6 +1,6 @@
 # Blocks Program
 
-Visual programming editor. Inspire by [blockly](https://github.com/google/blockly).
+Modern and smaller visual programming editor. Inspire by [blockly](https://github.com/google/blockly).
 
 ## TODO
 
@@ -10,8 +10,9 @@ Visual programming editor. Inspire by [blockly](https://github.com/google/blockl
 - [ ] fields
   - [x] BlockTextField
   - [x] BlockSlotField
+  - [ ] BlockInputField
   - [ ] BlockDropdownField
-- [ ] Renderer
+- [x] Renderer
   - [x] Render lib
   - [x] Workspace
   - [x] Block
@@ -20,9 +21,7 @@ Visual programming editor. Inspire by [blockly](https://github.com/google/blockl
   - [x] CodeGenerator
   - [ ] PythonGenerator
 - [ ] parser
-
   - [ ] BlockJSONParser
-
 - [ ] Docs
 
 ## Some Explanation
