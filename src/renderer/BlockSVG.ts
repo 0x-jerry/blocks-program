@@ -1,16 +1,25 @@
 import { Block } from '@/core'
-import { FIELD_TYPES } from '@/fields'
-import { Configuration, SArray } from '@/shared'
+import { FieldTypes } from '@/fields'
+import { SArray } from '@/shared'
 import { FieldSVG } from './fields/FieldSVG'
 import { G, Path } from './lib'
 import { Renderer } from './Renderer'
 import { Dragger } from './utils'
 import { Connection, ConnectionType } from './Connection'
+import { BlockSlotFieldSVG } from './fields'
 
 type BlockSVGOption = {
+  joinHeight: number
+  joinWidth: number
+  joinStartWidth: number
+
+  slotWidth: number
+  emptyHeight: number
+
   fieldGap: number
   horizontalPadding: number
   verticalPadding: number
+
   x: number
   y: number
   draggable: boolean
@@ -23,12 +32,10 @@ type BlockSVGOption = {
 export class BlockSVG extends G {
   readonly $b: Block
   readonly $r: Renderer
-  options: Configuration<BlockSVGOption>
+  options: BlockSVGOption
 
   background: Path
-  fields: SArray<FieldSVG>
-  contentWidth: number
-  contentHeight: number
+  fields: SArray<FieldSVG>[]
 
   previousConnection?: Connection
   nextConnection?: Connection
@@ -40,7 +47,12 @@ export class BlockSVG extends G {
     super()
     this.addClasses('s_block')
 
-    this.options = new Configuration({
+    this.options = {
+      joinHeight: 5,
+      joinWidth: 10,
+      joinStartWidth: 10,
+      slotWidth: 5,
+      emptyHeight: 20,
       fieldGap: 5,
       horizontalPadding: 8,
       verticalPadding: 5,
@@ -49,15 +61,13 @@ export class BlockSVG extends G {
       draggable: true,
       type: '',
       ...options
-    })
+    }
 
-    this.contentHeight = 0
-    this.contentWidth = 0
     this.$r = renderer
     this.$b = block
-    this.fields = new SArray()
+    this.fields = []
 
-    this.move(this.options.get('x'), this.options.get('y'))
+    this.move(this.options.x, this.options.y)
 
     this._initBackground()
     this._initFieldSVG()
@@ -68,7 +78,7 @@ export class BlockSVG extends G {
   }
 
   private _initConnections() {
-    if (this.$b.config.get('previous')) {
+    if (this.$b.options.previous) {
       // Initialize previous connection
       this.previousConnection = this.$r.connectionManager.createConnection(this, {
         type: ConnectionType.blockPrevious,
@@ -77,7 +87,7 @@ export class BlockSVG extends G {
       })
     }
 
-    if (this.$b.config.get('next')) {
+    if (this.$b.options.next) {
       // Initialize next connection
       this.nextConnection = this.$r.connectionManager.createConnection(this, {
         type: ConnectionType.blockNext,
@@ -86,7 +96,7 @@ export class BlockSVG extends G {
       })
     }
 
-    if (this.$b.config.get('output').length) {
+    if (this.$b.options.output.length) {
       // Initialize output connection
       this.outputConnection = this.$r.connectionManager.createConnection(this, {
         type: ConnectionType.blockOutput,
@@ -108,19 +118,8 @@ export class BlockSVG extends G {
 
     const rootBlock = this.getRootBlock()
 
-    const getBlockBoxHeight = (topBlock: BlockSVG) => {
-      let block = topBlock
-      let height = topBlock.contentHeight + block.options.get('verticalPadding') * 2
-
-      while (block.nextConnection?.targetConnection?.sourceBlock) {
-        block = block.nextConnection.targetConnection.sourceBlock
-        height += block.contentHeight + block.options.get('verticalPadding') * 2
-      }
-      return height
-    }
-
     const destPos = this.$r.$w.getWorldPosition(destConn.sourceBlock)
-    destPos.y -= getBlockBoxHeight(rootBlock)
+    destPos.y -= rootBlock.getContentHeightWithAllNextBlocks()
 
     rootBlock.move(destPos.x, destPos.y)
 
@@ -142,11 +141,15 @@ export class BlockSVG extends G {
   }
 
   private _initDragger() {
-    if (!this.options.get('draggable')) {
+    if (!this.options.draggable) {
       return
     }
 
-    const textFields = this.fields.filter((f) => f.$f.type === FIELD_TYPES.TEXT).map((f) => f.svg.dom)
+    const textFields = this.fields
+      .flat()
+      .filter((f) => f.$f.type === FieldTypes.text)
+      .map((f) => f.svg.dom)
+
     this.dragger = new Dragger(this.background.dom, ...textFields)
 
     this.dragger.on('dragging', (dx, dy) => {
@@ -173,25 +176,38 @@ export class BlockSVG extends G {
       const Ctor = this.$r.getFieldCtor(field.type)
 
       if (Ctor) {
-        const fieldSVG = new Ctor(field)
+        const fieldSVG = new Ctor(this, field)
 
-        this.fields.pushDistinct(fieldSVG)
+        this._addField(fieldSVG)
         this.append(fieldSVG.svg)
       }
     }
   }
 
-  getFieldRowCount() {
-    let rowCount = 0
-    for (const field of this.fields) {
-      rowCount = Math.max(field.$f.rowIdx, rowCount)
-    }
-
-    return rowCount
+  private _addField(fieldSVG: FieldSVG, rowIdx: number = 0) {
+    this.fields[rowIdx] = this.fields[rowIdx] || new SArray()
+    this.fields[rowIdx].pushDistinct(fieldSVG)
   }
 
-  getFieldByRow(rowIdx = 0) {
-    const fields = this.fields.filter((f) => f.$f.rowIdx === rowIdx)
+  getContentHeightWithAllNextBlocks() {
+    let block: BlockSVG = this
+    const joinHeight = this.options.joinHeight
+
+    let height = block.bbox.height - joinHeight
+
+    while (block.nextConnection?.targetConnection?.sourceBlock) {
+      block = block.nextConnection.targetConnection.sourceBlock
+      height += block.bbox.height - joinHeight
+    }
+    return height
+  }
+
+  getFieldRowCount() {
+    return this.fields.length
+  }
+
+  getFieldsByRow(rowIdx = 0) {
+    const fields = this.fields[rowIdx] || []
 
     fields.sort((a, b) => a.$f.colIdx - b.$f.colIdx)
 
@@ -218,87 +234,208 @@ export class BlockSVG extends G {
     return block
   }
 
-  updateFieldsShape() {
-    // todo, support multi row
-    const updateFieldsShapeByRow = (rowIdx: number) => {
-      let x = 0
-      let y = 0
-
-      const fields = this.getFieldByRow(rowIdx)
-
-      for (let colIdx = 0; colIdx < fields.length; colIdx++) {
-        const field = fields[colIdx]
-        const previousField = fields[colIdx - 1]
-        const isFirstField = colIdx === 0
-
-        x = isFirstField ? this.options.get('horizontalPadding') : this.options.get('fieldGap')
-        y = this.options.get('verticalPadding')
-
-        y += (this.contentHeight - field.svg.bbox.height) / 2
-
-        if (previousField) {
-          x += previousField.svg.x + previousField.svg.bbox.width
-        }
-
-        field.svg.move(x, y)
-      }
-    }
-
-    const rowCount = this.getFieldRowCount()
-
-    for (let rowIdx = 0; rowIdx <= rowCount; rowIdx++) {
-      updateFieldsShapeByRow(rowIdx)
-    }
-  }
-
   // todo
   updateOutputShape() {
     this.background.d.clear()
     this.background.d.M(0, 0).done()
   }
 
-  updateBackgroundShape() {
+  /**
+   *
+   * @returns content size
+   */
+  private _updateFieldsInline(fields: FieldSVG[], startY: number) {
+    let x = 0
+    let y = startY
+
+    const width = fields.reduce((pre, cur) => pre + cur.svg.bbox.width, 0) + this.options.fieldGap * (fields.length - 1)
+    const height = Math.max(...fields.map((f) => f.svg.bbox.height))
+
+    for (let colIdx = 0; colIdx < fields.length; colIdx++) {
+      const field = fields[colIdx]
+      const previousField = fields[colIdx - 1]
+      const isFirstField = colIdx === 0
+
+      x = isFirstField ? this.options.horizontalPadding : this.options.fieldGap
+
+      y += (height - field.svg.bbox.height) / 2
+
+      if (previousField) {
+        x += previousField.svg.x + previousField.svg.bbox.width
+      }
+
+      field.svg.move(x, y)
+    }
+
+    return {
+      width,
+      height
+    }
+  }
+
+  private _updateSlotField(field: BlockSlotFieldSVG, startY: number) {
+    const block = field.connection.targetConnection?.sourceBlock
+    const contentSize = {
+      width: 0,
+      height: this.options.emptyHeight
+    }
+
+    if (!block) {
+      return contentSize
+    }
+
+    contentSize.height = block.getContentHeightWithAllNextBlocks()
+
+    field.svg.move(this.options.slotWidth, startY)
+
+    return contentSize
+  }
+
+  private _updateJoinStartShape() {
+    this.background.d.h(this.options.joinStartWidth)
+
+    if (this.$b.options.previous) {
+      this.background.d
+        .v(-this.options.joinHeight)
+        .h(this.options.joinWidth)
+        .v(this.options.joinHeight)
+    } else {
+      this.background.d.h(this.options.joinWidth)
+    }
+  }
+
+  private _updateMultiRowFields(
+    fields: SArray<FieldSVG>[],
+    startY: number,
+    isSlot = false
+  ): { width: number; height: number } {
+    if (isSlot) {
+      return this._updateSlotField(fields[0][0] as any, startY)
+    } else {
+      const contentSize = {
+        width: 0,
+        height: 0
+      }
+
+      let y = startY
+
+      for (const subFields of fields) {
+        const size = this._updateFieldsInline(subFields, y)
+        contentSize.width = Math.max(contentSize.width, size.width)
+        contentSize.height += size.height
+
+        y += size.height
+      }
+
+      return contentSize
+    }
+  }
+
+  updateShape() {
+    if (!this.rendered) {
+      return
+    }
+
     if (this.$b.hasOutput) {
       this.updateOutputShape()
       return
     }
 
-    this.contentWidth =
-      this.fields.reduce((pre, cur) => pre + cur.svg.bbox.width, 0) +
-      (this.fields.length - 1) * this.options.get('fieldGap')
-
-    this.contentHeight = Math.max(...this.fields.map((f) => f.svg.bbox.height))
-
-    const totalWidth = this.contentWidth + this.options.get('horizontalPadding') * 2
-    const totalHeight = this.contentHeight + this.options.get('verticalPadding') * 2
-
-    const joinHeight = 5
-    const joinWidth = 10
-    const joinStartWidth = 5
-
     // Start update shape
     this.background.d.clear()
-    this.background.d.M(0, 0).h(joinStartWidth)
+    this.background.d.M(0, 0)
 
-    // Draw previous connection
-    if (this.$b.config.get('previous')) {
-      this.background.d
-        .v(-joinHeight)
-        .h(joinWidth)
-        .v(joinHeight)
-    } else {
-      this.background.d.h(joinWidth)
+    this._updateJoinStartShape()
+
+    const isSlotFields = (fields: FieldSVG[]) => !!fields.length && fields[0].$f.type === FieldTypes.blockSlot
+
+    const getAllTheSameKindFields = (fields: SArray<FieldSVG>, rowIdx: number) => {
+      const currentFields = [fields]
+      const isSlot = isSlotFields(fields)
+
+      let nextFields = this.fields[rowIdx + 1]
+
+      while (nextFields) {
+        const isTheSameSlot = isSlot && isSlotFields(nextFields)
+        const isTheSameNotSlot = !isSlot && !isSlotFields(nextFields) && !nextFields?.length
+        if (isTheSameSlot || isTheSameNotSlot) {
+          currentFields.push(nextFields)
+          rowIdx += 1
+          nextFields = this.fields[rowIdx + 1]
+        }
+      }
+
+      return currentFields
     }
 
-    // Draw right component
-    const extraHeight = this.$b.config.get('next') ? joinHeight : 0
-    this.background.d
-      .h(totalWidth - joinStartWidth - joinWidth)
-      .v(totalHeight + extraHeight)
-      .h(-(totalWidth - joinStartWidth - joinWidth))
+    const joinHeight = this.options.joinHeight
+    const joinWidth = this.options.joinWidth
+    const joinStartWidth = this.options.joinStartWidth
+    const slotWidth = this.options.slotWidth
+
+    const rowCount = this.getFieldRowCount()
+
+    const rowSize: { width: number; height: number }[] = []
+    const rowSlot: boolean[] = []
+
+    let startY = this.options.verticalPadding
+
+    for (let rowIdx = 0; rowIdx < rowCount; rowIdx++) {
+      const fields = this.fields[rowIdx]
+      const isFirstRow = rowIdx === 0
+
+      const isSlot = isSlotFields(fields)
+
+      const currentFields = getAllTheSameKindFields(fields, rowIdx)
+      rowIdx += currentFields.length
+
+      const contentSize = this._updateMultiRowFields(currentFields, startY, isSlot)
+      startY += contentSize.height
+
+      rowSize.push(contentSize)
+      rowSlot.push(isSlot)
+
+      if (isSlot) {
+        const previousContentSize = rowSize[rowSize.length - 2]
+
+        const totalWidth = previousContentSize.width + this.options.horizontalPadding * 2
+        this.background.d
+          .v(-(totalWidth - slotWidth - joinStartWidth - joinWidth))
+          // 凸
+          .h(-joinHeight)
+          .v(-joinWidth)
+          .h(joinHeight)
+          // __凸
+          .v(-joinStartWidth)
+          // line
+          .h(contentSize.height)
+      } else {
+        const totalWidth = contentSize.width + this.options.horizontalPadding * 2
+
+        const width = totalWidth - (isFirstRow ? joinStartWidth + joinWidth : slotWidth)
+        const height = contentSize.height + (isFirstRow ? joinHeight : 0)
+
+        this.background.d.h(width).v(height)
+      }
+    }
+
+    this.background.d.v(this.options.verticalPadding)
+
+    if (rowSlot.pop() === true) {
+      const tempWidth = 40
+      this.background.d
+        .h(tempWidth)
+        .v(-(this.options.emptyHeight + this.options.verticalPadding * 2))
+        .h(-(tempWidth + slotWidth - joinWidth - joinStartWidth))
+    } else {
+      const contentSize = rowSize[rowSize.length - 1]
+      const totalWidth = contentSize.width + this.options.horizontalPadding * 2
+
+      this.background.d.h(-(totalWidth - joinStartWidth - joinWidth))
+    }
 
     // Draw next connection
-    if (this.$b.config.get('next')) {
+    if (this.$b.options.next) {
       this.background.d
         .v(-joinHeight)
         .h(-joinWidth)
@@ -308,15 +445,7 @@ export class BlockSVG extends G {
     }
 
     this.background.d.h(-joinStartWidth).z()
-  }
 
-  updateShape() {
-    if (!this.rendered) {
-      return
-    }
-
-    this.updateBackgroundShape()
-    this.updateFieldsShape()
     this.updateConnectionPosition()
   }
 
@@ -325,9 +454,10 @@ export class BlockSVG extends G {
       this.previousConnection.dx = 0
       this.previousConnection.dy = 0
     }
+
     if (this.nextConnection) {
       this.nextConnection.dx = 0
-      this.nextConnection.dy = this.contentHeight + this.options.get('verticalPadding') * 2
+      this.nextConnection.dy = this.bbox.height - (this.$b.options.previous ? this.options.joinHeight : 0)
     }
 
     if (this.outputConnection) {
