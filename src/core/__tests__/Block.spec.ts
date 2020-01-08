@@ -93,7 +93,7 @@ describe('Block', () => {
     const clone = b.clone()
 
     expect(clone).not.toBe(b)
-    expect(clone.config).toEqual(b.config)
+    expect(clone.options).toEqual(b.options)
     expect(clone.fields.length).toEqual(b.fields.length)
 
     clone.fields.forEach((field, idx) => {

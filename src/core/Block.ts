@@ -23,7 +23,7 @@ export class Block {
    */
   parent: Observer<BlockField | null>
 
-  config: BlockConfigOption
+  options: BlockConfigOption
 
   fields: SArray<BlockField>
 
@@ -43,7 +43,7 @@ export class Block {
   }
 
   get hasOutput(): boolean {
-    const output = this.config.output
+    const output = this.options.output
 
     return output ? output.length > 0 : false
   }
@@ -51,7 +51,7 @@ export class Block {
   constructor(config: Partial<BlockConfigOption> = {}, id: string = uuid()) {
     this.id = id
 
-    this.config = {
+    this.options = {
       name: '',
       output: [],
       next: true,
@@ -125,7 +125,7 @@ export class Block {
   }
 
   clone() {
-    const block = new Block(this.config)
+    const block = new Block(this.options)
     for (const field of this.fields) {
       block.pushField(field.clone())
     }

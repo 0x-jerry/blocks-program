@@ -60,7 +60,7 @@ export class CodeGenerator {
 
   getCodes(workspace: Workspace) {
     workspace.blockRoots.forEach((block) => {
-      const func = this.blocks.get(block.config.name)
+      const func = this.blocks.get(block.options.name)
 
       const codes = toArray(func(block, this))
 
@@ -117,7 +117,7 @@ export class CodeGenerator {
    * @param block
    */
   getBlockCode(block: Block): string {
-    const func = this.blocks.get(block.config.name)
+    const func = this.blocks.get(block.options.name)
 
     return toArray(func(block, this)).join('\n')
   }
