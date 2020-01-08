@@ -14,9 +14,9 @@ export class BlockSlotFieldSVG extends FieldSVG<BlockSlotField, G> {
     this.connection = this.$b.$r.connectionManager.createConnection(this.$b, {
       dx: 0,
       dy: 0,
-      type: ConnectionType.field,
-      connectAction: (destConn) => {
-        this.$f.block.update(destConn?.sourceBlock.$b || null)
+      type: ConnectionType.slotField,
+      connectAction: (trigger, destConn) => {
+        this.$f.block.update(destConn?.targetConnection?.sourceBlock.$b || null)
 
         this.$b.updateShape()
       }

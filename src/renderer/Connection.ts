@@ -4,24 +4,29 @@ export enum ConnectionType {
   blockPrevious = 'block-previous',
   blockNext = 'block-next',
   blockOutput = 'block-output',
-  field = 'field'
+  slotField = 'field'
+}
+
+export interface IConnectionAction {
+  (triggerOnly: boolean, destConn: Connection | null, oldDestConn: Connection | null): void
 }
 
 export interface IConnectionOption {
   dx?: number
   dy?: number
   type: ConnectionType
-  connectAction: (destConn: Connection | null, triggerOnly: boolean) => void
+  connectAction: IConnectionAction
   acceptTypes?: ConnectionType[]
 }
 
 export class Connection {
   readonly type: ConnectionType
   readonly sourceBlock: BlockSVG
-  readonly connectAction: (destConn: Connection | null, triggerOnly: boolean) => void
+  readonly connectAction: IConnectionAction
 
   dx: number
   dy: number
+  oldTargetConnection: Connection | null
   targetConnection: Connection | null
 
   isActive: boolean
@@ -36,6 +41,7 @@ export class Connection {
     this.acceptTypes = []
     this.isActive = false
     this.targetConnection = null
+    this.oldTargetConnection = null
 
     this.connectAction = opt.connectAction
     this.dx = opt.dx || 0
@@ -69,18 +75,17 @@ export class Connection {
    * Null to disconnect
    */
   connectTo(destConn: Connection | null, triggerOnly = false) {
-    const oldTargetConnection = this.targetConnection
+    this.oldTargetConnection = this.targetConnection
+    this.targetConnection = destConn
 
-    if (destConn === oldTargetConnection) {
+    if (this.targetConnection === this.oldTargetConnection) {
       return
     }
 
-    this.targetConnection = destConn
-
-    this.connectAction(destConn, triggerOnly)
+    this.connectAction(triggerOnly, this.targetConnection, this.oldTargetConnection)
 
     if (!destConn) {
-      oldTargetConnection?.connectTo(null)
+      this.oldTargetConnection?.connectTo(null)
     } else {
       destConn.connectTo(this, true)
     }

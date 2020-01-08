@@ -5,7 +5,7 @@ import { FieldSVG } from './fields/FieldSVG'
 import { G, Path } from './lib'
 import { Renderer } from './Renderer'
 import { Dragger } from './utils'
-import { Connection, ConnectionType } from './Connection'
+import { Connection, ConnectionType, IConnectionAction } from './Connection'
 import { BlockSlotFieldSVG } from './fields'
 
 type BlockSVGOption = {
@@ -82,7 +82,7 @@ export class BlockSVG extends G {
       // Initialize previous connection
       this.previousConnection = this.$r.connectionManager.createConnection(this, {
         type: ConnectionType.blockPrevious,
-        acceptTypes: [ConnectionType.blockNext, ConnectionType.field],
+        acceptTypes: [ConnectionType.blockNext, ConnectionType.slotField],
         connectAction: this._previousConnAction.bind(this)
       })
     }
@@ -106,7 +106,7 @@ export class BlockSVG extends G {
     }
   }
 
-  private _outputConnAction(destConn: Connection | null, triggerOnly: boolean) {
+  private _outputConnAction: IConnectionAction = (triggerOnly, destConn) => {
     if (triggerOnly || !destConn) {
       return
     }
@@ -116,7 +116,7 @@ export class BlockSVG extends G {
     // this.move(destConn.dx, destConn.dy)
   }
 
-  private _nextConnAction(destConn: Connection | null, triggerOnly: boolean) {
+  private _nextConnAction: IConnectionAction = (triggerOnly, destConn) => {
     if (triggerOnly || !destConn) {
       return
     }
@@ -134,8 +134,10 @@ export class BlockSVG extends G {
     destConn.sourceBlock.move(this.nextConnection!.dx, this.nextConnection!.dy)
   }
 
-  private _previousConnAction(destConn: Connection | null, triggerOnly: boolean) {
+  private _previousConnAction: IConnectionAction = (triggerOnly, destConn) => {
     if (triggerOnly || !destConn) {
+      const block = this.inSlotFieldBefore()
+      block && block.updateShape()
       return
     }
 
@@ -143,6 +145,9 @@ export class BlockSVG extends G {
 
     destConn.sourceBlock.append(this)
     this.move(destConn.dx, destConn.dy)
+
+    const slotParentBlock = this.inSlotField()
+    slotParentBlock && slotParentBlock.updateShape()
   }
 
   private _initBackground() {
@@ -198,6 +203,31 @@ export class BlockSVG extends G {
   private _addField(fieldSVG: FieldSVG, rowIdx: number = 0) {
     this.fields[rowIdx] = this.fields[rowIdx] || new SArray()
     this.fields[rowIdx].pushDistinct(fieldSVG)
+  }
+
+  inSlotFieldBefore() {
+    let previousOldConn = this.previousConnection?.oldTargetConnection
+    while (previousOldConn) {
+      if (previousOldConn.type === ConnectionType.slotField) {
+        return previousOldConn.sourceBlock
+      }
+      previousOldConn = previousOldConn.sourceBlock.previousConnection?.targetConnection
+    }
+
+    return false
+  }
+
+  inSlotField() {
+    let block: BlockSVG = this
+
+    while (block.previousConnection?.targetConnection) {
+      if (block.previousConnection.targetConnection.type === ConnectionType.slotField) {
+        return block.previousConnection.targetConnection.sourceBlock
+      }
+      block = block.previousConnection.targetConnection.sourceBlock
+    }
+
+    return false
   }
 
   getContentHeightWithAllNextBlocks() {
@@ -456,6 +486,9 @@ export class BlockSVG extends G {
     this.background.d.h(-joinStartWidth).z()
 
     this.updateConnectionPosition()
+
+    const slotParentBlock = this.inSlotFieldBefore() || this.inSlotField()
+    slotParentBlock && slotParentBlock.updateShape()
   }
 
   updateConnectionPosition() {
