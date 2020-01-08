@@ -1,5 +1,5 @@
 import { Block, Workspace } from '@/core'
-import { Configuration, warn, toArray } from '@/shared'
+import { warn, toArray } from '@/shared'
 import { Codes } from './Codes'
 import { BlockSlotField, FieldTypes } from '@/fields'
 
@@ -39,18 +39,8 @@ interface GeneratorConfigOptions {
   indentSize: number
 }
 
-export class GeneratorConfig extends Configuration<GeneratorConfigOptions> {
-  constructor(opts: Partial<GeneratorConfigOptions> = {}) {
-    const defaultOpts: GeneratorConfigOptions = {
-      indentSize: 2
-    }
-
-    super(Object.assign(defaultOpts, opts))
-  }
-}
-
 export class CodeGenerator {
-  config: GeneratorConfig
+  config: GeneratorConfigOptions
   name: string
 
   private blocks: CodeBlocks
@@ -59,7 +49,7 @@ export class CodeGenerator {
 
   constructor(name: string = '') {
     this.name = name
-    this.config = new GeneratorConfig()
+    this.config = { indentSize: 2 }
     this.blocks = new CodeBlocks()
     this.codes = new Codes()
   }
@@ -70,7 +60,7 @@ export class CodeGenerator {
 
   getCodes(workspace: Workspace) {
     workspace.blockRoots.forEach((block) => {
-      const func = this.blocks.get(block.config.get('name'))
+      const func = this.blocks.get(block.config.name)
 
       const codes = toArray(func(block, this))
 
@@ -127,7 +117,7 @@ export class CodeGenerator {
    * @param block
    */
   getBlockCode(block: Block): string {
-    const func = this.blocks.get(block.config.get('name'))
+    const func = this.blocks.get(block.config.name)
 
     return toArray(func(block, this)).join('\n')
   }
@@ -171,6 +161,6 @@ export class CodeGenerator {
 
     const codes = slotBlock ? this.getTopBlockCode(slotBlock) : ''
 
-    return this.linePrefix(codes, ' '.repeat(this.config.get('indentSize')))
+    return this.linePrefix(codes, ' '.repeat(this.config.indentSize))
   }
 }

@@ -1,25 +1,12 @@
 import { Workspace } from './Workspace'
 import { BlockField } from './BlockField'
-import { Observer, ObserverCallbackFunc, uuid, Configuration, SArray } from '@/shared'
+import { Observer, ObserverCallbackFunc, uuid, SArray } from '@/shared'
 
 export interface BlockConfigOption {
   name: string
   output: string[]
   next: Boolean
   previous: Boolean
-}
-
-export class BlockConfig extends Configuration<BlockConfigOption> {
-  constructor(opts: Partial<BlockConfigOption> = {}) {
-    const defaultOpts: BlockConfigOption = {
-      name: '',
-      output: [],
-      next: true,
-      previous: true
-    }
-
-    super(Object.assign(defaultOpts, opts))
-  }
 }
 
 export class Block {
@@ -36,7 +23,7 @@ export class Block {
    */
   parent: Observer<BlockField | null>
 
-  config: BlockConfig
+  config: BlockConfigOption
 
   fields: SArray<BlockField>
 
@@ -56,7 +43,7 @@ export class Block {
   }
 
   get hasOutput(): boolean {
-    const output = this.config.get('output')
+    const output = this.config.output
 
     return output ? output.length > 0 : false
   }
@@ -64,7 +51,13 @@ export class Block {
   constructor(config: Partial<BlockConfigOption> = {}, id: string = uuid()) {
     this.id = id
 
-    this.config = new BlockConfig(config)
+    this.config = {
+      name: '',
+      output: [],
+      next: true,
+      previous: true,
+      ...config
+    }
 
     this.fields = new SArray()
 
@@ -132,7 +125,7 @@ export class Block {
   }
 
   clone() {
-    const block = new Block(this.config.raw)
+    const block = new Block(this.config)
     for (const field of this.fields) {
       block.pushField(field.clone())
     }

@@ -22,9 +22,7 @@ describe('BlockSlotField', () => {
     const a = new Block()
     const b = new Block()
 
-    a.config.update({
-      output: ['number']
-    })
+    a.config.output = ['number']
 
     expect(field.checkConnection(a)).toBe(false)
     expect(field.checkConnection(b)).toBe(true)

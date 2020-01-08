@@ -22,7 +22,7 @@ describe('BlockTextField', () => {
 
     expect(field.checkConnection(a)).toBe(false)
 
-    b.config.update('output', ['number', 'string'])
+    b.config.output = ['number', 'string']
 
     expect(field.checkConnection(b)).toBe(false)
   })
