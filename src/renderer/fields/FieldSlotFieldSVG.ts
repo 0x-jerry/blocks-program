@@ -16,8 +16,15 @@ export class BlockSlotFieldSVG extends FieldSVG<BlockSlotField, G> {
       dy: 0,
       type: ConnectionType.field,
       connectAction: (destConn) => {
-        // do nothing
+        this.$f.block.update(destConn?.sourceBlock.$b || null)
+
+        this.$b.updateShape()
       }
     })
+  }
+
+  updateConnPosition(dx: number, dy: number) {
+    this.connection.dx = dx
+    this.connection.dy = dy
   }
 }

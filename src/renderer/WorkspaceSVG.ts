@@ -77,6 +77,9 @@ export class WorkspaceSVG extends Area {
     }
   }
 
+  /**
+   * Only save data relationship
+   */
   connectBlock(block: BlockSVG, parentBlock: BlockSVG) {
     this.$w.connectBlock(block.$b, parentBlock.$b)
   }

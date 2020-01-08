@@ -82,7 +82,7 @@ export class BlockSVG extends G {
       // Initialize previous connection
       this.previousConnection = this.$r.connectionManager.createConnection(this, {
         type: ConnectionType.blockPrevious,
-        acceptTypes: [ConnectionType.blockNext],
+        acceptTypes: [ConnectionType.blockNext, ConnectionType.field],
         connectAction: this._previousConnAction.bind(this)
       })
     }
@@ -106,19 +106,26 @@ export class BlockSVG extends G {
     }
   }
 
-  private _outputConnAction(destConn: Connection) {
+  private _outputConnAction(destConn: Connection | null, triggerOnly: boolean) {
+    if (triggerOnly || !destConn) {
+      return
+    }
     // todo
     // this.previousConnection?.sourceBlock.$b.connectTo(destConn.sourceBlock.$b)
     // destConn.sourceBlock.append(this)
     // this.move(destConn.dx, destConn.dy)
   }
 
-  private _nextConnAction(destConn: Connection) {
+  private _nextConnAction(destConn: Connection | null, triggerOnly: boolean) {
+    if (triggerOnly || !destConn) {
+      return
+    }
     this.$r.$w.connectBlock(destConn.sourceBlock, this)
 
     const rootBlock = this.getRootBlock()
 
     const destPos = this.$r.$w.getWorldPosition(destConn.sourceBlock)
+
     destPos.y -= rootBlock.getContentHeightWithAllNextBlocks()
 
     rootBlock.move(destPos.x, destPos.y)
@@ -127,7 +134,11 @@ export class BlockSVG extends G {
     destConn.sourceBlock.move(this.nextConnection!.dx, this.nextConnection!.dy)
   }
 
-  private _previousConnAction(destConn: Connection) {
+  private _previousConnAction(destConn: Connection | null, triggerOnly: boolean) {
+    if (triggerOnly || !destConn) {
+      return
+    }
+
     this.$r.$w.connectBlock(this, destConn.sourceBlock)
 
     destConn.sourceBlock.append(this)
@@ -190,16 +201,9 @@ export class BlockSVG extends G {
   }
 
   getContentHeightWithAllNextBlocks() {
-    let block: BlockSVG = this
     const joinHeight = this.options.joinHeight
 
-    let height = block.bbox.height - joinHeight
-
-    while (block.nextConnection?.targetConnection?.sourceBlock) {
-      block = block.nextConnection.targetConnection.sourceBlock
-      height += block.bbox.height - joinHeight
-    }
-    return height
+    return this.bbox.height - (this.$b.options.previous ? joinHeight : 0)
   }
 
   getFieldRowCount() {
@@ -277,6 +281,8 @@ export class BlockSVG extends G {
     const block = field.connection.targetConnection?.sourceBlock
     field.svg.move(this.options.slotWidth, startY)
 
+    field.updateConnPosition(this.options.slotWidth, startY + this.options.verticalPadding)
+
     const contentSize = {
       width: 0,
       height: this.options.emptyHeight
@@ -286,6 +292,7 @@ export class BlockSVG extends G {
       return contentSize
     }
 
+    // todo ,check height
     contentSize.height = block.getContentHeightWithAllNextBlocks()
 
     return contentSize

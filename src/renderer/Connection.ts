@@ -11,14 +11,14 @@ export interface IConnectionOption {
   dx?: number
   dy?: number
   type: ConnectionType
-  connectAction: (destConn: Connection) => void
+  connectAction: (destConn: Connection | null, triggerOnly: boolean) => void
   acceptTypes?: ConnectionType[]
 }
 
 export class Connection {
   readonly type: ConnectionType
   readonly sourceBlock: BlockSVG
-  readonly connectAction: (destConn: Connection) => void
+  readonly connectAction: (destConn: Connection | null, triggerOnly: boolean) => void
 
   dx: number
   dy: number
@@ -68,25 +68,21 @@ export class Connection {
   /**
    * Null to disconnect
    */
-  connectTo(destConn: Connection | null, execAction = true) {
+  connectTo(destConn: Connection | null, triggerOnly = false) {
     const oldTargetConnection = this.targetConnection
 
     if (destConn === oldTargetConnection) {
       return
     }
 
-    if (!destConn) {
-      this.targetConnection = null
+    this.targetConnection = destConn
 
+    this.connectAction(destConn, triggerOnly)
+
+    if (!destConn) {
       oldTargetConnection?.connectTo(null)
     } else {
-      if (execAction) {
-        this.connectAction(destConn)
-      }
-
-      this.targetConnection = destConn
-
-      destConn.connectTo(this, false)
+      destConn.connectTo(this, true)
     }
   }
 }
