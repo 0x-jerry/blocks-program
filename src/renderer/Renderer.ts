@@ -2,7 +2,7 @@ import { Workspace } from '@/core'
 import { SVG, DropShadowEffect, PatternGrid } from './lib'
 import { WorkspaceSVG } from './WorkspaceSVG'
 import { FieldSVGCtor, BlockTextFieldSVG } from './fields'
-import { FIELD_TYPES } from '@/fields'
+import { FieldTypes } from '@/fields'
 import { ConnectionManager, IConnectionPair } from './ConnectionManager'
 
 interface IEffect {
@@ -86,7 +86,7 @@ export class Renderer {
   }
 
   private _registerAllFields() {
-    this.registerFieldCtor(FIELD_TYPES.TEXT, BlockTextFieldSVG)
+    this.registerFieldCtor(FieldTypes.text, BlockTextFieldSVG)
   }
 
   mount(el: HTMLElement) {
@@ -110,11 +110,11 @@ export class Renderer {
     this.svg.defs.dom.append(effect.dom)
   }
 
-  registerFieldCtor(type: FIELD_TYPES | string, Ctor: FieldSVGCtor) {
+  registerFieldCtor(type: FieldTypes | string, Ctor: FieldSVGCtor) {
     this.fieldCtors[type] = Ctor
   }
 
-  getFieldCtor(type: FIELD_TYPES | string): FieldSVGCtor | null {
+  getFieldCtor(type: FieldTypes | string): FieldSVGCtor | null {
     return this.fieldCtors[type] || null
   }
 }

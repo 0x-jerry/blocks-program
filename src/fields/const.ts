@@ -1,4 +1,4 @@
-export enum FIELD_TYPES {
-  TEXT = 'TEXT',
-  BLOCK_SLOT = 'BLOCK_SLOT'
+export enum FieldTypes {
+  text = 'TEXT',
+  blockSlot = 'BLOCK_SLOT'
 }

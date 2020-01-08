@@ -1,6 +1,6 @@
 import { Block, BlockField, IBlockFieldOption } from '@/core'
 import { ObserverCallbackFunc } from '@/shared'
-import { FIELD_TYPES } from './const'
+import { FieldTypes } from './const'
 
 export class BlockSlotField extends BlockField<Block> {
   get isSlot() {
@@ -9,7 +9,7 @@ export class BlockSlotField extends BlockField<Block> {
 
   constructor(name: string, value: Block | null = null, opt: IBlockFieldOption = {}) {
     super(name, value, {
-      type: FIELD_TYPES.BLOCK_SLOT,
+      type: FieldTypes.blockSlot,
       ...opt
     })
 

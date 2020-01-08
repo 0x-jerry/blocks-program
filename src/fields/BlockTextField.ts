@@ -1,9 +1,9 @@
 import { BlockField, IBlockFieldOption } from '@/core'
-import { FIELD_TYPES } from './const'
+import { FieldTypes } from './const'
 
 export class BlockTextField extends BlockField<string> {
   constructor(name: string, value = '', opt: IBlockFieldOption = {}) {
-    super(name, value, { type: FIELD_TYPES.TEXT, ...opt })
+    super(name, value, { type: FieldTypes.text, ...opt })
   }
 
   clone() {

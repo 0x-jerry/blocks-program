@@ -1,7 +1,7 @@
 import { Block, Workspace } from '@/core'
 import { Configuration, warn, toArray } from '@/shared'
 import { Codes } from './Codes'
-import { BlockSlotField, FIELD_TYPES } from '@/fields'
+import { BlockSlotField, FieldTypes } from '@/fields'
 
 export interface GenerateFunc {
   (block: Block, generator: CodeGenerator): string | string[]
@@ -140,7 +140,7 @@ export class CodeGenerator {
       return ''
     }
 
-    if (field.type === FIELD_TYPES.BLOCK_SLOT) {
+    if (field.type === FieldTypes.blockSlot) {
       warn(`Field ${fieldName} on block id: ${block.id} is a slot, use getSlotFieldCodes instead of.`)
       return ''
     }
@@ -160,7 +160,7 @@ export class CodeGenerator {
       return ''
     }
 
-    if (field.type !== FIELD_TYPES.BLOCK_SLOT) {
+    if (field.type !== FieldTypes.blockSlot) {
       warn(`Field ${fieldName} on block id: ${block.id} is not a slot, use getFieldCodes instead of.`)
       return ''
     }

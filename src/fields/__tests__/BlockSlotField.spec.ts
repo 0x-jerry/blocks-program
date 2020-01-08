@@ -1,6 +1,6 @@
 import { Block } from '@/core'
 import { BlockSlotField } from '../BlockSlotField'
-import { FIELD_TYPES } from '../const'
+import { FieldTypes } from '../const'
 
 describe('BlockSlotField', () => {
   let field: BlockSlotField
@@ -32,7 +32,7 @@ describe('BlockSlotField', () => {
 
   it('type', () => {
     expect(field.isSlot).toBe(true)
-    expect(field.type).toBe(FIELD_TYPES.BLOCK_SLOT)
+    expect(field.type).toBe(FieldTypes.blockSlot)
   })
 
   it('clone', () => {
