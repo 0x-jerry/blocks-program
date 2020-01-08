@@ -126,8 +126,9 @@ export class Block {
 
   clone() {
     const block = new Block(this.options)
+
     for (const field of this.fields) {
-      block.pushField(field.clone())
+      block.pushField(field.clone(), field.rowIdx)
     }
 
     return block

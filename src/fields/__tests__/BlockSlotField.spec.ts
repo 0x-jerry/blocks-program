@@ -29,7 +29,6 @@ describe('BlockSlotField', () => {
   })
 
   it('type', () => {
-    expect(field.isSlot).toBe(true)
     expect(field.type).toBe(FieldTypes.blockSlot)
   })
 

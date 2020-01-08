@@ -178,7 +178,7 @@ export class BlockSVG extends G {
       if (Ctor) {
         const fieldSVG = new Ctor(this, field)
 
-        this._addField(fieldSVG)
+        this._addField(fieldSVG, field.rowIdx)
         this.append(fieldSVG.svg)
       }
     }
@@ -275,6 +275,8 @@ export class BlockSVG extends G {
 
   private _updateSlotField(field: BlockSlotFieldSVG, startY: number) {
     const block = field.connection.targetConnection?.sourceBlock
+    field.svg.move(this.options.slotWidth, startY)
+
     const contentSize = {
       width: 0,
       height: this.options.emptyHeight
@@ -285,8 +287,6 @@ export class BlockSVG extends G {
     }
 
     contentSize.height = block.getContentHeightWithAllNextBlocks()
-
-    field.svg.move(this.options.slotWidth, startY)
 
     return contentSize
   }
@@ -362,6 +362,8 @@ export class BlockSVG extends G {
           currentFields.push(nextFields)
           rowIdx += 1
           nextFields = this.fields[rowIdx + 1]
+        } else {
+          break
         }
       }
 
@@ -387,7 +389,7 @@ export class BlockSVG extends G {
       const isSlot = isSlotFields(fields)
 
       const currentFields = getAllTheSameKindFields(fields, rowIdx)
-      rowIdx += currentFields.length
+      rowIdx += currentFields.length - 1
 
       const contentSize = this._updateMultiRowFields(currentFields, startY, isSlot)
       startY += contentSize.height
@@ -400,15 +402,16 @@ export class BlockSVG extends G {
 
         const totalWidth = previousContentSize.width + this.options.horizontalPadding * 2
         this.background.d
-          .v(-(totalWidth - slotWidth - joinStartWidth - joinWidth))
+          .v(this.options.verticalPadding)
+          .h(-(totalWidth - slotWidth - joinStartWidth - joinWidth))
           // 凸
-          .h(-joinHeight)
-          .v(-joinWidth)
-          .h(joinHeight)
+          .v(-joinHeight)
+          .h(-joinWidth)
+          .v(joinHeight)
           // __凸
-          .v(-joinStartWidth)
+          .h(-joinStartWidth)
           // line
-          .h(contentSize.height)
+          .v(contentSize.height)
       } else {
         const totalWidth = contentSize.width + this.options.horizontalPadding * 2
 
@@ -419,18 +422,17 @@ export class BlockSVG extends G {
       }
     }
 
-    this.background.d.v(this.options.verticalPadding)
-
     if (rowSlot.pop() === true) {
       const tempWidth = 40
       this.background.d
         .h(tempWidth)
-        .v(-(this.options.emptyHeight + this.options.verticalPadding * 2))
+        .v(this.options.emptyHeight + this.options.verticalPadding * 2)
         .h(-(tempWidth + slotWidth - joinWidth - joinStartWidth))
     } else {
       const contentSize = rowSize[rowSize.length - 1]
       const totalWidth = contentSize.width + this.options.horizontalPadding * 2
 
+      this.background.d.v(this.options.verticalPadding)
       this.background.d.h(-(totalWidth - joinStartWidth - joinWidth))
     }
 
