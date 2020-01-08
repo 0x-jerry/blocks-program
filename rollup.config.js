@@ -8,40 +8,56 @@ const config = {
   name: 'BlocksProgram'
 }
 
+const prod = process.env.NODE_ENV === 'production'
+
 const tsDeclarationConfig = {
   declarationDir: 'dist',
   declaration: true,
   declarationMap: true
 }
 
+/**
+ * @type {import('rollup').OutputOptions[]}
+ */
+const output = prod
+  ? [
+      {
+        file: config.file + '.cjs.js',
+        sourcemap: true,
+        format: 'cjs'
+      },
+      {
+        file: config.file + '.esm.js',
+        sourcemap: true,
+        format: 'esm'
+      },
+      {
+        file: config.file + '.browser.min.js',
+        format: 'iife',
+        name: config.name,
+        sourcemap: true,
+        plugins: [terser()]
+      },
+      {
+        file: config.file + '.umd.min.js',
+        format: 'umd',
+        name: config.name,
+        sourcemap: true,
+        plugins: [terser()]
+      }
+    ]
+  : [
+      {
+        file: config.file + '.browser.min.js',
+        format: 'iife',
+        name: config.name,
+        sourcemap: true
+      }
+    ]
+
 export default {
   input: 'src/index.ts',
-  output: [
-    {
-      file: config.file + '.cjs.js',
-      sourcemap: true,
-      format: 'cjs'
-    },
-    {
-      file: config.file + '.esm.js',
-      sourcemap: true,
-      format: 'esm'
-    },
-    {
-      file: config.file + '.browser.min.js',
-      format: 'iife',
-      name: config.name,
-      sourcemap: true,
-      plugins: [terser()]
-    },
-    {
-      file: config.file + '.umd.min.js',
-      format: 'umd',
-      name: config.name,
-      sourcemap: true,
-      plugins: [terser()]
-    }
-  ],
+  output: output,
   plugins: [
     babel({
       extensions: [...DEFAULT_EXTENSIONS, '.ts']
