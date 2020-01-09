@@ -4,6 +4,7 @@ import { WorkspaceSVG } from './WorkspaceSVG'
 import { FieldSVGCtor, BlockTextFieldSVG, BlockSlotFieldSVG } from './fields'
 import { FieldTypes } from '@/fields'
 import { ConnectionManager, IConnectionPair } from './ConnectionManager'
+import { BlockSVG } from './BlockSVG'
 
 interface IEffect {
   readonly id: string
@@ -53,28 +54,32 @@ export class Renderer {
 
     this.svg.append(this.$w)
 
-    this.$w.events.on('block-move', (block) => {
-      if (block.previousConnection) {
-        block.previousConnection.connectTo(null)
-      }
+    this.$w.events.on('select-block', this._blockMoving)
 
-      this.currentActiveConnPair?.to?.setActive(false)
-      const slotFields = block.fields.flat().filter((f) => f.$f.type === FieldTypes.blockSlot) as BlockSlotFieldSVG[]
-
-      this.currentActiveConnPair = this.connectionManager.getNearestConnPair(
-        block.previousConnection,
-        block.outputConnection,
-        block.getTrialBlock().nextConnection,
-        ...slotFields.map((f) => f.connection)
-      )
-
-      this.currentActiveConnPair?.to.setActive(true)
-    })
+    this.$w.events.on('block-move', this._blockMoving)
 
     this.$w.dragger.on('dragend', () => {
       this.currentActiveConnPair?.from.connectTo(this.currentActiveConnPair.to)
       this.currentActiveConnPair?.to.setActive(false)
     })
+  }
+
+  private _blockMoving = (block: BlockSVG) => {
+    if (block.previousConnection) {
+      block.previousConnection.connectTo(null)
+    }
+
+    this.currentActiveConnPair?.to?.setActive(false)
+    const slotFields = block.fields.flat().filter((f) => f.$f.type === FieldTypes.blockSlot) as BlockSlotFieldSVG[]
+
+    this.currentActiveConnPair = this.connectionManager.getNearestConnPair(
+      block.previousConnection,
+      block.outputConnection,
+      block.getTrialBlock().nextConnection,
+      ...slotFields.map((f) => f.connection)
+    )
+
+    this.currentActiveConnPair?.to.setActive(true)
   }
 
   private _initEffects() {

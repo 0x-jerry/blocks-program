@@ -248,6 +248,10 @@ export class BlockSVG extends G {
     return fields
   }
 
+  isRootBlock() {
+    return !this.previousConnection?.targetConnection?.sourceBlock
+  }
+
   getRootBlock() {
     let block: BlockSVG = this
 
