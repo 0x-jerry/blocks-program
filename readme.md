@@ -30,6 +30,7 @@ Modern and smaller visual programming editor. Inspire by [blockly](https://githu
 
 ## Improvement
 
+- [x] Make slot field connection can connect when block move.
 - [ ] Cache block content size.
 - [ ] Cache block position.
 - [ ] Remove getbbox interface
@@ -37,7 +38,6 @@ Modern and smaller visual programming editor. Inspire by [blockly](https://githu
 
 ## Bugs
 
-- [ ] Make slot field connection can connect when block move.
 - [x] Update next block position when block shape changed.
 
 ## Some Explanation

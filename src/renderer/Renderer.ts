@@ -59,10 +59,13 @@ export class Renderer {
       }
 
       this.currentActiveConnPair?.to?.setActive(false)
+      const slotFields = block.fields.flat().filter((f) => f.$f.type === FieldTypes.blockSlot) as BlockSlotFieldSVG[]
+
       this.currentActiveConnPair = this.connectionManager.getNearestConnPair(
         block.previousConnection,
         block.outputConnection,
-        block.getTrialBlock().nextConnection
+        block.getTrialBlock().nextConnection,
+        ...slotFields.map((f) => f.connection)
       )
 
       this.currentActiveConnPair?.to.setActive(true)

@@ -63,6 +63,8 @@ export class WorkspaceSVG extends Area {
     blockSVG.dragger.on('dragging', () => {
       this.events.emit('block-move', blockSVG)
     })
+
+    return blockSVG
   }
 
   removeBlock(blockSVGOrId: BlockSVG | string) {
