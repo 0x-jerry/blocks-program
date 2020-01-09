@@ -3,6 +3,9 @@ import { BlockField } from './BlockField'
 import { Observer, ObserverCallbackFunc, uuid, SArray, warn } from '@/shared'
 
 export interface BlockConfigOption {
+  /**
+   * Defined ID
+   */
   name: string
   output: string[]
   next: Boolean
@@ -103,7 +106,7 @@ export class Block {
 
   pushField(field: BlockField, rowIdx = 0) {
     if (this.getField(field.name)) {
-      warn(`The same name [${field.name}] field on block ${this.id}`)
+      warn(`The same name [${field.name}] field on block ${this}`)
     }
 
     const colCount = this.getFieldsByRow(rowIdx).length
@@ -142,5 +145,9 @@ export class Block {
     this.previous.update(null)
     this.next.update(null)
     this.parent.update(null)
+  }
+
+  toString() {
+    return `${this.id}[${this.options.name}]`
   }
 }

@@ -9,6 +9,7 @@ class DefinedBlocks {
   }
 
   add(block: Block) {
+    block.options.name = block.id
     this.blocks.pushDistinct(block)
   }
 

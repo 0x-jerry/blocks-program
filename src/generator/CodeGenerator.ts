@@ -126,12 +126,12 @@ export class CodeGenerator {
     const field = block.getField(fieldName)
 
     if (!field) {
-      warn(`Not found ${fieldName} field on block id: ${block.id}`)
+      warn(`Not found ${fieldName} field on block id: ${block}`)
       return ''
     }
 
     if (field.type === FieldTypes.blockSlot) {
-      warn(`Field ${fieldName} on block id: ${block.id} is a slot, use getSlotFieldCodes instead of.`)
+      warn(`Field ${fieldName} on block id: ${block} is a slot, use getSlotFieldCodes instead of.`)
       return ''
     }
 
@@ -146,12 +146,12 @@ export class CodeGenerator {
     const field = block.getField(fieldName)
 
     if (!field) {
-      warn(`Not found ${fieldName} field on block id: ${block.id}`)
+      warn(`Not found ${fieldName} field on block id: ${block}`)
       return ''
     }
 
     if (field.type !== FieldTypes.blockSlot) {
-      warn(`Field ${fieldName} on block id: ${block.id} is not a slot, use getFieldCodes instead of.`)
+      warn(`Field ${fieldName} on block id: ${block} is not a slot, use getFieldCodes instead of.`)
       return ''
     }
 
