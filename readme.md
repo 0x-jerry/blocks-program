@@ -16,13 +16,29 @@ Modern and smaller visual programming editor. Inspire by [blockly](https://githu
   - [x] Render lib
   - [x] Workspace
   - [x] Block
-  - [x] BlockField
+  - [ ] BlockField
+    - [x] BlockTextField
+    - [x] BlockSlotField
+    - [ ] BlockInputField
+    - [ ] BlockDropdownField
 - [ ] CodeGenerator
   - [x] CodeGenerator
   - [ ] PythonGenerator
 - [ ] parser
   - [ ] BlockJSONParser
 - [ ] Docs
+
+## Improvement
+
+- [ ] Cache block content size.
+- [ ] Cache block position.
+- [ ] Remove getbbox interface
+- [ ] Extract block const options.
+
+## Bugs
+
+- [ ] Make slot field connection can connect when block move.
+- [ ] Update next block position when block shape changed.
 
 ## Some Explanation
 
