@@ -70,13 +70,26 @@ export class Renderer {
     }
 
     this.currentActiveConnPair?.to?.setActive(false)
-    const slotFields = block.fields.flat().filter((f) => f.$f.type === FieldTypes.blockSlot) as BlockSlotFieldSVG[]
+
+    const getSlotFields = (block: BlockSVG) => {
+      const slotFields = block.fields.flat().filter((f) => f.$f.type === FieldTypes.blockSlot) as BlockSlotFieldSVG[]
+      return slotFields
+    }
+
+    const allSlotFields = getSlotFields(block)
+
+    for (const slot of allSlotFields) {
+      const block = slot.connection.targetConnection?.sourceBlock
+      if (block) {
+        allSlotFields.push(...getSlotFields(block))
+      }
+    }
 
     this.currentActiveConnPair = this.connectionManager.getNearestConnPair(
       block.previousConnection,
       block.outputConnection,
       block.getTrialBlock().nextConnection,
-      ...slotFields.map((f) => f.connection)
+      ...allSlotFields.map((f) => f.connection)
     )
 
     this.currentActiveConnPair?.to.setActive(true)
