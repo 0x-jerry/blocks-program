@@ -39,6 +39,8 @@ Modern and smaller visual programming editor. Inspire by [blockly](https://githu
 ## Bugs
 
 - [x] Update next block position when block shape changed.
+- [ ] When the next connection of child connected and the parent block shape is not update.
+- [ ] When the slot connection of child connected and the parent block move to wrong position.
 
 ## Some Explanation
 

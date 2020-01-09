@@ -5,6 +5,7 @@ import { FieldSVGCtor, BlockTextFieldSVG, BlockSlotFieldSVG } from './fields'
 import { FieldTypes } from '@/fields'
 import { ConnectionManager, IConnectionPair } from './ConnectionManager'
 import { BlockSVG } from './BlockSVG'
+import { Connection } from './Connection'
 
 interface IEffect {
   readonly id: string
@@ -71,25 +72,44 @@ export class Renderer {
 
     this.currentActiveConnPair?.to?.setActive(false)
 
-    const getSlotFields = (block: BlockSVG) => {
+    const getSlotConnections = (block: BlockSVG) => {
+      const conns: Connection[] = []
       const slotFields = block.fields.flat().filter((f) => f.$f.type === FieldTypes.blockSlot) as BlockSlotFieldSVG[]
-      return slotFields
+
+      for (const slot of slotFields) {
+        if (slot.connection.targetConnection) {
+          const slotConnectedBlock = slot.connection.targetConnection.sourceBlock
+          conns.push(...getAllNextAndSlotConnections(slotConnectedBlock))
+        } else {
+          conns.push(slot.connection)
+        }
+      }
+
+      return conns
     }
 
-    const allSlotFields = getSlotFields(block)
+    const getAllNextAndSlotConnections = (block: BlockSVG) => {
+      const conns: Connection[] = []
 
-    for (const slot of allSlotFields) {
-      const block = slot.connection.targetConnection?.sourceBlock
-      if (block) {
-        allSlotFields.push(...getSlotFields(block))
+      conns.push(...getSlotConnections(block))
+
+      if (block.nextConnection) {
+        if (block.nextBlock) {
+          const nextConns = getAllNextAndSlotConnections(block.nextBlock)
+          conns.push(...nextConns)
+        } else {
+          conns.push(block.nextConnection)
+        }
       }
+
+      return conns
     }
 
     this.currentActiveConnPair = this.connectionManager.getNearestConnPair(
       block.previousConnection,
       block.outputConnection,
       block.getTrialBlock().nextConnection,
-      ...allSlotFields.map((f) => f.connection)
+      ...getAllNextAndSlotConnections(block)
     )
 
     this.currentActiveConnPair?.to.setActive(true)

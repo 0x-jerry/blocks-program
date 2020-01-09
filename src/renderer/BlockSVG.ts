@@ -43,6 +43,14 @@ export class BlockSVG extends G {
 
   dragger: Dragger
 
+  get nextBlock() {
+    return this.nextConnection?.targetConnection?.sourceBlock
+  }
+
+  get previousBlock() {
+    return this.previousConnection?.targetConnection?.sourceBlock
+  }
+
   constructor(block: Block, renderer: Renderer, options: Partial<BlockSVGOption> = {}) {
     super()
     this.addClasses('s_block')
@@ -255,8 +263,8 @@ export class BlockSVG extends G {
   getRootBlock() {
     let block: BlockSVG = this
 
-    while (block.previousConnection?.targetConnection) {
-      block = block.previousConnection.targetConnection.sourceBlock
+    while (block.previousBlock) {
+      block = block.previousBlock
     }
 
     return block
@@ -265,8 +273,8 @@ export class BlockSVG extends G {
   getTrialBlock() {
     let block: BlockSVG = this
 
-    while (block.nextConnection?.targetConnection?.sourceBlock) {
-      block = block.nextConnection?.targetConnection?.sourceBlock
+    while (block.nextBlock) {
+      block = block.nextBlock
     }
 
     return block
