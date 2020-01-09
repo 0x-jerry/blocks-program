@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
-  "types": "dist/index.d.ts",
+  "types": "dist/src/index.d.ts",
   "scripts": {
     "build": "rollup -c --environment NODE_ENV:production",
     "build:dev": "rollup -c -w --environment NODE_ENV:development",
