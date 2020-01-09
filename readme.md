@@ -38,7 +38,7 @@ Modern and smaller visual programming editor. Inspire by [blockly](https://githu
 ## Bugs
 
 - [ ] Make slot field connection can connect when block move.
-- [ ] Update next block position when block shape changed.
+- [x] Update next block position when block shape changed.
 
 ## Some Explanation
 

@@ -499,7 +499,13 @@ export class BlockSVG extends G {
 
     if (this.nextConnection) {
       this.nextConnection.dx = 0
-      this.nextConnection.dy = this.bbox.height - (this.$b.options.previous ? this.options.joinHeight : 0)
+      const newDy = this.background.bbox.height - (this.$b.options.previous ? this.options.joinHeight : 0)
+
+      // Update next block position when block shape changed.
+      if (newDy !== this.nextConnection.dy) {
+        this.nextConnection.dy = newDy
+        this.nextConnection.targetConnection?.sourceBlock._previousConnAction(false, this.nextConnection, null)
+      }
     }
 
     if (this.outputConnection) {
