@@ -5,9 +5,10 @@
   "license": "MIT",
   "types": "dist/index.d.ts",
   "scripts": {
+    "build": "rollup -c --environment NODE_ENV:production",
+    "build:dev": "rollup -c -w --environment NODE_ENV:development",
     "test": "jest",
-    "docs": "typedoc",
-    "build": "rollup -c"
+    "docs": "typedoc"
   },
   "engines": {
     "node": ">=12.0.0"
