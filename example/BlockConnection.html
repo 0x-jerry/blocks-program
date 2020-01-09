@@ -61,8 +61,13 @@
       .s_debug_dot {
         fill: red;
       }
+
       .s_debug_dot[target='true'] {
         fill: green;
+      }
+
+      .s_block_selected .s_block_background {
+        stroke: black;
       }
     </style>
   </head>
@@ -89,10 +94,9 @@
 
       renderer.mount(document.getElementById('app'))
 
-      renderer.$w.addBlock('n', 100, 50)
+      renderer.$w.addBlock('p-n', 100, 50)
       renderer.$w.addBlock('p-n', 100, 100)
-      renderer.$w.addBlock('p-n', 100, 100)
-      renderer.$w.addBlock('p', 100, 150)
+      renderer.$w.addBlock('p-n', 100, 150)
 
       renderer.$w.addBlock('slot-p-n', 300, 50)
       renderer.$w.addBlock('slot-p-n1', 300, 150)
