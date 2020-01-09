@@ -1,6 +1,6 @@
 import { Workspace } from './Workspace'
 import { BlockField } from './BlockField'
-import { Observer, ObserverCallbackFunc, uuid, SArray } from '@/shared'
+import { Observer, ObserverCallbackFunc, uuid, SArray, warn } from '@/shared'
 
 export interface BlockConfigOption {
   name: string
@@ -94,7 +94,7 @@ export class Block {
     this.$w = w
   }
 
-  getFieldByRow(rowIdx = 0) {
+  getFieldsByRow(rowIdx = 0) {
     const fields = this.fields.filter((f) => f.rowIdx === rowIdx)
     fields.sort((a, b) => a.colIdx - b.colIdx)
 
@@ -102,7 +102,11 @@ export class Block {
   }
 
   pushField(field: BlockField, rowIdx = 0) {
-    const colCount = this.getFieldByRow(rowIdx).length
+    if (this.getField(field.name)) {
+      warn(`The same name [${field.name}] field on block ${this.id}`)
+    }
+
+    const colCount = this.getFieldsByRow(rowIdx).length
     field.rowIdx = rowIdx
     field.colIdx = colCount
     field.$b = this
