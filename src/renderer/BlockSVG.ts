@@ -83,7 +83,7 @@ export class BlockSVG extends G {
       this.previousConnection = this.$r.connectionManager.createConnection(this, {
         type: ConnectionType.blockPrevious,
         acceptTypes: [ConnectionType.blockNext, ConnectionType.slotField],
-        connectAction: this._previousConnAction.bind(this)
+        connectAction: this._previousConnAction
       })
     }
 
@@ -92,7 +92,7 @@ export class BlockSVG extends G {
       this.nextConnection = this.$r.connectionManager.createConnection(this, {
         type: ConnectionType.blockNext,
         acceptTypes: [ConnectionType.blockPrevious],
-        connectAction: this._nextConnAction.bind(this)
+        connectAction: this._nextConnAction
       })
     }
 
@@ -101,7 +101,7 @@ export class BlockSVG extends G {
       this.outputConnection = this.$r.connectionManager.createConnection(this, {
         type: ConnectionType.blockOutput,
         acceptTypes: [],
-        connectAction: this._outputConnAction.bind(this)
+        connectAction: this._outputConnAction
       })
     }
   }

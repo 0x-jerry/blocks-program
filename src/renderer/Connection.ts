@@ -75,19 +75,19 @@ export class Connection {
    * Null to disconnect
    */
   connectTo(destConn: Connection | null, triggerOnly = false) {
-    this.oldTargetConnection = this.targetConnection
-    this.targetConnection = destConn
-
-    if (this.targetConnection === this.oldTargetConnection) {
+    if (this.targetConnection === destConn) {
       return
     }
+
+    this.oldTargetConnection = this.targetConnection
+    this.targetConnection = destConn
 
     this.connectAction(triggerOnly, this.targetConnection, this.oldTargetConnection)
 
     if (!destConn) {
       this.oldTargetConnection?.connectTo(null)
     } else {
-      destConn.connectTo(this, true)
+      this.targetConnection?.connectTo(this, true)
     }
   }
 }

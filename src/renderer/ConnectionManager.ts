@@ -2,6 +2,8 @@ import { SArray, vecUtils } from '@/shared'
 import { BlockSVG } from './BlockSVG'
 import { Renderer } from './Renderer'
 import { Connection, IConnectionOption } from './Connection'
+import { config } from '@/config'
+import { DebugDotSVg } from './DebugDotSVG'
 
 export interface IConnectionPair {
   from: Connection
@@ -20,7 +22,31 @@ export class ConnectionManager {
   }
 
   createConnection(b: BlockSVG, opt: IConnectionOption) {
-    const conn = new Connection(b, opt)
+    let conn = new Connection(b, opt)
+
+    if (config.debug) {
+      const dot = new DebugDotSVg(0, 0, conn.sourceBlock)
+      dot.svg.attr('conn-type', conn.type)
+
+      conn = new Proxy(conn, {
+        set(target, key, value, receiver) {
+          // console.log(target, key, value, receiver)
+          //@ts-ignore
+          target[key] = value
+
+          if (key === 'dx' || key === 'dy') {
+            dot.svg.move(conn.dx, conn.dy)
+          }
+
+          if (key === 'targetConnection') {
+            dot.svg.attr('target', String(!!value))
+          }
+
+          return true
+        }
+      })
+    }
+
     this.connections.push(conn)
     return conn
   }
