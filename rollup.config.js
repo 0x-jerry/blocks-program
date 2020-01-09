@@ -1,5 +1,6 @@
 import babel from 'rollup-plugin-babel'
 import typescript from 'rollup-plugin-typescript2'
+import replace from '@rollup/plugin-replace'
 import { DEFAULT_EXTENSIONS } from '@babel/core'
 import { terser } from 'rollup-plugin-terser'
 
@@ -59,6 +60,7 @@ export default {
   input: 'src/index.ts',
   output: output,
   plugins: [
+    replace({ 'process.env.NODE_ENV': prod ? '"production"' : '"development"' }),
     babel({
       extensions: [...DEFAULT_EXTENSIONS, '.ts']
     }),
