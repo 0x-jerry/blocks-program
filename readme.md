@@ -31,7 +31,7 @@ Modern and smaller visual programming editor. Inspire by [blockly](https://githu
 
 ## Improvement
 
-- [x] Make slot field connection can connect when block move.
+- [ ] Make area content infinite, fix break position motion when block move from edge to inner.
 - [ ] Cache block content size.
 - [ ] Cache block position.
 - [ ] Remove getbbox interface
@@ -40,6 +40,7 @@ Modern and smaller visual programming editor. Inspire by [blockly](https://githu
 ## Bugs
 
 - [x] Update next block position when block shape changed.
+- [x] Make slot field connection can connect when block move.
 - [ ] The parent block shape is not update when the next connection of child block connected.
 - [ ] The parent block move to wrong position When the slot connection of child block connected.
 
