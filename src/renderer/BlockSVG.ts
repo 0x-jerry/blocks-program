@@ -529,7 +529,9 @@ export class BlockSVG extends G {
     this.updateConnectionPosition()
 
     const slotParentBlock = this.inSlotFieldBefore() || this.inSlotField()
-    slotParentBlock && slotParentBlock.updateShape()
+    if (slotParentBlock !== this) {
+      slotParentBlock && slotParentBlock.updateShape()
+    }
   }
 
   updateConnectionPosition() {
