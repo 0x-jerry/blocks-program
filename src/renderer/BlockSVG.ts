@@ -148,24 +148,21 @@ export class BlockSVG extends G {
     this.append(destConn.sourceBlock)
     destConn.sourceBlock.move(this.nextConnection!.dx, this.nextConnection!.dy)
 
-    const slotParentBlock = this.inSlotField()
-    slotParentBlock && slotParentBlock.updateShape()
+    this.inSlotField()?.updateShape()
   }
 
   private _previousConnAction: IConnectionAction = (triggerOnly, destConn) => {
     this.$b.previous.update(destConn?.sourceBlock.$b || null)
 
     if (triggerOnly || !destConn) {
-      const block = this.inSlotFieldBefore()
-      block && block.updateShape()
+      this.inSlotFieldBefore()?.updateShape()
       return
     }
 
     destConn.sourceBlock.append(this)
     this.move(destConn.dx, destConn.dy)
 
-    const slotParentBlock = this.inSlotField()
-    slotParentBlock && slotParentBlock.updateShape()
+    this.inSlotField()?.updateShape()
   }
 
   private _initBackground() {
@@ -341,12 +338,13 @@ export class BlockSVG extends G {
     let previousOldConn = this.previousConnection?.oldTargetConnection
     while (previousOldConn) {
       if (previousOldConn.type === ConnectionType.slotField) {
-        return previousOldConn.sourceBlock
+        const b = previousOldConn.sourceBlock
+        return b === this ? null : b
       }
       previousOldConn = previousOldConn.sourceBlock.previousConnection?.targetConnection
     }
 
-    return false
+    return null
   }
 
   inSlotField() {
@@ -354,12 +352,14 @@ export class BlockSVG extends G {
 
     while (block.previousConnection?.targetConnection) {
       if (block.previousConnection.targetConnection.type === ConnectionType.slotField) {
-        return block.previousConnection.targetConnection.sourceBlock
+        const b = block.previousConnection.targetConnection.sourceBlock
+
+        return b === this ? null : b
       }
       block = block.previousConnection.targetConnection.sourceBlock
     }
 
-    return false
+    return null
   }
 
   getContentHeightWithAllNextBlocks() {
@@ -529,10 +529,7 @@ export class BlockSVG extends G {
 
     this.updateConnectionPosition()
 
-    const slotParentBlock = this.inSlotFieldBefore() || this.inSlotField()
-    if (slotParentBlock !== this) {
-      slotParentBlock && slotParentBlock.updateShape()
-    }
+    this.inSlotField()?.updateShape()
   }
 
   updateConnectionPosition() {
