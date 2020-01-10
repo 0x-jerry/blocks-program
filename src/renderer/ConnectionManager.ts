@@ -47,11 +47,11 @@ export class ConnectionManager {
       }
 
       const d = vecUtils.distance(
-        vecUtils.plus(this.$r.$w.getWorldPosition(c.sourceBlock), {
+        vecUtils.plus(c.sourceBlock.getWorldPosition(), {
           x: c.dx,
           y: c.dy
         }),
-        vecUtils.plus(this.$r.$w.getWorldPosition(conn.sourceBlock), {
+        vecUtils.plus(conn.sourceBlock.getWorldPosition(), {
           x: conn.dx,
           y: conn.dy
         })

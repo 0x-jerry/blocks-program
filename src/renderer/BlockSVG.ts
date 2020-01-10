@@ -125,14 +125,15 @@ export class BlockSVG extends G {
   }
 
   private _nextConnAction: IConnectionAction = (triggerOnly, destConn) => {
+    this.$b.next.update(destConn?.sourceBlock.$b || null)
+
     if (triggerOnly || !destConn) {
       return
     }
-    this.$r.$w.connectBlock(destConn.sourceBlock, this)
 
-    const destPos = this.$r.$w.getWorldPosition(destConn.sourceBlock)
+    const destPos = destConn.sourceBlock.getWorldPosition()
 
-    const curPos = this.$r.$w.getWorldPosition(this)
+    const curPos = this.getWorldPosition()
 
     curPos.x += this.nextConnection!.dx
     curPos.y += this.nextConnection!.dy
@@ -152,13 +153,13 @@ export class BlockSVG extends G {
   }
 
   private _previousConnAction: IConnectionAction = (triggerOnly, destConn) => {
+    this.$b.previous.update(destConn?.sourceBlock.$b || null)
+
     if (triggerOnly || !destConn) {
       const block = this.inSlotFieldBefore()
       block && block.updateShape()
       return
     }
-
-    this.$r.$w.connectBlock(this, destConn.sourceBlock)
 
     destConn.sourceBlock.append(this)
     this.move(destConn.dx, destConn.dy)
@@ -314,6 +315,26 @@ export class BlockSVG extends G {
 
       return contentSize
     }
+  }
+
+  getWorldPosition() {
+    let block: BlockSVG | null = this
+
+    let pos = {
+      x: block.x,
+      y: block.y
+    }
+
+    while (block?.previousBlock) {
+      block = block.previousBlock || null
+
+      if (block) {
+        pos.x += block.x
+        pos.y += block.y
+      }
+    }
+
+    return pos
   }
 
   inSlotFieldBefore() {

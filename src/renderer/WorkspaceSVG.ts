@@ -82,35 +82,8 @@ export class WorkspaceSVG extends Area {
     }
   }
 
-  /**
-   * Only save data relationship
-   */
-  connectBlock(block: BlockSVG, parentBlock: BlockSVG) {
-    this.$w.connectBlock(block.$b, parentBlock.$b)
-  }
-
-  getWorldPosition(el: BlockSVG) {
-    let block: BlockSVG | null = el
-
-    let pos = {
-      x: block.x,
-      y: block.y
-    }
-
-    while (block?.previousBlock) {
-      block = block.previousBlock || null
-
-      if (block) {
-        pos.x += block.x
-        pos.y += block.y
-      }
-    }
-
-    return pos
-  }
-
   displayAtTop(block: BlockSVG) {
-    const pos = this.getWorldPosition(block)
+    const pos = block.getWorldPosition()
 
     block.move(pos.x, pos.y)
 

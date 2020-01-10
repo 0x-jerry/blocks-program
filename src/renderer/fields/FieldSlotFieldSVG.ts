@@ -30,8 +30,8 @@ export class BlockSlotFieldSVG extends FieldSVG<BlockSlotField, G> {
       return
     }
 
-    const destPos = this.$b.$r.$w.getWorldPosition(destConn.sourceBlock)
-    const curPos = this.$b.$r.$w.getWorldPosition(this.$b)
+    const destPos = destConn.sourceBlock.getWorldPosition()
+    const curPos = this.$b.getWorldPosition()
     curPos.x += this.connection.dx
     curPos.y += this.connection.dy
 
