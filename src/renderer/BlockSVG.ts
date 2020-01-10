@@ -409,6 +409,7 @@ export class BlockSVG extends G {
     this.background.d.clear()
     this.background.d.M(0, 0).done()
   }
+
   updateShape() {
     if (!this.rendered) {
       return
