@@ -40,7 +40,7 @@ export class BlockSlotFieldSVG extends FieldSVG<BlockSlotField, G> {
       y: destPos.y - curPos.y
     }
 
-    this.$b.getRootBlock().dmove(dPos.x, dPos.y)
+    this.$b.getTopBlock().dmove(dPos.x, dPos.y)
 
     this.$b.append(destConn.sourceBlock)
     destConn.sourceBlock.move(this.connection.dx, this.connection.dy)

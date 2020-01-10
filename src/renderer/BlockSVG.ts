@@ -142,7 +142,7 @@ export class BlockSVG extends G {
       y: destPos.y - curPos.y
     }
 
-    this.getRootBlock().dmove(dPos.x, dPos.y)
+    this.getTopBlock().dmove(dPos.x, dPos.y)
 
     this.append(destConn.sourceBlock)
     destConn.sourceBlock.move(this.nextConnection!.dx, this.nextConnection!.dy)
@@ -220,79 +220,6 @@ export class BlockSVG extends G {
   private _addField(fieldSVG: FieldSVG, rowIdx: number = 0) {
     this.fields[rowIdx] = this.fields[rowIdx] || new SArray()
     this.fields[rowIdx].pushDistinct(fieldSVG)
-  }
-
-  inSlotFieldBefore() {
-    let previousOldConn = this.previousConnection?.oldTargetConnection
-    while (previousOldConn) {
-      if (previousOldConn.type === ConnectionType.slotField) {
-        return previousOldConn.sourceBlock
-      }
-      previousOldConn = previousOldConn.sourceBlock.previousConnection?.targetConnection
-    }
-
-    return false
-  }
-
-  inSlotField() {
-    let block: BlockSVG = this
-
-    while (block.previousConnection?.targetConnection) {
-      if (block.previousConnection.targetConnection.type === ConnectionType.slotField) {
-        return block.previousConnection.targetConnection.sourceBlock
-      }
-      block = block.previousConnection.targetConnection.sourceBlock
-    }
-
-    return false
-  }
-
-  getContentHeightWithAllNextBlocks() {
-    const joinHeight = this.options.joinHeight
-
-    return this.bbox.height - (this.$b.options.previous ? joinHeight : 0)
-  }
-
-  getFieldRowCount() {
-    return this.fields.length
-  }
-
-  getFieldsByRow(rowIdx = 0) {
-    const fields = this.fields[rowIdx] || []
-
-    fields.sort((a, b) => a.$f.colIdx - b.$f.colIdx)
-
-    return fields
-  }
-
-  isRootBlock() {
-    return !this.previousConnection?.targetConnection?.sourceBlock
-  }
-
-  getRootBlock() {
-    let block: BlockSVG = this
-
-    while (block.previousBlock) {
-      block = block.previousBlock
-    }
-
-    return block
-  }
-
-  getTrialBlock() {
-    let block: BlockSVG = this
-
-    while (block.nextBlock) {
-      block = block.nextBlock
-    }
-
-    return block
-  }
-
-  // todo
-  updateOutputShape() {
-    this.background.d.clear()
-    this.background.d.M(0, 0).done()
   }
 
   /**
@@ -389,6 +316,78 @@ export class BlockSVG extends G {
     }
   }
 
+  inSlotFieldBefore() {
+    let previousOldConn = this.previousConnection?.oldTargetConnection
+    while (previousOldConn) {
+      if (previousOldConn.type === ConnectionType.slotField) {
+        return previousOldConn.sourceBlock
+      }
+      previousOldConn = previousOldConn.sourceBlock.previousConnection?.targetConnection
+    }
+
+    return false
+  }
+
+  inSlotField() {
+    let block: BlockSVG = this
+
+    while (block.previousConnection?.targetConnection) {
+      if (block.previousConnection.targetConnection.type === ConnectionType.slotField) {
+        return block.previousConnection.targetConnection.sourceBlock
+      }
+      block = block.previousConnection.targetConnection.sourceBlock
+    }
+
+    return false
+  }
+
+  getContentHeightWithAllNextBlocks() {
+    const joinHeight = this.options.joinHeight
+
+    return this.bbox.height - (this.$b.options.previous ? joinHeight : 0)
+  }
+
+  getFieldRowCount() {
+    return this.fields.length
+  }
+
+  getFieldsByRow(rowIdx = 0) {
+    const fields = this.fields[rowIdx] || []
+
+    fields.sort((a, b) => a.$f.colIdx - b.$f.colIdx)
+
+    return fields
+  }
+
+  isRootBlock() {
+    return !this.previousConnection?.targetConnection?.sourceBlock
+  }
+
+  getTopBlock() {
+    let block: BlockSVG = this
+
+    while (block.previousBlock) {
+      block = block.previousBlock
+    }
+
+    return block
+  }
+
+  getTrialBlock() {
+    let block: BlockSVG = this
+
+    while (block.nextBlock) {
+      block = block.nextBlock
+    }
+
+    return block
+  }
+
+  // todo
+  updateOutputShape() {
+    this.background.d.clear()
+    this.background.d.M(0, 0).done()
+  }
   updateShape() {
     if (!this.rendered) {
       return
