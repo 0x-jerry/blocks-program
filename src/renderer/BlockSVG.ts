@@ -436,7 +436,8 @@ export class BlockSVG extends G {
 
       while (nextFields) {
         const isTheSameSlot = isSlot && isSlotFields(nextFields)
-        const isTheSameNotSlot = !isSlot && !isSlotFields(nextFields) && !nextFields?.length
+        const isTheSameNotSlot = !isSlot && !isSlotFields(nextFields)
+
         if (isTheSameSlot || isTheSameNotSlot) {
           currentFields.push(nextFields)
           rowIdx += 1
