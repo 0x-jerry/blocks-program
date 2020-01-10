@@ -41,8 +41,8 @@ Modern and smaller visual programming editor. Inspire by [blockly](https://githu
 
 - [x] Update next block position when block shape changed.
 - [x] Make slot field connection can connect when block move.
-- [ ] The parent block shape is not update when the next connection of child block connected.
-- [ ] The parent block move to wrong position When the slot connection of child block connected.
+- [x] The parent block shape is not update when the next connection of child block connected.
+- [x] The parent block move to wrong position When the slot connection of child block connected.
 
 ## Some Explanation
 

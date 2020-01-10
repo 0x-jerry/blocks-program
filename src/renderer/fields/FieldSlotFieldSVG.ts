@@ -21,28 +21,6 @@ export class BlockSlotFieldSVG extends FieldSVG<BlockSlotField, G> {
     })
   }
 
-  private _getOffsetOfRootBlock() {
-    let block: BlockSVG = this.$b
-
-    const offset = {
-      x: 0,
-      y: 0
-    }
-
-    while (block.previousConnection?.targetConnection) {
-      const targetConn = block.previousConnection.targetConnection
-
-      if (targetConn.type === ConnectionType.slotField) {
-        offset.x += targetConn.dx
-        offset.y += targetConn.dy
-      }
-
-      block = block.previousConnection.targetConnection.sourceBlock
-    }
-
-    return offset
-  }
-
   private _connAction: IConnectionAction = (trigger, destConn) => {
     this.$f.block.update(destConn?.targetConnection?.sourceBlock.$b || null)
 
@@ -52,17 +30,17 @@ export class BlockSlotFieldSVG extends FieldSVG<BlockSlotField, G> {
       return
     }
 
-    const rootBlock = this.$b.getRootBlock()
-
     const destPos = this.$b.$r.$w.getWorldPosition(destConn.sourceBlock)
+    const curPos = this.$b.$r.$w.getWorldPosition(this.$b)
+    curPos.x += this.connection.dx
+    curPos.y += this.connection.dy
 
-    const offset = this._getOffsetOfRootBlock()
-    console.log(offset)
+    const dPos = {
+      x: destPos.x - curPos.x,
+      y: destPos.y - curPos.y
+    }
 
-    destPos.x -= offset.x + this.connection.dx
-    destPos.y -= offset.y + this.connection.dy
-
-    rootBlock.move(destPos.x, destPos.y)
+    this.$b.getRootBlock().dmove(dPos.x, dPos.y)
 
     this.$b.append(destConn.sourceBlock)
     destConn.sourceBlock.move(this.connection.dx, this.connection.dy)

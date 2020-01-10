@@ -130,16 +130,25 @@ export class BlockSVG extends G {
     }
     this.$r.$w.connectBlock(destConn.sourceBlock, this)
 
-    const rootBlock = this.getRootBlock()
-
     const destPos = this.$r.$w.getWorldPosition(destConn.sourceBlock)
 
-    destPos.y -= rootBlock.getContentHeightWithAllNextBlocks()
+    const curPos = this.$r.$w.getWorldPosition(this)
 
-    rootBlock.move(destPos.x, destPos.y)
+    curPos.x += this.nextConnection!.dx
+    curPos.y += this.nextConnection!.dy
+
+    const dPos = {
+      x: destPos.x - curPos.x,
+      y: destPos.y - curPos.y
+    }
+
+    this.getRootBlock().dmove(dPos.x, dPos.y)
 
     this.append(destConn.sourceBlock)
     destConn.sourceBlock.move(this.nextConnection!.dx, this.nextConnection!.dy)
+
+    const slotParentBlock = this.inSlotField()
+    slotParentBlock && slotParentBlock.updateShape()
   }
 
   private _previousConnAction: IConnectionAction = (triggerOnly, destConn) => {

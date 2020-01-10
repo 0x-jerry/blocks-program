@@ -97,8 +97,8 @@ export class WorkspaceSVG extends Area {
       y: block.y
     }
 
-    while (block?.previousConnection) {
-      block = block.previousConnection.targetConnection?.sourceBlock || null
+    while (block?.previousBlock) {
+      block = block.previousBlock || null
 
       if (block) {
         pos.x += block.x
