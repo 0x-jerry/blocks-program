@@ -26,7 +26,7 @@ export class ConnectionManager {
 
     if (config.debug) {
       const dot = new DebugDotSVg(0, 0, conn.sourceBlock)
-      return dot.proxyOnConnection(conn)
+      conn = dot.proxyOnConnection(conn)
     }
 
     this.connections.push(conn)
