@@ -1,4 +1,4 @@
-import { SArray, vecUtils } from '@/shared'
+import { SArray, vec2Distance } from '@/shared'
 import { BlockSVG } from './BlockSVG'
 import { Renderer } from './Renderer'
 import { Connection, IConnectionOption } from './Connection'
@@ -46,15 +46,17 @@ export class ConnectionManager {
         continue
       }
 
-      const d = vecUtils.distance(
-        vecUtils.plus(c.sourceBlock.getWorldPosition(), {
-          x: c.dx,
-          y: c.dy
-        }),
-        vecUtils.plus(conn.sourceBlock.getWorldPosition(), {
-          x: conn.dx,
-          y: conn.dy
-        })
+      const destPos = c.sourceBlock.getWorldPosition()
+      const curPos = conn.sourceBlock.getWorldPosition()
+      const d = vec2Distance(
+        {
+          x: c.dx + destPos.x,
+          y: c.dy + destPos.y
+        },
+        {
+          x: conn.dx + curPos.x,
+          y: conn.dy + curPos.y
+        }
       )
 
       if (d < this.maxRange && d < minDistance) {
