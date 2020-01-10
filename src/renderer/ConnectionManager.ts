@@ -26,25 +26,7 @@ export class ConnectionManager {
 
     if (config.debug) {
       const dot = new DebugDotSVg(0, 0, conn.sourceBlock)
-      dot.svg.attr('conn-type', conn.type)
-
-      conn = new Proxy(conn, {
-        set(target, key, value, receiver) {
-          // console.log(target, key, value, receiver)
-          //@ts-ignore
-          target[key] = value
-
-          if (key === 'dx' || key === 'dy') {
-            dot.svg.move(conn.dx, conn.dy)
-          }
-
-          if (key === 'targetConnection') {
-            dot.svg.attr('target', String(!!value))
-          }
-
-          return true
-        }
-      })
+      return dot.proxyOnConnection(conn)
     }
 
     this.connections.push(conn)
