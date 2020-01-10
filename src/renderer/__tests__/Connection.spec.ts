@@ -49,9 +49,21 @@ describe('Connection', () => {
     const action1 = jest.spyOn(conn, 'connectAction')
     const action2 = jest.spyOn(b.nextConnection!, 'connectAction')
 
-    conn.connectTo(b.nextConnection || null)
+    conn.connectTo(b.nextConnection!)
 
     expect(action1).toBeCalledTimes(1)
     expect(action2).toBeCalledTimes(1)
+    expect(conn.targetConnection).toBe(b.nextConnection)
+    expect(b.nextConnection?.targetConnection).toBe(conn)
+
+    action1.mockReset()
+    action2.mockReset()
+
+    conn.connectTo(null)
+
+    expect(action1).toBeCalledTimes(1)
+    expect(action2).toBeCalledTimes(1)
+    expect(conn.targetConnection).toBe(null)
+    expect(b.nextConnection?.targetConnection).toBe(null)
   })
 })
