@@ -9,7 +9,7 @@ const config = {
   name: 'BlocksProgram'
 }
 
-const prod = process.env.NODE_ENV === 'production'
+const isProd = process.env.NODE_ENV === 'production'
 
 const tsDeclarationConfig = {
   declarationDir: 'dist',
@@ -20,7 +20,7 @@ const tsDeclarationConfig = {
 /**
  * @type {import('rollup').OutputOptions[]}
  */
-const output = prod
+const output = isProd
   ? [
       {
         file: config.file + '.cjs.js',
@@ -56,15 +56,8 @@ const output = prod
       }
     ]
 
-export default {
-  input: 'src/index.ts',
-  output: output,
-  plugins: [
-    replace({ 'process.env.NODE_ENV': prod ? '"production"' : '"development"' }),
-    babel({
-      extensions: [...DEFAULT_EXTENSIONS, '.ts']
-    }),
-    typescript({
+const tsConfig = isProd
+  ? {
       check: false,
       tsconfig: 'tsconfig.json',
       useTsconfigDeclarationDir: true,
@@ -72,6 +65,20 @@ export default {
         compilerOptions: tsDeclarationConfig,
         exclude: ['**/__tests__']
       }
+    }
+  : {
+      check: true,
+      tsconfig: 'tsconfig.json'
+    }
+
+export default {
+  input: 'src/index.ts',
+  output: output,
+  plugins: [
+    replace({ 'process.env.NODE_ENV': isProd ? '"production"' : '"development"' }),
+    typescript(tsConfig),
+    babel({
+      extensions: [...DEFAULT_EXTENSIONS, '.ts']
     })
   ]
 }
