@@ -35,7 +35,7 @@ Modern and smaller visual programming editor. Inspire by [blockly](https://githu
 - [ ] Cache block content size.
 - [ ] Cache block position.
 - [ ] Remove getbbox interface
-- [ ] Extract block const options.
+- [x] Extract block svg render options.
 
 ## Bugs
 
