@@ -4,7 +4,7 @@ import { WorkspaceSVG } from './WorkspaceSVG'
 import { FieldSVGCtor, BlockTextFieldSVG, BlockSlotFieldSVG } from './fields'
 import { FieldTypes } from '@/fields'
 import { ConnectionManager, IConnectionPair } from './ConnectionManager'
-import { BlockSVG } from './BlockSVG'
+import { BlockSVG, IBlockSVGRenderOption } from './BlockSVG'
 import { Connection } from './Connection'
 
 interface IEffect {
@@ -21,6 +21,10 @@ export interface IRendererEffects extends IRendererEffectMaps {
   [name: string]: IEffect | undefined
 }
 
+export interface IRenderOptions {
+  block: IBlockSVGRenderOption
+}
+
 export class Renderer {
   svg: SVG
   $w: WorkspaceSVG
@@ -34,6 +38,8 @@ export class Renderer {
 
   effects: IRendererEffects
 
+  rendererOptions: IRenderOptions
+
   constructor(workspace: Workspace, width = 600, height = 400) {
     //@ts-ignore
     this.effects = {}
@@ -42,9 +48,26 @@ export class Renderer {
     this.currentActiveConnPair = null
     this.connectionManager = new ConnectionManager(this)
 
+    this._initRendererOptions()
+
     this._registerAllFields()
 
     this._initWorkspaceSVG(workspace, width, height)
+  }
+
+  private _initRendererOptions() {
+    this.rendererOptions = {
+      block: {
+        joinHeight: 5,
+        joinWidth: 10,
+        joinStartWidth: 10,
+        slotWidth: 5,
+        emptyHeight: 20,
+        fieldGap: 5,
+        horizontalPadding: 8,
+        verticalPadding: 5
+      }
+    }
   }
 
   private _initWorkspaceSVG(workspace: Workspace, width: number, height: number) {

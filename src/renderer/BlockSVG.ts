@@ -8,7 +8,17 @@ import { Dragger } from './utils'
 import { Connection, ConnectionType, IConnectionAction } from './Connection'
 import { BlockSlotFieldSVG } from './fields'
 
-type BlockSVGOption = {
+export interface IBlockSVGOption {
+  x: number
+  y: number
+  draggable: boolean
+  /**
+   * Block defined id
+   */
+  type: string
+}
+
+export interface IBlockSVGRenderOption {
   joinHeight: number
   joinWidth: number
   joinStartWidth: number
@@ -19,20 +29,12 @@ type BlockSVGOption = {
   fieldGap: number
   horizontalPadding: number
   verticalPadding: number
-
-  x: number
-  y: number
-  draggable: boolean
-  /**
-   * Block defined id
-   */
-  type: string
 }
 
 export class BlockSVG extends G {
   readonly $b: Block
   readonly $r: Renderer
-  options: BlockSVGOption
+  options: IBlockSVGOption
 
   background: Path
   fields: SArray<FieldSVG>[]
@@ -51,19 +53,11 @@ export class BlockSVG extends G {
     return this.previousConnection?.targetConnection?.sourceBlock
   }
 
-  constructor(block: Block, renderer: Renderer, options: Partial<BlockSVGOption> = {}) {
+  constructor(block: Block, renderer: Renderer, options: Partial<IBlockSVGOption> = {}) {
     super()
     this.addClasses('s_block')
 
     this.options = {
-      joinHeight: 5,
-      joinWidth: 10,
-      joinStartWidth: 10,
-      slotWidth: 5,
-      emptyHeight: 20,
-      fieldGap: 5,
-      horizontalPadding: 8,
-      verticalPadding: 5,
       x: 0,
       y: 0,
       draggable: true,
@@ -225,10 +219,13 @@ export class BlockSVG extends G {
    * @returns content size
    */
   private _updateFieldsInline(fields: FieldSVG[], startY: number) {
+    const rendererOptions = this.$r.rendererOptions.block
+
     let x = 0
     let y = startY
 
-    const width = fields.reduce((pre, cur) => pre + cur.svg.bbox.width, 0) + this.options.fieldGap * (fields.length - 1)
+    const width =
+      fields.reduce((pre, cur) => pre + cur.svg.bbox.width, 0) + rendererOptions.fieldGap * (fields.length - 1)
     const height = Math.max(...fields.map((f) => f.svg.bbox.height))
 
     for (let colIdx = 0; colIdx < fields.length; colIdx++) {
@@ -236,7 +233,7 @@ export class BlockSVG extends G {
       const previousField = fields[colIdx - 1]
       const isFirstField = colIdx === 0
 
-      x = isFirstField ? this.options.horizontalPadding : this.options.fieldGap
+      x = isFirstField ? rendererOptions.horizontalPadding : rendererOptions.fieldGap
 
       y += (height - field.svg.bbox.height) / 2
 
@@ -254,14 +251,15 @@ export class BlockSVG extends G {
   }
 
   private _updateSlotField(field: BlockSlotFieldSVG, startY: number) {
+    const rendererOptions = this.$r.rendererOptions.block
     const block = field.connection.targetConnection?.sourceBlock
-    field.svg.move(this.options.slotWidth, startY)
+    field.svg.move(rendererOptions.slotWidth, startY)
 
-    field.updateConnPosition(this.options.slotWidth, startY + this.options.verticalPadding)
+    field.updateConnPosition(rendererOptions.slotWidth, startY + rendererOptions.verticalPadding)
 
     const contentSize = {
       width: 0,
-      height: this.options.emptyHeight
+      height: rendererOptions.emptyHeight
     }
 
     if (!block) {
@@ -275,15 +273,16 @@ export class BlockSVG extends G {
   }
 
   private _updateJoinStartShape() {
-    this.background.d.h(this.options.joinStartWidth)
+    const rendererOptions = this.$r.rendererOptions.block
+    this.background.d.h(rendererOptions.joinStartWidth)
 
     if (this.$b.options.previous) {
       this.background.d
-        .v(-this.options.joinHeight)
-        .h(this.options.joinWidth)
-        .v(this.options.joinHeight)
+        .v(-rendererOptions.joinHeight)
+        .h(rendererOptions.joinWidth)
+        .v(rendererOptions.joinHeight)
     } else {
-      this.background.d.h(this.options.joinWidth)
+      this.background.d.h(rendererOptions.joinWidth)
     }
   }
 
@@ -292,6 +291,8 @@ export class BlockSVG extends G {
     startY: number,
     isSlot = false
   ): { width: number; height: number } {
+    const rendererOptions = this.$r.rendererOptions.block
+
     let rowSize = { width: 0, height: 0 }
 
     if (isSlot) {
@@ -302,7 +303,7 @@ export class BlockSVG extends G {
         height: 0
       }
 
-      let y = startY + this.options.verticalPadding
+      let y = startY + rendererOptions.verticalPadding
 
       for (const subFields of fields) {
         const size = this._updateFieldsInline(subFields, y)
@@ -313,7 +314,7 @@ export class BlockSVG extends G {
       }
 
       rowSize.width = contentSize.width
-      rowSize.height = contentSize.height + this.options.verticalPadding * 2
+      rowSize.height = contentSize.height + rendererOptions.verticalPadding * 2
     }
 
     return rowSize
@@ -368,7 +369,8 @@ export class BlockSVG extends G {
   }
 
   getContentHeightWithAllNextBlocks() {
-    const joinHeight = this.options.joinHeight
+    const rendererOptions = this.$r.rendererOptions.block
+    const joinHeight = rendererOptions.joinHeight
 
     return this.bbox.height - (this.$b.options.previous ? joinHeight : 0)
   }
@@ -455,10 +457,14 @@ export class BlockSVG extends G {
       return currentFields
     }
 
-    const joinHeight = this.options.joinHeight
-    const joinWidth = this.options.joinWidth
-    const joinStartWidth = this.options.joinStartWidth
-    const slotWidth = this.options.slotWidth
+    const rendererOptions = this.$r.rendererOptions.block
+    const joinHeight = rendererOptions.joinHeight
+    const joinWidth = rendererOptions.joinWidth
+    const joinStartWidth = rendererOptions.joinStartWidth
+    const slotWidth = rendererOptions.slotWidth
+    const verticalPadding = rendererOptions.verticalPadding
+    const horizontalPadding = rendererOptions.horizontalPadding
+    const emptyHeight = rendererOptions.emptyHeight
 
     const rowCount = this.getFieldRowCount()
 
@@ -485,7 +491,7 @@ export class BlockSVG extends G {
       if (isSlot) {
         const previousContentSize = rowSize[rowSize.length - 2]
 
-        const totalWidth = previousContentSize.width + this.options.horizontalPadding * 2
+        const totalWidth = previousContentSize.width + horizontalPadding * 2
         startY += joinHeight
 
         this.background.d
@@ -500,7 +506,7 @@ export class BlockSVG extends G {
           // line
           .v(contentSize.height)
       } else {
-        const totalWidth = contentSize.width + this.options.horizontalPadding * 2
+        const totalWidth = contentSize.width + horizontalPadding * 2
 
         const width = totalWidth - (isFirstRow ? joinStartWidth + joinWidth : slotWidth)
         const height = contentSize.height
@@ -513,13 +519,13 @@ export class BlockSVG extends G {
       const tempWidth = 40
       this.background.d
         .h(tempWidth)
-        .v(this.options.emptyHeight + this.options.verticalPadding * 2)
+        .v(emptyHeight)
         .h(-(tempWidth + slotWidth - joinWidth - joinStartWidth))
     } else {
       const contentSize = rowSize[rowSize.length - 1]
-      const totalWidth = contentSize.width + this.options.horizontalPadding * 2
+      const totalWidth = contentSize.width + horizontalPadding * 2
 
-      this.background.d.v(this.options.verticalPadding)
+      this.background.d.v(verticalPadding)
       this.background.d.h(-(totalWidth - joinStartWidth - joinWidth))
     }
 
@@ -541,6 +547,8 @@ export class BlockSVG extends G {
   }
 
   updateConnectionPosition() {
+    const rendererOptions = this.$r.rendererOptions.block
+
     if (this.previousConnection) {
       this.previousConnection.dx = 0
       this.previousConnection.dy = 0
@@ -548,7 +556,7 @@ export class BlockSVG extends G {
 
     if (this.nextConnection) {
       this.nextConnection.dx = 0
-      const newDy = this.background.bbox.height - (this.$b.options.previous ? this.options.joinHeight : 0)
+      const newDy = this.background.bbox.height - (this.$b.options.previous ? rendererOptions.joinHeight : 0)
 
       // Update next block position when block shape changed.
       if (newDy !== this.nextConnection.dy) {
