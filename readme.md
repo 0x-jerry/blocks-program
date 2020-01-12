@@ -1,53 +1,22 @@
 # Blocks Program
 
-Modern and smaller visual programming editor. Inspire by [blockly](https://github.com/google/blockly).
+可视化编程编辑器，灵感来源于 [Blockly](https://github.com/google/blockly)
 
-## TODO
+目标是在不更改源代码的情况下，更容易扩展。
 
-- [x] Workspace
-- [x] Block
-- [x] BlockField
-- [ ] fields
-  - [x] BlockTextField
-  - [x] BlockSlotField
-  - [ ] BlockInputField
-  - [ ] BlockDropdownField
-- [x] Renderer
-  - [x] Render lib
-  - [x] Workspace
-  - [x] Block
-  - [ ] BlockField
-    - [x] BlockTextField
-    - [x] BlockSlotField
-    - [ ] BlockInputField
-    - [ ] BlockDropdownField
-- [ ] CodeGenerator
-  - [x] CodeGenerator
-  - [ ] PythonGenerator
-- [ ] parser
-  - [ ] BlockJSONParser
-- [ ] Document
-- [ ] Toolbox
+目前正处于开发之中，目前仅实现最基本的功能，详情见[TODO](todo.md)
 
-## Improvement
+## 开发
 
-- [ ] Make area content infinite, fix break position motion when block move from edge to inner.
-- [ ] Cache block content size.
-- [ ] Cache block position.
-- [ ] Remove getbbox interface
-- [x] Extract block svg render options.
+1. 克隆本仓库
+2. `yarn && yarn build:dev` (推荐使用 yarn)
+3. 打开 `example Workspace.html`，如果看到编程积木，则说明编译成功了
 
-## Bugs
+## 测试
 
-- [x] Update next block position when block shape changed.
-- [x] Make slot field connection can connect when block move.
-- [x] The parent block shape is not update when the next connection of child block connected.
-- [x] The parent block move to wrong position When the slot connection of child block connected.
+1. 克隆本仓库
+2. `yarn && yarn test` (推荐使用 yarn)
 
-## Some Explanation
+## 贡献
 
-`core` folder code is only store necessary data.
-
-`renderer` is generate svg accord the data that store in `workspace` object.
-
-`renderer` folder code only store ui data.
+在贡献之前，最好开一个 ISSUE 说一下想做的功能，确认之后再开始。否则可能不会被合并到主分支。
