@@ -1,6 +1,6 @@
 {
   "name": "blocks-program",
-  "version": "preview-0.0.1",
+  "version": "0.0.1-alpha",
   "main": "index.js",
   "license": "MIT",
   "types": "dist/src/index.d.ts",
