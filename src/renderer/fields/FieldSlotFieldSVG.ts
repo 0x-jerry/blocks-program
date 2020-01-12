@@ -46,9 +46,19 @@ export class BlockSlotFieldSVG extends FieldSVG<BlockSlotField, G> {
     destConn.sourceBlock.move(this.connection.dx, this.connection.dy)
   }
 
+  private _updateConnectedBlockPosition() {
+    const targetBlock = this.connection.targetConnection?.sourceBlock
+    if (!targetBlock || targetBlock.isRootBlock()) {
+      return
+    }
+
+    targetBlock.move(this.connection.dx, this.connection.dy)
+  }
+
   updateConnPosition(dx: number, dy: number) {
     this.svg.move(dx, dy)
     this.connection.dx = dx
     this.connection.dy = dy
+    this._updateConnectedBlockPosition()
   }
 }

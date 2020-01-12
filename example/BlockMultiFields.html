@@ -83,18 +83,18 @@
       workspace.definedBlocks.add(createBlock({ next: false }, 'p'))
       workspace.definedBlocks.add(createBlock({ next: false, previous: false }, 'none'))
 
-      // workspace.definedBlocks.add(createSlotBlock({ next: true, previous: true }, 'slot-p-n'))
-      // workspace.definedBlocks.add(createSlotBlock({ next: true, previous: true }, 'slot-p-n1'))
-      // workspace.definedBlocks.add(createSlotBlock({ next: true, previous: true }, 'slot-p-n2'))
+      workspace.definedBlocks.add(createSlotBlock({ next: true, previous: true }, 'slot-p-n'))
+      workspace.definedBlocks.add(createSlotBlock({ next: true, previous: true }, 'slot-p-n1'))
+      workspace.definedBlocks.add(createSlotBlock({ next: true, previous: true }, 'slot-p-n2'))
       const renderer = new BlocksProgram.Renderer(workspace, 600, 400)
 
       renderer.mount(document.getElementById('app'))
 
       renderer.$w.addBlock('p-n', 100, 50)
-      renderer.$w.addBlock('p-n', 100, 100)
-      renderer.$w.addBlock('p-n', 100, 150)
+      renderer.$w.addBlock('n', 100, 150)
+      renderer.$w.addBlock('p', 100, 250)
 
-      // renderer.$w.addBlock('slot-p-n', 300, 50)
+      renderer.$w.addBlock('slot-p-n', 300, 50)
       // renderer.$w.addBlock('slot-p-n1', 300, 150)
       // renderer.$w.addBlock('slot-p-n2', 300, 250)
 
@@ -118,6 +118,8 @@
 
         block.pushField(field)
         block.pushField(slotField, 1)
+        block.pushField(field.clone(), 2)
+        block.pushField(slotField.clone(), 3)
 
         return block
       }

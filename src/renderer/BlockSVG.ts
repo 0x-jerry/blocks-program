@@ -292,15 +292,17 @@ export class BlockSVG extends G {
     startY: number,
     isSlot = false
   ): { width: number; height: number } {
+    let rowSize = { width: 0, height: 0 }
+
     if (isSlot) {
-      return this._updateSlotField(fields[0][0] as any, startY)
+      rowSize = this._updateSlotField(fields[0][0] as any, startY)
     } else {
       const contentSize = {
         width: 0,
         height: 0
       }
 
-      let y = startY
+      let y = startY + this.options.verticalPadding
 
       for (const subFields of fields) {
         const size = this._updateFieldsInline(subFields, y)
@@ -310,8 +312,11 @@ export class BlockSVG extends G {
         y += size.height
       }
 
-      return contentSize
+      rowSize.width = contentSize.width
+      rowSize.height = contentSize.height + this.options.verticalPadding * 2
     }
+
+    return rowSize
   }
 
   getWorldPosition() {
@@ -460,7 +465,7 @@ export class BlockSVG extends G {
     const rowSize: { width: number; height: number }[] = []
     const rowSlot: boolean[] = []
 
-    let startY = this.options.verticalPadding
+    let startY = 0
 
     for (let rowIdx = 0; rowIdx < rowCount; rowIdx++) {
       const fields = this.fields[rowIdx]
@@ -481,8 +486,10 @@ export class BlockSVG extends G {
         const previousContentSize = rowSize[rowSize.length - 2]
 
         const totalWidth = previousContentSize.width + this.options.horizontalPadding * 2
+        startY += joinHeight
+
         this.background.d
-          .v(this.options.verticalPadding)
+          .v(joinHeight)
           .h(-(totalWidth - slotWidth - joinStartWidth - joinWidth))
           // 凸
           .v(-joinHeight)
@@ -496,13 +503,13 @@ export class BlockSVG extends G {
         const totalWidth = contentSize.width + this.options.horizontalPadding * 2
 
         const width = totalWidth - (isFirstRow ? joinStartWidth + joinWidth : slotWidth)
-        const height = contentSize.height + (isFirstRow ? joinHeight : 0)
+        const height = contentSize.height
 
         this.background.d.h(width).v(height)
       }
     }
 
-    if (rowSlot.pop() === true) {
+    if (rowSlot[rowSlot.length - 1] === true) {
       const tempWidth = 40
       this.background.d
         .h(tempWidth)
