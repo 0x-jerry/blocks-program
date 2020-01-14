@@ -3,7 +3,7 @@ import { FieldTypes } from './const'
 
 export class BlockTextField extends BlockField<string> {
   constructor(name: string, value = '', opt: IBlockFieldOption = {}) {
-    super(name, value, { type: FieldTypes.text, ...opt })
+    super(name, value, FieldTypes.text, opt)
   }
 
   clone() {

@@ -48,7 +48,7 @@ describe('Block', () => {
 
   it('getField', () => {
     const a = new Block()
-    const b = new BlockField('arg')
+    const b = new BlockField('arg', '')
 
     a.pushField(b)
 
@@ -61,7 +61,7 @@ describe('Block', () => {
 
   it('pushField', () => {
     const block = new Block()
-    const field = new BlockField('test')
+    const field = new BlockField('test', '')
     block.pushField(field)
 
     expect(field.$b).toBe(block)

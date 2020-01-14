@@ -2,12 +2,13 @@ import { Block, BlockField, IBlockFieldOption } from '@/core'
 import { ObserverCallbackFunc } from '@/shared'
 import { FieldTypes } from './const'
 
-export class BlockSlotField extends BlockField<Block> {
+export class BlockSlotField extends BlockField<Block | null> {
   constructor(name: string, value: Block | null = null, opt: IBlockFieldOption = {}) {
-    super(name, value, {
-      type: FieldTypes.blockSlot,
-      ...opt
-    })
+    super(name, value, FieldTypes.blockSlot, opt)
+
+    if (value) {
+      value.connectToField(this)
+    }
 
     this.block.sub(this.blockChanged)
   }

@@ -4,7 +4,7 @@ import { Block } from './Block'
 export interface IBlockFieldOption {
   id?: string
   acceptInput?: string[]
-  type?: string
+  shadow?: boolean
   colIdx?: number
   rowIdx?: number
 }
@@ -21,7 +21,7 @@ export class BlockField<T = any> {
   readonly id: string
   readonly name: string
 
-  protected _value: T | null
+  protected _value: T
 
   /**
    * Receive types (input <=> output)
@@ -33,6 +33,7 @@ export class BlockField<T = any> {
    */
   block: Observer<Block | null>
 
+  shadow: boolean
   type: string
   /**
    * Start with 0
@@ -51,9 +52,10 @@ export class BlockField<T = any> {
     return !!this.block.value
   }
 
-  constructor(name: string, value: T | null = null, opt: IBlockFieldOption = {}) {
+  constructor(name: string, value: T, type: string = 'no-type', opt: IBlockFieldOption = {}) {
     this.name = name
-    this.type = opt.type || ''
+    this.type = type
+    this.shadow = !!opt.shadow
 
     this.id = opt.id || uuid()
     this.$b = null
@@ -74,7 +76,6 @@ export class BlockField<T = any> {
   getOptions(): IBlockFieldOption {
     return {
       acceptInput: this.acceptInput,
-      type: this.type,
       id: this.id,
       colIdx: this.colIdx,
       rowIdx: this.rowIdx
@@ -99,6 +100,6 @@ export class BlockField<T = any> {
   clone() {
     const { id, ...otherOption } = this.getOptions()
 
-    return new BlockField(this.name, this.value(), otherOption)
+    return new BlockField(this.name, this.value(), this.type, otherOption)
   }
 }
