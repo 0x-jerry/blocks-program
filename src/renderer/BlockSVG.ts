@@ -257,7 +257,7 @@ export class BlockSVG extends G {
     const block = field.connection.targetConnection?.sourceBlock
     field.svg.move(rendererOptions.slotWidth, startY)
 
-    field.updateConnPosition(rendererOptions.slotWidth, startY + rendererOptions.verticalPadding)
+    field.updateConnPosition(rendererOptions.slotWidth, startY)
 
     const contentSize = {
       width: 0,
@@ -480,7 +480,6 @@ export class BlockSVG extends G {
     const joinWidth = rendererOptions.joinWidth
     const joinStartWidth = rendererOptions.joinStartWidth
     const slotWidth = rendererOptions.slotWidth
-    const verticalPadding = rendererOptions.verticalPadding
     const horizontalPadding = rendererOptions.horizontalPadding
     const emptyHeight = rendererOptions.emptyHeight
 
@@ -510,10 +509,8 @@ export class BlockSVG extends G {
         const previousContentSize = rowSize[rowSize.length - 2]
 
         const totalWidth = previousContentSize.width + horizontalPadding * 2
-        startY += joinHeight
 
         this.background.d
-          .v(joinHeight)
           .h(-(totalWidth - slotWidth - joinStartWidth - joinWidth))
           // 凸
           .v(-joinHeight)
@@ -543,7 +540,6 @@ export class BlockSVG extends G {
       const contentSize = rowSize[rowSize.length - 1]
       const totalWidth = contentSize.width + horizontalPadding * 2
 
-      this.background.d.v(verticalPadding)
       this.background.d.h(-(totalWidth - joinStartWidth - joinWidth))
     }
 

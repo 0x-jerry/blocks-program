@@ -58,14 +58,14 @@ export class Renderer {
   private _initRendererOptions() {
     this.rendererOptions = {
       block: {
-        joinHeight: 5,
+        joinHeight: 4,
         joinWidth: 10,
         joinStartWidth: 10,
         slotWidth: 5,
         emptyHeight: 20,
         fieldGap: 5,
         horizontalPadding: 8,
-        verticalPadding: 5
+        verticalPadding: 6
       }
     }
   }
