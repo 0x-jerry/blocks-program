@@ -16,6 +16,10 @@ export class FieldSVG<T extends BlockField = BlockField, S extends SElement = SE
     this.svg = svg
     this.$b = block
   }
+
+  initShape() {
+    // Abstract method
+  }
 }
 
 export interface FieldSVGCtor<T extends BlockField = BlockField, S extends SElement = SElement> {

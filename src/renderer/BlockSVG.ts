@@ -45,6 +45,8 @@ export class BlockSVG extends G {
 
   dragger: Dragger
 
+  private _isFirstTimeToRender: boolean
+
   get nextBlock() {
     return this.nextConnection?.targetConnection?.sourceBlock
   }
@@ -56,6 +58,7 @@ export class BlockSVG extends G {
   constructor(block: Block, renderer: Renderer, options: Partial<IBlockSVGOption> = {}) {
     super()
     this.addClasses('s_block')
+    this._isFirstTimeToRender = true
 
     this.options = {
       x: 0,
@@ -222,7 +225,6 @@ export class BlockSVG extends G {
     const rendererOptions = this.$r.rendererOptions.block
 
     let x = 0
-    let y = startY
 
     const width =
       fields.reduce((pre, cur) => pre + cur.svg.bbox.width, 0) + rendererOptions.fieldGap * (fields.length - 1)
@@ -235,7 +237,7 @@ export class BlockSVG extends G {
 
       x = isFirstField ? rendererOptions.horizontalPadding : rendererOptions.fieldGap
 
-      y += (height - field.svg.bbox.height) / 2
+      const y = startY + (height - field.svg.bbox.height) / 2
 
       if (previousField) {
         x += previousField.svg.x + previousField.svg.bbox.width
@@ -318,6 +320,20 @@ export class BlockSVG extends G {
     }
 
     return rowSize
+  }
+
+  private _firstTimeToUpdateShape() {
+    if (!this._isFirstTimeToRender) {
+      return
+    }
+
+    this._isFirstTimeToRender = true
+
+    for (const row of this.fields) {
+      for (const f of row) {
+        f.initShape()
+      }
+    }
   }
 
   getWorldPosition() {
@@ -421,6 +437,8 @@ export class BlockSVG extends G {
     if (!this.rendered) {
       return
     }
+
+    this._firstTimeToUpdateShape()
 
     if (this.$b.hasOutput) {
       this.updateOutputShape()

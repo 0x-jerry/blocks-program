@@ -1,7 +1,7 @@
 import { Workspace } from '@/core'
 import { SVG, DropShadowEffect, PatternGrid } from './lib'
 import { WorkspaceSVG } from './WorkspaceSVG'
-import { FieldSVGCtor, BlockTextFieldSVG, BlockSlotFieldSVG } from './fields'
+import { FieldSVGCtor, BlockTextFieldSVG, BlockSlotFieldSVG, BlockInputFieldSVG } from './fields'
 import { FieldTypes } from '@/fields'
 import { ConnectionManager, IConnectionPair } from './ConnectionManager'
 import { BlockSVG, IBlockSVGRenderOption } from './BlockSVG'
@@ -152,6 +152,7 @@ export class Renderer {
   private _registerAllFields() {
     this.registerFieldCtor(FieldTypes.text, BlockTextFieldSVG)
     this.registerFieldCtor(FieldTypes.blockSlot, BlockSlotFieldSVG)
+    this.registerFieldCtor(FieldTypes.input, BlockInputFieldSVG)
   }
 
   mount(el: HTMLElement) {
