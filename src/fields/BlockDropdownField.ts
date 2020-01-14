@@ -1,39 +1,50 @@
 import { BlockField, IBlockFieldOption } from '@/core'
 import { FieldTypes } from './const'
 
+type DropdownOptions = string[][] | { key: string; value?: string }[]
+
 export interface IBlockDropdownFieldOption extends IBlockFieldOption {
   /**
    * [[key, value], [key, value]...]
+   * or
+   * {key: value, ...}
    */
-  options: string[][]
+  options: DropdownOptions
 }
 
 export class BlockDropdownField extends BlockField<string> {
-  /**
-   * [[key, value], [key, value]...]
-   */
-  options: string[][]
+  options: { key: string; value: string }[]
+
+  get selected() {
+    let select = this.options.find((o) => o.key === this._value)
+    select = select || this.options[0] || { key: '', value: '' }
+
+    return select
+  }
 
   constructor(name: string, value: string = '', opt: Partial<IBlockDropdownFieldOption> = {}) {
     super(name, value, FieldTypes.dropdown, opt)
 
-    this.options = opt.options || []
-
-    this._parseOptions()
+    this._parseOptions(opt.options || [])
   }
 
-  private _parseOptions() {
-    for (let i = 0; i < this.options.length; i++) {
-      const o = this.options[i]
-      const key = o[0] ?? ''
-      const value = o[1] ?? key
+  private _parseOptions(opt: DropdownOptions) {
+    this.options = []
 
-      this.options[i] = [key, value]
+    let key = ''
+    let value = ''
+
+    for (const o of opt) {
+      if (Array.isArray(o)) {
+        key = o[0] || ''
+        value = o[1] ?? key
+      } else {
+        key = o.key
+        value = o.value ?? o.key
+      }
+
+      this.options.push({ key, value })
     }
-  }
-
-  value() {
-    return this._value
   }
 
   getOptions(): IBlockDropdownFieldOption {

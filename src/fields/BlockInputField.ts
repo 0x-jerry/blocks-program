@@ -10,12 +10,9 @@ export class BlockInputField extends BlockField<string> {
 
   constructor(name: string, value: string = '', opt: Partial<IBlockInputFieldOption> = {}) {
     super(name, value, FieldTypes.input, opt)
-
     this.inputType = opt.inputType || 'string'
-  }
 
-  value() {
-    return this._value
+    this.value(value)
   }
 
   getOptions(): IBlockInputFieldOption {
@@ -25,6 +22,24 @@ export class BlockInputField extends BlockField<string> {
       inputType: this.inputType,
       ...options
     }
+  }
+
+  value(val?: string): string {
+    if (val === undefined) {
+      return this._value
+    }
+
+    let value = val
+
+    if (this.inputType === 'number') {
+      const n = parseFloat(value)
+
+      value = Number.isNaN(n) ? '' : n.toString()
+    }
+
+    this._value = value
+
+    return this._value
   }
 
   clone() {

@@ -89,10 +89,12 @@ export class BlockField<T = any> {
     return this.hasInput && oneOf(this.acceptInput, block.options.output)
   }
 
-  value(val?: T): T | null {
-    if (val !== undefined) {
-      this._value = val
+  value(val?: T): T {
+    if (val === undefined) {
+      return this._value
     }
+
+    this._value = val
 
     return this._value
   }

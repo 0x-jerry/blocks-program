@@ -9,6 +9,10 @@ describe('BlockTextField', () => {
     field = new BlockTextField('')
   })
 
+  it('new', () => {
+    expect(field.type).toBe(FieldTypes.text)
+  })
+
   it('get/set value', () => {
     expect(field.value()).toBe('')
 
@@ -25,10 +29,6 @@ describe('BlockTextField', () => {
     b.options.output = ['number', 'string']
 
     expect(field.checkConnection(b)).toBe(false)
-  })
-
-  it('type', () => {
-    expect(field.type).toBe(FieldTypes.text)
   })
 
   it('clone', () => {

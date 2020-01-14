@@ -9,6 +9,10 @@ describe('BlockSlotField', () => {
     field = new BlockSlotField('')
   })
 
+  it('new', () => {
+    expect(field.type).toEqual(FieldTypes.blockSlot)
+  })
+
   it('get/set value', () => {
     const a = new Block()
     expect(field.value()).toBe(null)
@@ -26,10 +30,6 @@ describe('BlockSlotField', () => {
 
     expect(field.checkConnection(a)).toBe(false)
     expect(field.checkConnection(b)).toBe(true)
-  })
-
-  it('type', () => {
-    expect(field.type).toBe(FieldTypes.blockSlot)
   })
 
   it('clone', () => {
