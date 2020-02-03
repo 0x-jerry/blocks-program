@@ -97,6 +97,8 @@ export class Renderer {
   }
 
   private _blockMoving = (block: BlockSVG) => {
+    this.floatWeight.hide()
+
     if (block.previousConnection) {
       block.previousConnection.connectTo(null)
     }

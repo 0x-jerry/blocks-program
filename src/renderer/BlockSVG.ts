@@ -1,6 +1,6 @@
 import { Block } from '@/core'
 import { FieldTypes } from '@/fields'
-import { SArray, EventEmitter } from '@/shared'
+import { SArray } from '@/shared'
 import { FieldSVG } from './fields/FieldSVG'
 import { G, Path } from './lib'
 import { Renderer } from './Renderer'
@@ -31,10 +31,6 @@ export interface IBlockSVGRenderOption {
   verticalPadding: number
 }
 
-export type BlockSVGEventsMap = {
-  initilaized(): void
-}
-
 export class BlockSVG extends G {
   readonly $b: Block
   readonly $r: Renderer
@@ -48,7 +44,6 @@ export class BlockSVG extends G {
   outputConnection?: Connection
 
   dragger: Dragger
-  events: EventEmitter<BlockSVGEventsMap>
 
   private _isFirstTimeToRender: boolean
 
@@ -76,7 +71,6 @@ export class BlockSVG extends G {
     this.$r = renderer
     this.$b = block
     this.fields = []
-    this.events = new EventEmitter()
 
     this.move(this.options.x, this.options.y)
 
@@ -86,8 +80,6 @@ export class BlockSVG extends G {
     this._initConnections()
 
     this.updateShape()
-
-    this.events.emit('initilaized')
   }
 
   private _initConnections() {

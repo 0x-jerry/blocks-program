@@ -14,12 +14,6 @@ export class BlockInputFieldSVG extends FieldSVG<BlockTextField, G> {
     this.svg.addClasses('s_field_input')
     this._initBackground()
     this._initInputText()
-
-    this.$b.events.on('initilaized', () => {
-      this.$b.dragger.on('dragstart', () => {
-        this.$b.$r.floatWeight.hide()
-      })
-    })
   }
 
   private _initInputText() {
