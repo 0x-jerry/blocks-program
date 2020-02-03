@@ -57,6 +57,8 @@ export class BlockInputFieldSVG extends FieldSVG<BlockTextField, G> {
       this.text.text(inputValue)
       this.$f.value(inputValue)
 
+      this.updateShape()
+
       const rect = this.svg.dom.getBoundingClientRect()
 
       css(input, {
@@ -65,8 +67,6 @@ export class BlockInputFieldSVG extends FieldSVG<BlockTextField, G> {
         width: `${rect.width}px`,
         height: `${rect.height}px`
       })
-
-      this.updateShape()
     })
 
     input.value = this.$f.value()
