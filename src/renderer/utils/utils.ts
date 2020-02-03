@@ -16,8 +16,7 @@ export function css(el: HTMLElement | SVGElement, css: CSS.Properties | string) 
   } else {
     const styles = Object.entries(css)
     styles.forEach(([key, value]) => {
-      // @ts-ignore
-      el.style[key] = value
+      el.style.setProperty(key, value)
     })
   }
 }

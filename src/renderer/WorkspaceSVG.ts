@@ -3,6 +3,7 @@ import { Workspace } from '@/core'
 import { Renderer } from './Renderer'
 import { warn, SArray, EventEmitter } from '@/shared'
 import { BlockSVG } from './BlockSVG'
+import { css } from './utils'
 
 type WorkspaceSVGEventsMap = IAreaEventsMap & {
   'select-block'(block: BlockSVG): void
@@ -32,7 +33,7 @@ export class WorkspaceSVG extends Area {
   private _initGrid() {
     const gridEffect = this.$r.effects.grid
 
-    this.background.dom.style.fill = `url(#${gridEffect.id})`
+    css(this.background.dom, { fill: `url(#${gridEffect.id})` })
     this.events.on('move', (dx, dy) => {
       gridEffect.dmove(-dx, -dy)
     })

@@ -4,7 +4,7 @@ import { SArray, EventEmitter } from '@/shared'
 import { FieldSVG } from './fields/FieldSVG'
 import { G, Path } from './lib'
 import { Renderer } from './Renderer'
-import { Dragger } from './utils'
+import { Dragger, css } from './utils'
 import { Connection, ConnectionType, IConnectionAction } from './Connection'
 import { BlockSlotFieldSVG } from './fields'
 
@@ -194,7 +194,7 @@ export class BlockSVG extends G {
 
     this.dragger.on('dragstart', () => {
       const id = this.$r.effects.dragging.id
-      this.dom.style.filter = `url(#${id})`
+      css(this.dom, { filter: `url(#${id})` })
 
       this.addClasses('s_block_dragging')
       this.$r.$w.displayAtTop(this)
@@ -202,7 +202,7 @@ export class BlockSVG extends G {
 
     this.dragger.on('dragend', () => {
       this.$r.$w.resize()
-      this.dom.style.filter = ''
+      css(this.dom, { filter: '' })
       this.removeClasses('s_block_dragging')
     })
   }

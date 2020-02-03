@@ -1,3 +1,5 @@
+import { css } from './utils'
+
 export class FloatWeight {
   dom: HTMLDivElement
 
@@ -29,8 +31,10 @@ export class FloatWeight {
     this.x = x
     this.y = y
 
-    this.dom.style.left = `${x}px`
-    this.dom.style.top = `${y}px`
+    css(this.dom, {
+      left: `${x}px`,
+      top: `${y}px`
+    })
   }
 
   clear() {
