@@ -6,6 +6,7 @@ import { FieldTypes } from '@/fields'
 import { ConnectionManager, IConnectionPair } from './ConnectionManager'
 import { BlockSVG, IBlockSVGRenderOption } from './BlockSVG'
 import { Connection } from './Connection'
+import { FloatWeight } from './utils'
 
 interface IEffect {
   readonly id: string
@@ -27,6 +28,8 @@ export interface IRenderOptions {
 
 export class Renderer {
   svg: SVG
+  dom?: HTMLElement
+  floatWeight: FloatWeight
   $w: WorkspaceSVG
 
   connectionManager: ConnectionManager
@@ -47,6 +50,7 @@ export class Renderer {
 
     this.currentActiveConnPair = null
     this.connectionManager = new ConnectionManager(this)
+    this.floatWeight = new FloatWeight()
 
     this._initRendererOptions()
 
@@ -81,6 +85,10 @@ export class Renderer {
     this.$w.events.on('select-block', this._blockMoving)
 
     this.$w.events.on('block-move', this._blockMoving)
+
+    this.$w.dragger.on('dragstart', () => {
+      this.floatWeight.hide()
+    })
 
     this.$w.dragger.on('dragend', () => {
       this.currentActiveConnPair?.from.connectTo(this.currentActiveConnPair.to)
@@ -156,6 +164,7 @@ export class Renderer {
   }
 
   mount(el: HTMLElement) {
+    this.dom = el
     this.svg.mount(el)
   }
 

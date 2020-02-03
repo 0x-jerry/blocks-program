@@ -1,17 +1,5 @@
 import { EventEmitter } from '@/shared'
-
-type IGlobalDomEvent = {
-  pointerup(e: MouseEvent): void
-  pointermove(e: MouseEvent): void
-}
-
-// init global events --- start
-const globalDomEvent = new EventEmitter<IGlobalDomEvent>()
-
-window.addEventListener('pointerup', (e) => globalDomEvent.emit('pointerup', e))
-window.addEventListener('pointermove', (e) => globalDomEvent.emit('pointermove', e))
-
-// init global events --- end
+import { globalDomEvent } from './utils'
 
 export type IDraggableEventsMap = {
   dragstart(e: MouseEvent): void

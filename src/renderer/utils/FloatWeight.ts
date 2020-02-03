@@ -33,8 +33,12 @@ export class FloatWeight {
     this.dom.style.top = `${y}px`
   }
 
-  replace(...nodes: HTMLElement[]) {
+  clear() {
     this.dom.innerHTML = ''
+  }
+
+  replace(...nodes: HTMLElement[]) {
+    this.clear()
     this.dom.append(...nodes)
   }
 
@@ -46,5 +50,3 @@ export class FloatWeight {
     this.dom.remove()
   }
 }
-
-export const floatWeight = new FloatWeight()
