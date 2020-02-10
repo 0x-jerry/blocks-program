@@ -7,20 +7,20 @@ Modern and easy extends visual programming editor. Inspire by [blockly](https://
 - [x] Workspace
 - [x] Block
 - [x] BlockField
-- [ ] fields
+- [x] fields
   - [x] BlockTextField
   - [x] BlockSlotField
   - [x] BlockInputField
-  - [ ] BlockDropdownField
+  - [x] BlockDropdownField
 - [x] Renderer
   - [x] Render lib
   - [x] Workspace
   - [x] Block
-  - [ ] BlockField
+  - [x] BlockField
     - [x] BlockTextField
     - [x] BlockSlotField
     - [x] BlockInputField
-    - [ ] BlockDropdownField
+    - [x] BlockDropdownField
 - [ ] CodeGenerator
   - [x] CodeGenerator
   - [ ] PythonGenerator
