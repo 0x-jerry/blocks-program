@@ -10,7 +10,7 @@ Modern and easy extends visual programming editor. Inspire by [blockly](https://
 - [ ] fields
   - [x] BlockTextField
   - [x] BlockSlotField
-  - [ ] BlockInputField
+  - [x] BlockInputField
   - [ ] BlockDropdownField
 - [x] Renderer
   - [x] Render lib
@@ -19,7 +19,7 @@ Modern and easy extends visual programming editor. Inspire by [blockly](https://
   - [ ] BlockField
     - [x] BlockTextField
     - [x] BlockSlotField
-    - [ ] BlockInputField
+    - [x] BlockInputField
     - [ ] BlockDropdownField
 - [ ] CodeGenerator
   - [x] CodeGenerator
