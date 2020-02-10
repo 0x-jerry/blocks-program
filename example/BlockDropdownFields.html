@@ -17,15 +17,16 @@
       const renderer = new BlocksProgram.Renderer(workspace, 600, 400)
       renderer.mount(document.getElementById('app'))
 
-      workspace.definedBlocks.add(createBlock({}, 'input'))
+      workspace.definedBlocks.add(createBlock({}, 'dropdown'))
 
-      renderer.$w.addBlock('input', 100, 50)
+      renderer.$w.addBlock('dropdown', 100, 50)
 
       function createBlock(opt = {}, id) {
         const block = new BlocksProgram.Block(opt, id)
 
         const field = new BlocksProgram.BlockTextField('text1', 'hello')
-        const field1 = new BlocksProgram.BlockInputField('text2', 'input')
+        const options = [['1'], ['2', '21']]
+        const field1 = new BlocksProgram.BlockDropdownField('text2', 'dropdown', { options })
         block.pushField(field)
         block.pushField(field1)
 
