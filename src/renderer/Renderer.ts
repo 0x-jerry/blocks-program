@@ -1,12 +1,13 @@
 import { Workspace } from '@/core'
 import { SVG, DropShadowEffect, PatternGrid } from './lib'
 import { WorkspaceSVG } from './WorkspaceSVG'
-import { FieldSVGCtor, BlockTextFieldSVG, BlockSlotFieldSVG, BlockInputFieldSVG } from './fields'
+import { FieldSVGCtor, BlockTextFieldSVG, BlockSlotFieldSVG, BlockInputFieldSVG, BlockDropdownFieldSVG, FieldSVG } from './fields'
 import { FieldTypes } from '@/fields'
 import { ConnectionManager, IConnectionPair } from './ConnectionManager'
 import { BlockSVG, IBlockSVGRenderOption } from './BlockSVG'
 import { Connection } from './Connection'
 import { FloatWeight } from './utils'
+import { config } from '@/config'
 
 interface IEffect {
   readonly id: string
@@ -24,6 +25,23 @@ export interface IRendererEffects extends IRendererEffectMaps {
 
 export interface IRenderOptions {
   block: IBlockSVGRenderOption
+  assetsRoot: string
+}
+
+class AssestsManager {
+  root: string
+
+  /**
+   *
+   * @param rootPath Don't add the tail backslash
+   */
+  constructor(rootPath = '.') {
+    this.root = rootPath
+  }
+
+  get(relativePath: string) {
+    return this.root + '/' + relativePath
+  }
 }
 
 export class Renderer {
@@ -43,7 +61,11 @@ export class Renderer {
 
   rendererOptions: IRenderOptions
 
-  constructor(workspace: Workspace, width = 600, height = 400) {
+  assets: AssestsManager
+
+  currentActiveField?: FieldSVG
+
+  constructor(workspace: Workspace, width = 600, height = 400, options?: Partial<IRenderOptions>) {
     //@ts-ignore
     this.effects = {}
     this.fieldCtors = {}
@@ -52,15 +74,17 @@ export class Renderer {
     this.connectionManager = new ConnectionManager(this)
     this.floatWeight = new FloatWeight()
 
-    this._initRendererOptions()
+    this._initRendererOptions(options)
+
+    this.assets = new AssestsManager(this.rendererOptions.assetsRoot)
 
     this._registerAllFields()
 
     this._initWorkspaceSVG(workspace, width, height)
   }
 
-  private _initRendererOptions() {
-    this.rendererOptions = {
+  private _initRendererOptions(options?: Partial<IRenderOptions>) {
+    const defualtOptions: IRenderOptions = {
       block: {
         joinHeight: 4,
         joinWidth: 10,
@@ -70,8 +94,11 @@ export class Renderer {
         fieldGap: 5,
         horizontalPadding: 8,
         verticalPadding: 6
-      }
+      },
+      assetsRoot: config.debug ? '../assets' : '.'
     }
+
+    this.rendererOptions = Object.assign({}, defualtOptions, options)
   }
 
   private _initWorkspaceSVG(workspace: Workspace, width: number, height: number) {
@@ -87,6 +114,7 @@ export class Renderer {
     this.$w.events.on('block-move', this._blockMoving)
 
     this.$w.dragger.on('dragstart', () => {
+      this.currentActiveField?.release()
       this.floatWeight.hide()
     })
 
@@ -97,6 +125,7 @@ export class Renderer {
   }
 
   private _blockMoving = (block: BlockSVG) => {
+    this.currentActiveField?.release()
     this.floatWeight.hide()
 
     if (block.previousConnection) {
@@ -163,6 +192,7 @@ export class Renderer {
     this.registerFieldCtor(FieldTypes.text, BlockTextFieldSVG)
     this.registerFieldCtor(FieldTypes.blockSlot, BlockSlotFieldSVG)
     this.registerFieldCtor(FieldTypes.input, BlockInputFieldSVG)
+    this.registerFieldCtor(FieldTypes.dropdown, BlockDropdownFieldSVG)
   }
 
   mount(el: HTMLElement) {
