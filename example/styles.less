@@ -96,6 +96,15 @@
   }
 
   &_field {
+    &_focus {
+      .s_field {
+        &_input_background,
+        &_dropdown_background {
+          fill: darken(#6dcbf7, 20);
+        }
+      }
+    }
+
     &_input {
       &_backgorund {
         fill: transparent;
@@ -112,6 +121,25 @@
       &:hover {
         .s_field_dropdown_background {
           stroke: red;
+        }
+      }
+
+      &_select {
+        box-sizing: border-box;
+        background: #6dcbf7;
+        border: 1px solid gray;
+
+        &_option {
+          color: black;
+          text-align: center;
+
+          &:hover {
+            background: darken(#6dcbf7, 20);
+          }
+
+          & + & {
+            border-top: 1px solid gray;
+          }
         }
       }
     }

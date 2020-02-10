@@ -1,27 +1,27 @@
-import { BlockTextField } from '@/fields'
+import { BlockInputField } from '@/fields'
 import { Text, G, Path } from '../lib'
 import { FieldSVG } from './FieldSVG'
 import { BlockSVG } from '../BlockSVG'
 import { css } from '../utils'
 
-export class BlockInputFieldSVG extends FieldSVG<BlockTextField, G> {
+export class BlockInputFieldSVG extends FieldSVG<BlockInputField, G> {
   background: Path
   text: Text
 
-  constructor(block: BlockSVG, field: BlockTextField) {
+  constructor(block: BlockSVG, field: BlockInputField) {
     super(block, field, new G())
 
     this.svg.addClasses('s_field_input')
     this._initBackground()
-    this._initInputText()
+    this._initBackgroundText()
   }
 
-  private _initInputText() {
+  private _initBackgroundText() {
     this.text = new Text(this.$f.value())
     this.text.addClasses('s_field_input_text')
     this.svg.append(this.text)
 
-    this.text.on('click', this._focus)
+    this.text.on('click', this.focus)
   }
 
   private _initBackground() {
@@ -29,7 +29,7 @@ export class BlockInputFieldSVG extends FieldSVG<BlockTextField, G> {
     this.background.addClasses('s_field_input_background')
     this.svg.append(this.background)
 
-    this.background.on('click', this._focus)
+    this.background.on('click', this.focus)
   }
 
   private _buildInput() {
@@ -68,21 +68,6 @@ export class BlockInputFieldSVG extends FieldSVG<BlockTextField, G> {
     return input
   }
 
-  private _focus = () => {
-    const floatWeight = this.$b.$r.floatWeight
-
-    const input = this._buildInput()
-    input.addEventListener('keydown', (e: KeyboardEvent) => {
-      if (e.key === 'Enter') {
-        floatWeight.hide()
-      }
-    })
-
-    floatWeight.replace(input)
-    floatWeight.show()
-    input.focus()
-  }
-
   private _updateBackgroundShape() {
     this.background.d.clear()
     const size = this.text.bbox
@@ -97,6 +82,24 @@ export class BlockInputFieldSVG extends FieldSVG<BlockTextField, G> {
       .z()
 
     this.text.move(padding, padding)
+  }
+
+  focus = () => {
+    super.focus()
+
+    const floatWeight = this.$b.$r.floatWeight
+
+    const input = this._buildInput()
+    input.addEventListener('keydown', (e: KeyboardEvent) => {
+      if (e.key === 'Enter') {
+        floatWeight.hide()
+      }
+    })
+
+    floatWeight.replace(input)
+    floatWeight.toggle()
+
+    input.focus()
   }
 
   initShape() {

@@ -6,8 +6,11 @@ export class FloatWeight {
   x: number
   y: number
 
+  actived: boolean
+
   constructor() {
     this.dom = document.createElement('div')
+    this.actived = false
 
     this._initRootDom()
   }
@@ -18,13 +21,23 @@ export class FloatWeight {
   }
 
   show() {
+    this.actived = true
     this.dom.classList.remove('s_float_weight_hide')
     this.dom.classList.add('s_float_weight_show')
   }
 
   hide() {
+    this.actived = false
     this.dom.classList.remove('s_float_weight_show')
     this.dom.classList.add('s_float_weight_hide')
+  }
+
+  toggle() {
+    if (this.actived) {
+      this.hide()
+    } else {
+      this.show()
+    }
   }
 
   move(x: number, y: number) {

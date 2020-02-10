@@ -75,9 +75,7 @@ export class ScrollBar extends G {
   }
 
   private _disabledChanged: ObserverCallbackFunc<boolean> = (now) => {
-    const disabledClassName = 's_scroll_disabled'
-
-    now ? this.addClasses(disabledClassName) : this.removeClasses(disabledClassName)
+    this.attr('disabled', !!now || null)
   }
 
   private _initDragger() {

@@ -1,7 +1,9 @@
 import { SArray } from '@/shared'
 
+export type AttrTypes = string | number | boolean | null
+
 interface AttributeObject {
-  [key: string]: string | number | null
+  [key: string]: AttrTypes
 }
 
 export class BasicElement<T extends Element = Element> {
@@ -23,7 +25,7 @@ export class BasicElement<T extends Element = Element> {
     this.children = new SArray()
   }
 
-  protected getAttr(name: string): string | null | number {
+  protected getAttr(name: string): AttrTypes {
     const attr = this.dom.getAttribute(name)
     if (!attr) {
       return attr
@@ -33,7 +35,7 @@ export class BasicElement<T extends Element = Element> {
     return Number.isNaN(px) ? attr : px
   }
 
-  protected setAttr(name: string, val: string | number | null) {
+  protected setAttr(name: string, val: AttrTypes) {
     if (val === null) {
       this.dom.removeAttribute(name)
     } else {
@@ -60,9 +62,9 @@ export class BasicElement<T extends Element = Element> {
   }
 
   attr(attrs: AttributeObject): void
-  attr(attrName: string): string | number | null
-  attr(attrName: string, attrVal: string | number | null): void
-  attr(attrsOrName: AttributeObject | string, attrVal?: string | number | null): string | number | null | void {
+  attr(attrName: string): AttrTypes
+  attr(attrName: string, attrVal: AttrTypes): void
+  attr(attrsOrName: AttributeObject | string, attrVal?: AttrTypes): AttrTypes | void {
     if (typeof attrsOrName === 'string') {
       if (attrVal !== undefined) {
         this.setAttr(attrsOrName, attrVal)
