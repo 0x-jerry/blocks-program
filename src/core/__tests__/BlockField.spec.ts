@@ -9,7 +9,7 @@ describe('BlockField', () => {
   })
 
   it('get/set value', () => {
-    expect(field.value()).toBeNull()
+    expect(field.value()).toBe('')
 
     field.value(1)
     expect(field.value()).toBe(1)

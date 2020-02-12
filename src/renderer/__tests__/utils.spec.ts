@@ -1,4 +1,6 @@
-import { createSVGEl, Transform, Sizeable, floatWeight } from '../utils'
+import { createSVGEl, Transform, Sizeable, FloatWeight } from '../utils'
+
+const floatWeight = new FloatWeight()
 
 describe('utils', () => {
   it('createSVGEl', () => {
