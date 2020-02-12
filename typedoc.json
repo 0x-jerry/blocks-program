@@ -1,11 +1,10 @@
 {
-  "$schema": "http://json.schemastore.org/typedoc",
   "out": "api",
   "mode": "file",
   "name": "BlocksProgram",
-  "exclude": [
-    "**/__tests__/**/*.ts",
-    "**/index.ts"
-  ],
-  "excludeNotExported": true
+  "exclude": ["**/__tests__/**/*.ts"],
+  "excludeNotExported": true,
+  "externalPattern": [
+    "node_modules/csstype/index.d.ts"
+  ]
 }
