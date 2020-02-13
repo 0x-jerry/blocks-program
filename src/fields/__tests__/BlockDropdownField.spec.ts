@@ -1,5 +1,6 @@
 import { BlockDropdownField } from '../BlockDropdownField'
 import { FieldTypes } from '../const'
+import { Block } from '@/core'
 
 describe('BlockDropdownField', () => {
   let field: BlockDropdownField
@@ -49,5 +50,14 @@ describe('BlockDropdownField', () => {
 
     expect(newField).not.toBe(field)
     expect(newField.options).toEqual(field.options)
+
+    const b = new Block({ previous: false, next: false, output: ['boolean'] })
+    newField.block.update(b)
+
+    const newField2 = newField.clone()
+
+    expect(newField2).not.toBe(newField)
+    expect(newField2.options).toEqual(newField.options)
+    expect(newField2.block.value).not.toBe(newField.block.value)
   })
 })
