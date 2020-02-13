@@ -66,6 +66,19 @@ describe('Block', () => {
 
     expect(field.$b).toBe(block)
     expect(block.fields).toEqual([field])
+
+
+    const field1 = new BlockField('test', '')
+
+    const spyWarn = jest.spyOn(global.console, 'warn')
+    spyWarn.mockReset()
+
+    block.pushField(field1)
+    expect(field1.$b).toBe(block)
+    expect(block.getFieldsByRow(0)).toEqual([field, field1])
+
+    expect(spyWarn).toBeCalledTimes(1)
+    spyWarn.mockRestore()
   })
 
   it('destroy', () => {

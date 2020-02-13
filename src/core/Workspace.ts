@@ -68,8 +68,8 @@ export class Workspace {
     }
   }
 
-  hasBlock(block: Block | string): false | Block {
-    const id = getId(block)
+  hasBlock(blockOrId: Block | string): false | Block {
+    const id = getId(blockOrId)
 
     return this.blockDB.find((b) => b.id === id) || false
   }
@@ -89,9 +89,11 @@ export class Workspace {
     }
   }
 
-  removeBlock(block: Block) {
-    if (!this.hasBlock(block)) {
-      return
+  removeBlock(blockOrId: Block | string) {
+    const block = this.hasBlock(blockOrId)
+
+    if(!block) {
+      return null
     }
 
     if (block.isRoot) {
@@ -105,6 +107,10 @@ export class Workspace {
     if (block.next.value) {
       this.removeBlock(block.next.value)
     }
+
+    block.destroy()
+
+    return block
   }
 
   connectBlock(block: Block, parent: Block) {

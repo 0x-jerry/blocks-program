@@ -18,6 +18,8 @@ describe('Workspace', () => {
 
     toBeTheSameIds($w.blockDB, [a, b])
     toBeTheSameIds($w.blockRoots, [a, b])
+    expect(a.workspace).toBe($w)
+    expect(b.workspace).toBe($w)
   })
 
   it('remove block', () => {
@@ -93,7 +95,11 @@ describe('Workspace', () => {
     toBeTheSameIds($w.blockDB, [a, c, d])
     toBeTheSameIds($w.blockRoots, [a, c])
 
-    $w.removeBlock(c)
+    $w.removeBlock(c.id)
+    toBeTheSameIds($w.blockDB, [a])
+    toBeTheSameIds($w.blockRoots, [a])
+
+    $w.removeBlock(b) 
     toBeTheSameIds($w.blockDB, [a])
     toBeTheSameIds($w.blockRoots, [a])
   })
@@ -102,15 +108,17 @@ describe('Workspace', () => {
     const a = new Block({}, 'test')
 
     $w.definedBlocks.add(a)
-    let block = $w.definedBlocks.blocks.find((b) => b.id === a.id)
-
-    expect(block).toBe(a)
-
+    expect($w.definedBlocks.get(a.id)).toBe(a)
     $w.definedBlocks.remove(a)
-    block = $w.definedBlocks.blocks.find((b) => b.id === a.id)
-    expect(block).toBeFalsy()
+    expect($w.definedBlocks.get(a.id)).toBeNull()
+    expect($w.definedBlocks.blocks.length).toBe(0)
 
-    $w.definedBlocks.add(new Block())
+    $w.definedBlocks.add(new Block({}, 'test1'))
+    expect($w.definedBlocks.get('test1')).not.toBeNull()
+    $w.definedBlocks.remove('test1')
+    expect($w.definedBlocks.get('test1')).toBeNull()
+    expect($w.definedBlocks.blocks.length).toBe(0)
+
     $w.definedBlocks.add(new Block())
     $w.definedBlocks.add(new Block())
     $w.definedBlocks.add(new Block())
