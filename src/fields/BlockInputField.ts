@@ -43,9 +43,7 @@ export class BlockInputField extends BlockField<string> {
   }
 
   clone() {
-    const { id, ...otherOption } = this.getOptions()
-
-    const newField = new BlockInputField(this.name, this.value(), otherOption)
+    const newField = new BlockInputField(this.name, this.value(), this.getOptions())
 
     if (this.block.value) {
       const b = this.block.value.clone()

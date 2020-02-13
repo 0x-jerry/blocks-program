@@ -7,7 +7,6 @@ export class BlockTextField extends BlockField<string> {
   }
 
   clone() {
-    const { id, ...otherOption } = this.getOptions()
-    return new BlockTextField(this.name, this.value() || '', otherOption)
+    return new BlockTextField(this.name, this.value() || '', this.getOptions())
   }
 }

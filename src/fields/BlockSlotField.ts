@@ -29,9 +29,7 @@ export class BlockSlotField extends BlockField<Block | null> {
   }
 
   clone() {
-    const { id, ...otherOption } = this.getOptions()
-
-    const newField = new BlockSlotField(this.name, null, otherOption)
+    const newField = new BlockSlotField(this.name, null, this.getOptions())
 
     const block = this.value()?.clone()
 

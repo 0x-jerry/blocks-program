@@ -76,7 +76,6 @@ export class BlockField<T = any> {
   getOptions(): IBlockFieldOption {
     return {
       acceptInput: this.acceptInput,
-      id: this.id,
       colIdx: this.colIdx,
       rowIdx: this.rowIdx
     }
@@ -100,8 +99,6 @@ export class BlockField<T = any> {
   }
 
   clone() {
-    const { id, ...otherOption } = this.getOptions()
-
-    return new BlockField(this.name, this.value(), this.type, otherOption)
+    return new BlockField(this.name, this.value(), this.type, this.getOptions())
   }
 }
