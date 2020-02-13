@@ -1,5 +1,6 @@
 import { BlockInputField } from '../BlockInputField'
 import { FieldTypes } from '../const'
+import { Block } from '@/core'
 
 describe('BlockInputField', () => {
   let field: BlockInputField
@@ -29,5 +30,21 @@ describe('BlockInputField', () => {
     field.value('.22x')
 
     expect(field.value()).toEqual('0.22')
+  })
+
+  it('clone', () => {
+    const newField = field.clone()
+
+    expect(newField).not.toBe(field)
+    expect(newField.getOptions()).toEqual(field.getOptions())
+
+    const b = new Block({ previous: false, next: false, output: ['boolean'] })
+    newField.block.update(b)
+
+    const newField2 = newField.clone()
+
+    expect(newField2).not.toBe(newField)
+    expect(newField2.getOptions()).toEqual(newField.getOptions())
+    expect(newField2.block.value).not.toBe(newField.block.value)
   })
 })
