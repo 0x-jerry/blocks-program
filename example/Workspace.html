@@ -13,16 +13,18 @@
     <script src="https://cdn.staticfile.org/dat-gui/0.7.6/dat.gui.min.js"></script>
     <script src="../build/blocks-program.browser.min.js"></script>
     <script>
-      const workspace = new BlocksProgram.Workspace()
+      window.onload = () => {
+        const workspace = new BlocksProgram.Workspace()
 
-      const block = new BlocksProgram.Block(null, 'testid')
-      const field = new BlocksProgram.BlockTextField('arg', 'hello')
-      block.pushField(field)
+        const block = new BlocksProgram.Block(null, 'testid')
+        const field = new BlocksProgram.BlockTextField('arg', 'hello')
+        block.pushField(field)
 
-      workspace.definedBlocks.add(block)
-      const renderer = new BlocksProgram.Renderer(workspace, 600, 400)
+        workspace.definedBlocks.add(block)
+        const renderer = new BlocksProgram.Renderer(workspace, 600, 400)
 
-      renderer.mount(document.getElementById('app'))
+        renderer.mount(document.getElementById('app'))
+      }
 
       // ---------------
 

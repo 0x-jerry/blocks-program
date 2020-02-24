@@ -13,39 +13,41 @@
     <script src="https://cdn.staticfile.org/less.js/3.11.1/less.min.js"></script>
     <script src="../build/blocks-program.browser.min.js"></script>
     <script>
-      const svg = new BlocksProgram.SVG(600, 400)
-      svg.mount(document.getElementById('app'))
+      window.onload = () => {
+        const svg = new BlocksProgram.SVG(600, 400)
+        svg.mount(document.getElementById('app'))
 
-      const area = new BlocksProgram.Area(600, 400)
-      svg.append(area)
+        const area = new BlocksProgram.Area(600, 400)
+        svg.append(area)
 
-      const rect = new BlocksProgram.Rect(20, 20)
-
-      rect.move(10, 10)
-      area.appendContent(rect)
-
-      const gridPattern = new BlocksProgram.PatternGrid(40, 40)
-      svg.defs.append(gridPattern)
-
-      area.background.dom.style.fill = `url(#${gridPattern.id})`
-
-      area.events.on('move', (dx, dy) => {
-        gridPattern.dmove(-dx, -dy)
-      })
-
-      // Performance test
-      for (let index = 0; index < 100; index++) {
         const rect = new BlocksProgram.Rect(20, 20)
 
-        rect.move(-2000 + Math.random() * 4000, -2000 + Math.random() * 4000)
+        rect.move(10, 10)
         area.appendContent(rect)
+
+        const gridPattern = new BlocksProgram.PatternGrid(40, 40)
+        svg.defs.append(gridPattern)
+
+        area.background.dom.style.fill = `url(#${gridPattern.id})`
+
+        area.events.on('move', (dx, dy) => {
+          gridPattern.dmove(-dx, -dy)
+        })
+
+        // Performance test
+        for (let index = 0; index < 100; index++) {
+          const rect = new BlocksProgram.Rect(20, 20)
+
+          rect.move(-2000 + Math.random() * 4000, -2000 + Math.random() * 4000)
+          area.appendContent(rect)
+        }
+
+        svg.on('dblclick', (e) => {
+          const rect = new BlocksProgram.Rect(20, 20)
+          rect.move(e.offsetX, e.offsetY)
+          area.appendContent(rect)
+        })
       }
-
-      svg.on('dblclick', (e) => {
-        const rect = new BlocksProgram.Rect(20, 20)
-        rect.move(e.offsetX, e.offsetY)
-        area.appendContent(rect)
-      })
     </script>
   </body>
 </html>

@@ -13,25 +13,27 @@
     <script src="https://cdn.staticfile.org/dat-gui/0.7.6/dat.gui.min.js"></script>
     <script src="../build/blocks-program.browser.min.js"></script>
     <script>
-      const workspace = new BlocksProgram.Workspace()
+      window.onload = () => {
+        const workspace = new BlocksProgram.Workspace()
 
-      const block = new BlocksProgram.Block(null, 'p-n')
-      const field = new BlocksProgram.BlockTextField('arg', 'hello')
-      block.pushField(field)
+        const block = new BlocksProgram.Block(null, 'p-n')
+        const field = new BlocksProgram.BlockTextField('arg', 'hello')
+        block.pushField(field)
 
-      workspace.definedBlocks.add(createBlock({}, 'p-n'))
-      workspace.definedBlocks.add(createBlock({ previous: false }, 'n'))
-      workspace.definedBlocks.add(createBlock({ next: false }, 'p'))
-      workspace.definedBlocks.add(createBlock({ next: false, previous: false }, 'none'))
+        workspace.definedBlocks.add(createBlock({}, 'p-n'))
+        workspace.definedBlocks.add(createBlock({ previous: false }, 'n'))
+        workspace.definedBlocks.add(createBlock({ next: false }, 'p'))
+        workspace.definedBlocks.add(createBlock({ next: false, previous: false }, 'none'))
 
-      const renderer = new BlocksProgram.Renderer(workspace, 600, 400)
+        const renderer = new BlocksProgram.Renderer(workspace, 600, 400)
 
-      renderer.mount(document.getElementById('app'))
+        renderer.mount(document.getElementById('app'))
 
-      renderer.$w.addBlock('n', 100, 50)
-      renderer.$w.addBlock('p-n', 100, 100)
-      renderer.$w.addBlock('p', 100, 150)
-      renderer.$w.addBlock('none', 100, 200)
+        renderer.$w.addBlock('n', 100, 50)
+        renderer.$w.addBlock('p-n', 100, 100)
+        renderer.$w.addBlock('p', 100, 150)
+        renderer.$w.addBlock('none', 100, 200)
+      }
 
       function createBlock(opt = {}, id) {
         const block = new BlocksProgram.Block(opt, id)

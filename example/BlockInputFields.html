@@ -13,13 +13,15 @@
     <script src="https://cdn.staticfile.org/dat-gui/0.7.6/dat.gui.min.js"></script>
     <script src="../build/blocks-program.browser.min.js"></script>
     <script>
-      const workspace = new BlocksProgram.Workspace()
-      const renderer = new BlocksProgram.Renderer(workspace, 600, 400)
-      renderer.mount(document.getElementById('app'))
+      window.onload = () => {
+        const workspace = new BlocksProgram.Workspace()
+        const renderer = new BlocksProgram.Renderer(workspace, 600, 400)
+        renderer.mount(document.getElementById('app'))
 
-      workspace.definedBlocks.add(createBlock({}, 'input'))
+        workspace.definedBlocks.add(createBlock({}, 'input'))
 
-      renderer.$w.addBlock('input', 100, 50)
+        renderer.$w.addBlock('input', 100, 50)
+      }
 
       function createBlock(opt = {}, id) {
         const block = new BlocksProgram.Block(opt, id)
