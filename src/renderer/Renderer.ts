@@ -1,7 +1,14 @@
 import { Workspace } from '@/core'
 import { SVG, DropShadowEffect, PatternGrid } from './lib'
 import { WorkspaceSVG } from './WorkspaceSVG'
-import { FieldSVGCtor, BlockTextFieldSVG, BlockSlotFieldSVG, BlockInputFieldSVG, BlockDropdownFieldSVG, FieldSVG } from './fields'
+import {
+  FieldSVGCtor,
+  BlockTextFieldSVG,
+  BlockSlotFieldSVG,
+  BlockInputFieldSVG,
+  BlockDropdownFieldSVG,
+  FieldSVG
+} from './fields'
 import { FieldTypes } from '@/fields'
 import { ConnectionManager, IConnectionPair } from './ConnectionManager'
 import { BlockSVG, IBlockSVGRenderOption } from './BlockSVG'
@@ -126,7 +133,10 @@ export class Renderer {
 
   private _blockMoving = (block: BlockSVG) => {
     this.currentActiveField?.release()
-    this.floatWeight.hide()
+
+    if (this.floatWeight.actived) {
+      this.floatWeight.hide()
+    }
 
     if (block.previousConnection) {
       block.previousConnection.connectTo(null)

@@ -189,11 +189,9 @@ export class BlockSVG extends G {
       css(this.dom, { filter: `url(#${id})` })
 
       this.addClasses('s_block_dragging')
-      this.$r.$w.displayAtTop(this)
     })
 
     this.dragger.on('dragend', () => {
-      this.$r.$w.resize()
       css(this.dom, { filter: '' })
       this.removeClasses('s_block_dragging')
     })

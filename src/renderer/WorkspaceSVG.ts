@@ -61,11 +61,16 @@ export class WorkspaceSVG extends Area {
       this.currentSelectedBlock = blockSVG
 
       this.currentSelectedBlock?.addClasses('s_block_selected')
+      this.displayAtTop(blockSVG)
       this.events.emit('select-block', blockSVG)
     })
 
     blockSVG.dragger.on('dragging', () => {
       this.events.emit('block-move', blockSVG)
+    })
+
+    blockSVG.dragger.on('dragend', () => {
+      this.resize()
     })
 
     return blockSVG
