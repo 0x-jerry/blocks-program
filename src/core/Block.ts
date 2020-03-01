@@ -104,13 +104,15 @@ export class Block {
     return fields
   }
 
-  pushField(field: BlockField, rowIdx = 0) {
+  pushField(field: BlockField, rowIdx?: number) {
     if (this.getField(field.name)) {
-      warn(`The same name [${field.name}] field on block ${this}`)
+      warn(Block.name, `The same name [${field.name}] field on block ${this}`)
     }
 
     const colCount = this.getFieldsByRow(rowIdx).length
-    field.rowIdx = rowIdx
+    if (rowIdx !== undefined) {
+      field.rowIdx = rowIdx
+    }
     field.colIdx = colCount
     field.$b = this
 

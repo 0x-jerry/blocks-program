@@ -43,7 +43,7 @@ export class WorkspaceSVG extends Area {
     const block = this.$w.definedBlocks.get(defineId)
 
     if (!block) {
-      warn('Not found block definition: ', defineId)
+      warn(WorkspaceSVG.name, 'Not found block definition: ', defineId)
       return
     }
 

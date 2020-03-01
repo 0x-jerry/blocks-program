@@ -28,7 +28,7 @@ export class CodeBlocks {
     const func = this.blocks[name]
 
     if (!func) {
-      warn(`Not found ${name}'s generate function.`)
+      warn(CodeBlocks.name, `Not found ${name}'s generate function.`)
     }
 
     return func || this.placeholderFunc
@@ -126,12 +126,12 @@ export class CodeGenerator {
     const field = block.getField(fieldName)
 
     if (!field) {
-      warn(`Not found ${fieldName} field on block id: ${block}`)
+      warn(CodeGenerator.name, `Not found ${fieldName} field on block id: ${block}`)
       return ''
     }
 
     if (field.type === FieldTypes.blockSlot) {
-      warn(`Field ${fieldName} on block id: ${block} is a slot, use getSlotFieldCodes instead of.`)
+      warn(CodeGenerator.name, `Field ${fieldName} on block id: ${block} is a slot, use getSlotFieldCodes instead of.`)
       return ''
     }
 
@@ -146,12 +146,12 @@ export class CodeGenerator {
     const field = block.getField(fieldName)
 
     if (!field) {
-      warn(`Not found ${fieldName} field on block id: ${block}`)
+      warn(CodeGenerator.name, `Not found ${fieldName} field on block id: ${block}`)
       return ''
     }
 
     if (field.type !== FieldTypes.blockSlot) {
-      warn(`Field ${fieldName} on block id: ${block} is not a slot, use getFieldCodes instead of.`)
+      warn(CodeGenerator.name, `Field ${fieldName} on block id: ${block} is not a slot, use getFieldCodes instead of.`)
       return ''
     }
 

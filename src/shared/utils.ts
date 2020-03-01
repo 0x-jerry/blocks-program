@@ -56,8 +56,8 @@ export class SArray<T> extends Array<T> {
   }
 }
 
-export function warn(...args: any[]) {
-  console.warn(...args)
+export function warn(context: string, ...args: any[]) {
+  console.warn(`[${context}]`, ...args)
   console.trace()
 }
 

@@ -102,3 +102,7 @@ export class BlockField<T = any> {
     return new BlockField(this.name, this.value(), this.type, this.getOptions())
   }
 }
+
+export interface BlockFieldCtor<T = any> {
+  new (name: string, value: T, opt?: IBlockFieldOption): BlockField<T>
+}
