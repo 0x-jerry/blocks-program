@@ -199,7 +199,7 @@ export class BlockSVG extends G {
 
   private _initFieldSVG() {
     for (const field of this.$b.fields) {
-      const Ctor = this.$r.getFieldCtor(field.type)
+      const Ctor = this.$r.fieldFactory.get(field.type)
 
       if (Ctor) {
         const fieldSVG = new Ctor(this, field)

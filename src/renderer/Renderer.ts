@@ -15,6 +15,7 @@ import { BlockSVG, IBlockSVGRenderOption } from './BlockSVG'
 import { Connection } from './Connection'
 import { FloatWeight } from './utils'
 import { config } from '@/config'
+import { Factory } from '@/shared'
 
 interface IEffect {
   readonly id: string
@@ -60,9 +61,7 @@ export class Renderer {
   connectionManager: ConnectionManager
   currentActiveConnPair: IConnectionPair | null
 
-  fieldCtors: {
-    [type: string]: FieldSVGCtor
-  }
+  fieldFactory: Factory<FieldSVGCtor>
 
   effects: IRendererEffects
 
@@ -75,7 +74,7 @@ export class Renderer {
   constructor(workspace: Workspace, width = 600, height = 400, options?: Partial<IRenderOptions>) {
     //@ts-ignore
     this.effects = {}
-    this.fieldCtors = {}
+    this.fieldFactory = new Factory()
 
     this.currentActiveConnPair = null
     this.connectionManager = new ConnectionManager(this)
@@ -199,10 +198,10 @@ export class Renderer {
   }
 
   private _registerAllFields() {
-    this.registerFieldCtor(FieldTypes.text, BlockTextFieldSVG)
-    this.registerFieldCtor(FieldTypes.blockSlot, BlockSlotFieldSVG)
-    this.registerFieldCtor(FieldTypes.input, BlockInputFieldSVG)
-    this.registerFieldCtor(FieldTypes.dropdown, BlockDropdownFieldSVG)
+    this.fieldFactory.set(FieldTypes.text, BlockTextFieldSVG)
+    this.fieldFactory.set(FieldTypes.blockSlot, BlockSlotFieldSVG)
+    this.fieldFactory.set(FieldTypes.input, BlockInputFieldSVG)
+    this.fieldFactory.set(FieldTypes.dropdown, BlockDropdownFieldSVG)
   }
 
   mount(el: HTMLElement) {
@@ -225,13 +224,5 @@ export class Renderer {
     this.effects[name] = effect
 
     this.svg.defs.dom.append(effect.dom)
-  }
-
-  registerFieldCtor(type: FieldTypes | string, Ctor: FieldSVGCtor) {
-    this.fieldCtors[type] = Ctor
-  }
-
-  getFieldCtor(type: FieldTypes | string): FieldSVGCtor | null {
-    return this.fieldCtors[type] || null
   }
 }

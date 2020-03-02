@@ -37,9 +37,9 @@ describe('Renderer', () => {
       }
     }
 
-    $r.registerFieldCtor('test', TestField)
+    $r.fieldFactory.set('test', TestField)
 
-    const Ctor = $r.getFieldCtor('test')
+    const Ctor = $r.fieldFactory.get('test')
 
     expect(Ctor).toBe(TestField)
   })
