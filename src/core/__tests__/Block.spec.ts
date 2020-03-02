@@ -1,5 +1,5 @@
 import { Block } from '../Block'
-import { BlockTextField, BlockSlotField } from '@/fields'
+import { BlockTextField, BlockSlotField } from '@/core/fields'
 import { BlockField } from '../BlockField'
 
 describe('Block', () => {
@@ -66,7 +66,6 @@ describe('Block', () => {
 
     expect(field.$b).toBe(block)
     expect(block.fields).toEqual([field])
-
 
     const field1 = new BlockField('test', '')
 

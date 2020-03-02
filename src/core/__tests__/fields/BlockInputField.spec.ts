@@ -1,5 +1,5 @@
-import { BlockInputField } from '../BlockInputField'
-import { FieldTypes } from '../const'
+import { BlockInputField } from '../../fields/BlockInputField'
+import { FieldTypes } from '../../fields/const'
 import { Block } from '@/core'
 
 describe('BlockInputField', () => {

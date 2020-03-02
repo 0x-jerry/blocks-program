@@ -1,4 +1,4 @@
-import { BlockTextField } from '@/fields'
+import { BlockTextField } from '@/core/fields'
 import { Text } from '../lib'
 import { FieldSVG } from './FieldSVG'
 import { BlockSVG } from '../BlockSVG'

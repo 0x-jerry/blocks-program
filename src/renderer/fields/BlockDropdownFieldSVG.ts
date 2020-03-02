@@ -1,4 +1,4 @@
-import { BlockDropdownField } from '@/fields'
+import { BlockDropdownField } from '@/core/fields'
 import { Text, G, Path, SImage } from '../lib'
 import { FieldSVG } from './FieldSVG'
 import { BlockSVG } from '../BlockSVG'

@@ -1,4 +1,4 @@
-import { BlockField, IBlockFieldOption } from '@/core'
+import { BlockField, IBlockFieldOption } from '../BlockField'
 import { FieldTypes } from './const'
 
 export class BlockTextField extends BlockField<string> {

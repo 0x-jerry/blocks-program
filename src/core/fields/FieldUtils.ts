@@ -1,5 +1,5 @@
 import { FieldTypes } from './const'
-import { BlockFieldCtor } from '@/core'
+import { BlockFieldCtor } from '../BlockField'
 import { warn } from '@/shared'
 import { BlockTextField } from './BlockTextField'
 import { BlockSlotField } from './BlockSlotField'

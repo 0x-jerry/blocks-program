@@ -1,6 +1,6 @@
 import { Block } from '@/core'
-import { BlockSlotField } from '../BlockSlotField'
-import { FieldTypes } from '../const'
+import { BlockSlotField } from '../../fields/BlockSlotField'
+import { FieldTypes } from '../../fields/const'
 
 describe('BlockSlotField', () => {
   let field: BlockSlotField

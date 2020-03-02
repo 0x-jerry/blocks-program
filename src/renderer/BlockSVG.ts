@@ -1,5 +1,5 @@
 import { Block } from '@/core'
-import { FieldTypes } from '@/fields'
+import { FieldTypes } from '@/core/fields'
 import { SArray } from '@/shared'
 import { FieldSVG } from './fields/FieldSVG'
 import { G, Path } from './lib'

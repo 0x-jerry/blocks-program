@@ -1,6 +1,7 @@
-import { Block, BlockField, IBlockFieldOption } from '@/core'
+import { BlockField, IBlockFieldOption } from '../BlockField'
 import { ObserverCallbackFunc } from '@/shared'
 import { FieldTypes } from './const'
+import { Block } from '../Block'
 
 export class BlockSlotField extends BlockField<Block | null> {
   constructor(name: string, value: Block | null = null, opt: IBlockFieldOption = {}) {

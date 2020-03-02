@@ -2,7 +2,7 @@ import { ObjectAny } from '@/typedef'
 import { Block, BlockConfigOption } from '../Block'
 import { toArray, warn } from '@/shared'
 import { BlockField } from '../BlockField'
-import { fieldUtils, FieldTypes } from '@/fields'
+import { fieldUtils, FieldTypes } from '../fields'
 
 class BlockJSONParser {
   parse(json: ObjectAny): Block | null {

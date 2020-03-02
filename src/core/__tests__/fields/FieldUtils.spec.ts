@@ -1,5 +1,5 @@
-import { FieldTypes } from '../const'
-import { fieldUtils } from '../FieldUtils'
+import { FieldTypes } from '../../fields/const'
+import { fieldUtils } from '../../fields/FieldUtils'
 import { BlockField } from '@/core'
 
 describe('fieldUtils', () => {

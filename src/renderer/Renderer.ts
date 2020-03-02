@@ -9,7 +9,7 @@ import {
   BlockDropdownFieldSVG,
   FieldSVG
 } from './fields'
-import { FieldTypes } from '@/fields'
+import { FieldTypes } from '@/core/fields'
 import { ConnectionManager, IConnectionPair } from './ConnectionManager'
 import { BlockSVG, IBlockSVGRenderOption } from './BlockSVG'
 import { Connection } from './Connection'

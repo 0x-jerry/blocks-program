@@ -1,4 +1,4 @@
-import { BlockSlotField } from '@/fields'
+import { BlockSlotField } from '@/core/fields'
 import { FieldSVG } from './FieldSVG'
 import { G } from '../lib'
 import { BlockSVG } from '../BlockSVG'
