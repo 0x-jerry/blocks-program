@@ -24,8 +24,8 @@ Modern and easy extends visual programming editor. Inspire by [blockly](https://
 - [ ] CodeGenerator
   - [x] CodeGenerator
   - [ ] PythonGenerator
-- [ ] parser
-  - [ ] BlockJSONParser
+- [x] parser
+  - [x] BlockJSONParser
 - [ ] Document
 - [ ] Toolbox
 
