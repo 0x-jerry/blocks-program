@@ -1,12 +1,16 @@
 import { Block } from '@/core'
 import { FieldTypes } from '@/core/fields'
-import { SArray } from '@/shared'
+import { SArray, EventEmitter } from '@/shared'
 import { FieldSVG } from './fields/FieldSVG'
 import { G, Path } from './lib'
 import { Renderer } from './Renderer'
 import { Dragger, css } from './utils'
 import { Connection, ConnectionType, IConnectionAction } from './Connection'
 import { BlockSlotFieldSVG } from './fields'
+
+export type IBlockSVGEventMap = {
+  beforeDestory(): void
+}
 
 export interface IBlockSVGOption {
   x: number
@@ -45,6 +49,8 @@ export class BlockSVG extends G {
 
   dragger: Dragger
 
+  events: EventEmitter<IBlockSVGEventMap>
+
   private _isFirstTimeToRender: boolean
 
   get nextBlock() {
@@ -57,6 +63,8 @@ export class BlockSVG extends G {
 
   constructor(block: Block, renderer: Renderer, options: Partial<IBlockSVGOption> = {}) {
     super()
+    this.events = new EventEmitter()
+
     this.addClasses('s_block')
     this._isFirstTimeToRender = true
 
@@ -583,7 +591,9 @@ export class BlockSVG extends G {
     }
   }
 
-  destroy() {
+  async destroy() {
+    await this.events.emit('beforeDestory')
+
     this.dragger.destroy()
 
     super.destroy()

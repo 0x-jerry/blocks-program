@@ -16,8 +16,8 @@ describe('Workspace', () => {
     $w.addBlock(a)
     $w.addBlock(b)
 
-    toBeTheSameIds($w.blockDB, [a, b])
-    toBeTheSameIds($w.blockRoots, [a, b])
+    toBeTheSameIds([...$w.blockDB.values()], [a, b])
+    toBeTheSameIds([...$w.blockRoots.values()], [a, b])
     expect(a.workspace).toBe($w)
     expect(b.workspace).toBe($w)
   })
@@ -33,8 +33,8 @@ describe('Workspace', () => {
 
     $w.removeBlock(b)
 
-    toBeTheSameIds($w.blockDB, [a, c])
-    toBeTheSameIds($w.blockRoots, [c, a])
+    toBeTheSameIds([...$w.blockDB.values()], [a, c])
+    toBeTheSameIds([...$w.blockRoots.values()], [c, a])
   })
 
   it('connect block', () => {
@@ -49,7 +49,7 @@ describe('Workspace', () => {
     $w.connectBlock(b, a)
     $w.connectBlock(c, b)
 
-    toBeTheSameIds($w.blockDB, [a, b, c])
+    toBeTheSameIds([...$w.blockDB.values()], [a, b, c])
 
     expect(a.next.value).toBe(b)
     expect(b.next.value).toBe(c)
@@ -59,7 +59,7 @@ describe('Workspace', () => {
     expect(b.previous.value).toBe(a)
     expect(c.previous.value).toBe(b)
 
-    toBeTheSameIds($w.blockRoots, [a])
+    toBeTheSameIds([...$w.blockRoots.values()], [a])
   })
 
   it('add connected block', () => {
@@ -72,9 +72,9 @@ describe('Workspace', () => {
     $w.addBlock(a)
     $w.addBlock(c)
 
-    toBeTheSameIds($w.blockDB, [a, b, c])
+    toBeTheSameIds([...$w.blockDB.values()], [a, b, c])
 
-    toBeTheSameIds($w.blockRoots, [a, c])
+    toBeTheSameIds([...$w.blockRoots.values()], [a, c])
   })
 
   it('remove connect block', () => {
@@ -92,16 +92,16 @@ describe('Workspace', () => {
     $w.connectBlock(b, a)
 
     $w.removeBlock(b)
-    toBeTheSameIds($w.blockDB, [a, c, d])
-    toBeTheSameIds($w.blockRoots, [a, c])
+    toBeTheSameIds([...$w.blockDB.values()], [a, c, d])
+    toBeTheSameIds([...$w.blockRoots.values()], [a, c])
 
     $w.removeBlock(c.id)
-    toBeTheSameIds($w.blockDB, [a])
-    toBeTheSameIds($w.blockRoots, [a])
+    toBeTheSameIds([...$w.blockDB.values()], [a])
+    toBeTheSameIds([...$w.blockRoots.values()], [a])
 
-    $w.removeBlock(b) 
-    toBeTheSameIds($w.blockDB, [a])
-    toBeTheSameIds($w.blockRoots, [a])
+    $w.removeBlock(b)
+    toBeTheSameIds([...$w.blockDB.values()], [a])
+    toBeTheSameIds([...$w.blockRoots.values()], [a])
   })
 
   it('defined block', () => {
@@ -111,20 +111,20 @@ describe('Workspace', () => {
     expect($w.definedBlocks.get(a.id)).toBe(a)
     $w.definedBlocks.remove(a)
     expect($w.definedBlocks.get(a.id)).toBeNull()
-    expect($w.definedBlocks.blocks.length).toBe(0)
+    expect($w.definedBlocks.blocks.size).toBe(0)
 
     $w.definedBlocks.add(new Block({}, 'test1'))
     expect($w.definedBlocks.get('test1')).not.toBeNull()
     $w.definedBlocks.remove('test1')
     expect($w.definedBlocks.get('test1')).toBeNull()
-    expect($w.definedBlocks.blocks.length).toBe(0)
+    expect($w.definedBlocks.blocks.size).toBe(0)
 
     $w.definedBlocks.add(new Block())
     $w.definedBlocks.add(new Block())
     $w.definedBlocks.add(new Block())
     $w.definedBlocks.clear()
 
-    expect($w.definedBlocks.blocks.length).toBe(0)
+    expect($w.definedBlocks.blocks.size).toBe(0)
 
     const b = new Block({}, 'test1234')
     $w.definedBlocks.add(b)

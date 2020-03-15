@@ -1,42 +1,48 @@
-import { uuid, getId, SArray } from '@/shared'
+import { uuid, getId } from '@/shared'
 import { Block } from './Block'
 
 class DefinedBlocks {
-  blocks: SArray<Block>
+  private _blocksMap: Map<string, Block>
+
+  get blocks() {
+    return this._blocksMap
+  }
 
   constructor() {
-    this.blocks = new SArray()
+    this._blocksMap = new Map()
   }
 
   add(block: Block) {
-    block.options.name = block.id
-    this.blocks.pushDistinct(block)
+    const name = (block.options.name = block.id)
+    this._blocksMap.set(name, block)
   }
 
   remove(blockOrId: Block | string): Block | null {
-    return typeof blockOrId === 'string'
-      ? this.blocks.remove((b) => b.id === blockOrId)
-      : this.blocks.removeItem(blockOrId)
+    const name = typeof blockOrId === 'string' ? blockOrId : blockOrId.options.name
+
+    const block = this._blocksMap.get(name)
+
+    if (block) {
+      this._blocksMap.delete(name)
+    }
+
+    return block || null
   }
 
   get(id: string): Block | null {
-    return this.blocks.find((b) => b.id === id) || null
+    return this._blocksMap.get(id) || null
   }
 
-  clear(destroyOldBlocks = true): SArray<Block> {
-    if (destroyOldBlocks) {
-      this.destroy()
-    }
+  clear() {
+    this.destroy()
 
-    const olds = this.blocks
-
-    this.blocks = new SArray()
-
-    return olds
+    this._blocksMap.clear()
   }
 
   destroy() {
-    this.blocks.forEach((b) => b.destroy())
+    for (const [, b] of this._blocksMap) {
+      b.destroy()
+    }
   }
 }
 
@@ -44,39 +50,39 @@ export class Workspace {
   readonly id: string
   definedBlocks: DefinedBlocks
 
-  blockDB: SArray<Block>
+  blockDB: Map<string, Block>
 
-  blockRoots: SArray<Block>
+  blockRoots: Map<string, Block>
 
   constructor(id: string = uuid()) {
     this.id = id
 
     this.definedBlocks = new DefinedBlocks()
-    this.blockDB = new SArray()
-    this.blockRoots = new SArray()
+    this.blockDB = new Map()
+    this.blockRoots = new Map()
   }
 
   private isRootBlock(blockOrId: Block | string): false | Block {
     const id = getId(blockOrId)
 
-    return this.blockRoots.find((b) => b.id === id) || false
+    return this.blockRoots.get(id) || false
   }
 
   private addRootBlock(block: Block) {
     if (!this.isRootBlock(block)) {
-      this.blockRoots.push(block)
+      this.blockRoots.set(block.id, block)
     }
   }
 
   hasBlock(blockOrId: Block | string): false | Block {
     const id = getId(blockOrId)
 
-    return this.blockDB.find((b) => b.id === id) || false
+    return this.blockDB.get(id) || false
   }
 
   addBlock(block: Block) {
     if (!this.hasBlock(block)) {
-      this.blockDB.push(block)
+      this.blockDB.set(block.id, block)
       block.setWorkspace(this)
     }
 
@@ -92,15 +98,15 @@ export class Workspace {
   removeBlock(blockOrId: Block | string) {
     const block = this.hasBlock(blockOrId)
 
-    if(!block) {
+    if (!block) {
       return null
     }
 
     if (block.isRoot) {
-      this.blockRoots.removeItem(block)
+      this.blockRoots.delete(block.id)
     }
 
-    this.blockDB.removeItem(block)
+    this.blockDB.delete(block.id)
 
     block.setWorkspace(null)
 
@@ -115,7 +121,7 @@ export class Workspace {
 
   connectBlock(block: Block, parent: Block) {
     if (block.isRoot) {
-      this.blockRoots.removeItem(block)
+      this.blockRoots.delete(block.id)
     }
 
     block.previous.update(parent)

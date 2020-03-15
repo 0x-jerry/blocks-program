@@ -5,7 +5,7 @@ export interface ObserverCallbackFunc<T> {
 export class Observer<T = any> {
   private _value: T
 
-  private subs: ObserverCallbackFunc<T>[]
+  private _subs: Set<ObserverCallbackFunc<T>>
 
   get value() {
     return this._value
@@ -16,21 +16,17 @@ export class Observer<T = any> {
    */
   constructor(val: T) {
     this._value = val
-    this.subs = []
+    this._subs = new Set()
   }
 
   sub(func: ObserverCallbackFunc<T>) {
-    if (this.subs.indexOf(func) < 0) {
-      this.subs.push(func)
+    if (!this._subs.has(func)) {
+      this._subs.add(func)
     }
   }
 
   unSub(func: ObserverCallbackFunc<T>) {
-    const idx = this.subs.indexOf(func)
-
-    if (idx >= 0) {
-      this.subs.splice(idx, 1)
-    }
+    this._subs.delete(func)
   }
 
   update(newVal: T, updateOnly = false) {
@@ -46,8 +42,8 @@ export class Observer<T = any> {
       return
     }
 
-    this.subs.forEach((func) => {
+    for (const func of this._subs) {
       func(newVal, oldValue)
-    })
+    }
   }
 }

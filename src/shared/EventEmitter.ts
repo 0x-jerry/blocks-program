@@ -1,5 +1,3 @@
-import { SArray } from './utils'
-
 export interface IEventCallback {
   (...params: any[]): void
 }
@@ -10,7 +8,7 @@ interface IEventsMap {
 
 export class EventEmitter<T extends IEventsMap = IEventsMap> {
   protected _events: {
-    [name: string]: SArray<IEventCallback>
+    [name: string]: Set<IEventCallback>
   }
 
   constructor() {
@@ -19,25 +17,35 @@ export class EventEmitter<T extends IEventsMap = IEventsMap> {
 
   events(type: string) {
     if (!this._events[type]) {
-      this._events[type] = new SArray()
+      this._events[type] = new Set()
     }
 
     return this._events[type]
   }
 
   on<K extends keyof T>(type: K, func: T[K]) {
-    this.events(type as string).pushDistinct(func)
+    this.events(type as string).add(func)
   }
 
   off<K extends keyof T>(type: K, func: T[K]) {
-    this.events(type as string).removeItem(func)
+    this.events(type as string).delete(func)
   }
 
   emit<K extends keyof T>(type: K, ...args: Parameters<T[K]>) {
-    this.events(type as string).forEach((func) => func(...args))
+    const evts = this.events(type as string)
+
+    for (const func of evts) {
+      func(...args)
+    }
   }
 
-  clear() {
-    this._events = {}
+  clear<K extends keyof T>(type?: K) {
+    if (type !== undefined) {
+      const evts = this.events(type as string)
+
+      evts && evts.clear()
+    } else {
+      this._events = {}
+    }
   }
 }

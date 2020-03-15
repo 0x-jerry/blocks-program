@@ -24,33 +24,33 @@
         const renderer = new BlocksProgram.Renderer(workspace, 600, 400)
 
         renderer.mount(document.getElementById('app'))
-      }
 
-      // ---------------
+        // ---------------
 
-      const gui = new dat.GUI()
-      const guiConfig = {
-        x: 10,
-        y: 10,
-        addBlock() {
-          renderer.$w.addBlock('testid', guiConfig.x, guiConfig.y)
-        },
-        removeBlock() {
-          const b = renderer.$w.blocks[0]
-          if (b) {
-            console.log(b.$b.id)
-            renderer.$w.removeBlock(b)
-          } else {
-            console.log('no block')
+        const gui = new dat.GUI()
+        const guiConfig = {
+          x: 10,
+          y: 10,
+          addBlock() {
+            renderer.$w.addBlock('testid', guiConfig.x, guiConfig.y)
+          },
+          removeBlock() {
+            const b = renderer.$w.blocks[0]
+            if (b) {
+              console.log(b.$b.id)
+              renderer.$w.removeBlock(b)
+            } else {
+              console.log('no block')
+            }
           }
         }
+
+        gui.add(guiConfig, 'x', 0, 600)
+        gui.add(guiConfig, 'y', 0, 400)
+
+        gui.add(guiConfig, 'addBlock')
+        gui.add(guiConfig, 'removeBlock')
       }
-
-      gui.add(guiConfig, 'x', 0, 600)
-      gui.add(guiConfig, 'y', 0, 400)
-
-      gui.add(guiConfig, 'addBlock')
-      gui.add(guiConfig, 'removeBlock')
     </script>
   </body>
 </html>

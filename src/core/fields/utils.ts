@@ -1,6 +1,10 @@
-import { Factory } from '@/shared/Factory'
+import { Factory } from '@/shared'
 import { BlockFieldCtor } from '../BlockField'
-import { FieldTypes, BlockTextField, BlockSlotField, BlockDropdownField, BlockInputField } from '.'
+import { FieldTypes } from './const'
+import { BlockTextField } from './BlockTextField'
+import { BlockSlotField } from './BlockSlotField'
+import { BlockDropdownField } from './BlockDropdownField'
+import { BlockInputField } from './BlockInputField'
 
 export const fieldUtils = new Factory<BlockFieldCtor>()
 
