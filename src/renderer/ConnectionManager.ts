@@ -1,4 +1,4 @@
-import { SArray, vec2Distance } from '@/shared'
+import { vec2Distance } from '@/shared'
 import { BlockSVG } from './BlockSVG'
 import { Renderer } from './Renderer'
 import { Connection, IConnectionOption } from './Connection'
@@ -13,11 +13,11 @@ export interface IConnectionPair {
 export class ConnectionManager {
   readonly $r: Renderer
   readonly maxRange: number
-  connections: SArray<Connection>
+  connections: Set<Connection>
 
   constructor(renderer: Renderer, range = 10) {
     this.$r = renderer
-    this.connections = new SArray()
+    this.connections = new Set()
     this.maxRange = range
   }
 
@@ -29,7 +29,12 @@ export class ConnectionManager {
       conn = dot.proxyOnConnection(conn)
     }
 
-    this.connections.push(conn)
+    this.connections.add(conn)
+
+    b.events.on('beforeDestory', () => {
+      this.connections.delete(conn)
+    })
+
     return conn
   }
 
