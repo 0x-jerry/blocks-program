@@ -2,7 +2,8 @@ module.exports = {
   preset: 'ts-jest',
   globals: {
     'ts-jest': {
-      babelConfig: '.babelrc'
+      babelConfig: '.babelrc',
+      diagnostics: false
     }
   },
   coverageDirectory: 'coverage',
