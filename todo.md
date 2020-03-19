@@ -13,6 +13,7 @@ Modern and easy extends visual programming editor. Inspire by [blockly](https://
   - [x] BlockInputField
   - [x] BlockDropdownField
 - [x] Renderer
+  - [ ] Scale Workspace
   - [x] Render lib
   - [x] Workspace
   - [x] Block
