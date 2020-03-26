@@ -23,6 +23,7 @@ Modern and easy extends visual programming editor. Inspire by [blockly](https://
     - [x] BlockSlotField
     - [x] BlockInputField
     - [x] BlockDropdownField
+  - [ ] JSONParser
 - [ ] CodeGenerator
   - [x] CodeGenerator
   - [ ] PythonGenerator
