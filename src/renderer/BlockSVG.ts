@@ -9,7 +9,7 @@ import { Connection, ConnectionType, IConnectionAction } from './Connection'
 import { BlockSlotFieldSVG } from './fields'
 
 export type IBlockSVGEventMap = {
-  beforeDestory(): void
+  beforeDestroy(): void
 }
 
 export interface IBlockSVGOption {
@@ -591,8 +591,8 @@ export class BlockSVG extends G {
     }
   }
 
-  async destroy() {
-    await this.events.emit('beforeDestory')
+  destroy() {
+    this.events.emit('beforeDestroy')
 
     this.dragger.destroy()
 

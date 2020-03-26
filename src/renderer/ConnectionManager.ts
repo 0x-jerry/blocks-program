@@ -31,7 +31,7 @@ export class ConnectionManager {
 
     this.connections.add(conn)
 
-    b.events.on('beforeDestory', () => {
+    b.events.on('beforeDestroy', () => {
       this.connections.delete(conn)
     })
 
