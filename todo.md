@@ -7,10 +7,10 @@ Modern and easy extends visual programming editor. Inspire by [blockly](https://
 - [x] Workspace
 - [x] Block
 - [x] BlockField
+  - [ ] hollow option
 - [x] fields
   - [x] BlockTextField
   - [x] BlockSlotField
-    - [ ] shadow option
   - [x] BlockInputField
   - [x] BlockDropdownField
 - [x] Renderer
