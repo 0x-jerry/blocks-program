@@ -102,8 +102,7 @@ export function throttle<T extends (...args: any[]) => void>(
   let trailingHandle: NodeJS.Timeout
 
   // @ts-ignore
-  return function(this: T, ...params: Parameters<T>) {
-    const wrapperFunc = func.bind(this)
+  return function (this: T, ...params: Parameters<T>) {
     const now = new Date().getTime()
 
     // leading
@@ -112,7 +111,7 @@ export function throttle<T extends (...args: any[]) => void>(
       lastCalledTime = now
 
       if (opt.leading) {
-        wrapperFunc(...params)
+        func.apply(this, params)
         return
       }
     }
@@ -121,13 +120,13 @@ export function throttle<T extends (...args: any[]) => void>(
     // exact time interval
     if (now - lastCalledTime >= time) {
       lastCalledTime = now
-      wrapperFunc(...params)
+      func.apply(this, params)
       return
     }
 
     // between time interval, for trailing
     if (opt.trailing) {
-      trailingHandle = setTimeout(() => wrapperFunc(...params), time)
+      trailingHandle = setTimeout(() => func.apply(this, params), time)
     }
   }
 }
@@ -153,8 +152,7 @@ export function debounce<T extends (...args: any[]) => void>(
   const opt: IDebounceConfig = Object.assign({ leading: false, trailing: true, maxWait: time }, options)
 
   //@ts-ignore
-  return function(this: T, ...params: any[]) {
-    const wrapperFunc = func.bind(this)
+  return function (this: T, ...params: any[]) {
     const now = new Date().getTime()
 
     // leading
@@ -163,7 +161,7 @@ export function debounce<T extends (...args: any[]) => void>(
       firstTimeCalled = true
 
       if (opt.leading) {
-        wrapperFunc(...params)
+        func.apply(this, params)
         return
       }
     }
@@ -171,7 +169,7 @@ export function debounce<T extends (...args: any[]) => void>(
     clearTimeout(trailingHandle)
     // exact time interval
     if (now - lastRecordTime >= time) {
-      wrapperFunc(...params)
+      func.apply(this, params)
       lastRecordTime = now
       return
     }
@@ -179,7 +177,7 @@ export function debounce<T extends (...args: any[]) => void>(
     lastRecordTime = now
 
     if (opt.trailing) {
-      trailingHandle = setTimeout(() => wrapperFunc(...params), opt.maxWait)
+      trailingHandle = setTimeout(() => func.apply(this, params), opt.maxWait)
     }
   }
 }
