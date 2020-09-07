@@ -36,7 +36,7 @@ export interface IRenderOptions {
   assetsRoot: string
 }
 
-class AssestsManager {
+class AssetsManager {
   root: string
 
   /**
@@ -67,7 +67,7 @@ export class Renderer {
 
   rendererOptions: IRenderOptions
 
-  assets: AssestsManager
+  assets: AssetsManager
 
   currentActiveField?: FieldSVG
 
@@ -82,7 +82,7 @@ export class Renderer {
 
     this._initRendererOptions(options)
 
-    this.assets = new AssestsManager(this.rendererOptions.assetsRoot)
+    this.assets = new AssetsManager(this.rendererOptions.assetsRoot)
 
     this._registerAllFields()
 
