@@ -101,7 +101,7 @@ export class Renderer {
         horizontalPadding: 8,
         verticalPadding: 6
       },
-      assetsRoot: config.debug ? '../assets' : '.'
+      assetsRoot: '.'
     }
 
     this.rendererOptions = Object.assign({}, defualtOptions, options)

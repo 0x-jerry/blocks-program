@@ -1,5 +1,7 @@
 import { css } from './utils'
 
+const sharedDom = document.createElement('div')
+
 export class FloatWeight {
   dom: HTMLDivElement
 
@@ -9,7 +11,7 @@ export class FloatWeight {
   actived: boolean
 
   constructor() {
-    this.dom = document.createElement('div')
+    this.dom = sharedDom
     this.actived = false
 
     this._initRootDom()

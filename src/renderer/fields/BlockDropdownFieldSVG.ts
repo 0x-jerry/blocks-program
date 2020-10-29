@@ -27,7 +27,7 @@ export class BlockDropdownFieldSVG extends FieldSVG<BlockDropdownField, G> {
   }
 
   private _initBackgroundDropdownIcon() {
-    this.icon = new SImage(this.$b.$r.assets.get('icons/caret-down.svg'))
+    this.icon = new SImage(this.$b.$r.assets.get('./icons/caret-down.svg'))
     this.icon.addClasses('s_field_dropdown_icon')
 
     const size = this.iconConfig.size
