@@ -1,5 +1,5 @@
 import { BlockTextField } from '../../fields/BlockTextField'
-import { Block } from '@/core'
+import { Block } from '../../../core'
 import { FieldTypes } from '../../fields/const'
 
 describe('BlockTextField', () => {

@@ -1,4 +1,4 @@
-import { Block } from '@/core'
+import { Block } from '../../../core'
 import { BlockSlotField } from '../../fields/BlockSlotField'
 import { FieldTypes } from '../../fields/const'
 

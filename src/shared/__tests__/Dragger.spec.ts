@@ -1,4 +1,4 @@
-import { Dragger } from '@/renderer/utils'
+import { Dragger } from '../../renderer/utils'
 
 describe('Dragger', () => {
   let dom: HTMLElement

@@ -1,5 +1,5 @@
 import { Block } from '../Block'
-import { BlockTextField, BlockSlotField } from '@/core/fields'
+import { BlockTextField, BlockSlotField } from '../../core/fields'
 import { BlockField } from '../BlockField'
 
 describe('Block', () => {

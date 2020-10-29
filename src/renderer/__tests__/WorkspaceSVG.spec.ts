@@ -1,5 +1,5 @@
 import { WorkspaceSVG } from '../WorkspaceSVG'
-import { Workspace, Block } from '@/core'
+import { Workspace, Block } from '../../core'
 import { Renderer } from '../Renderer'
 import './jest.setup'
 

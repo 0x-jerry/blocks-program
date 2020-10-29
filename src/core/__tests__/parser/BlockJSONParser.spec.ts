@@ -1,6 +1,6 @@
 import { blockJSONParser } from '../../index'
-import { Block } from '@/core/Block'
-import { BlockDropdownField } from '@/core/fields'
+import { Block } from '../../../core/Block'
+import { BlockDropdownField } from '../../../core/fields'
 
 describe('blockJSONParser', () => {
   it('parse', () => {

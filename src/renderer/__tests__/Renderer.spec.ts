@@ -1,5 +1,5 @@
 import { Renderer } from '../Renderer'
-import { Workspace } from '@/core'
+import { Workspace } from '../../core'
 import './jest.setup'
 import { FieldSVG } from '../fields'
 

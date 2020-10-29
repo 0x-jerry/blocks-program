@@ -1,6 +1,10 @@
-import { getId } from '@/shared'
+import { getId } from '../shared'
 
-export function toBeTheSameIds<T extends { id: string }>(received: (T | string)[], expected: (T | string)[], sorted = true) {
+export function toBeTheSameIds<T extends { id: string }>(
+  received: (T | string)[],
+  expected: (T | string)[],
+  sorted = true
+) {
   const receivedIds = received.map((r) => getId(r))
   const expectedIds = expected.map((r) => getId(r))
 

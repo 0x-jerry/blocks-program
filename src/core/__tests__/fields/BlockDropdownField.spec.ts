@@ -1,6 +1,6 @@
 import { BlockDropdownField } from '../../fields/BlockDropdownField'
 import { FieldTypes } from '../../fields/const'
-import { Block } from '@/core'
+import { Block } from '../../../core'
 
 describe('BlockDropdownField', () => {
   let field: BlockDropdownField

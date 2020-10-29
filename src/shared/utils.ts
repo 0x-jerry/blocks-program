@@ -99,7 +99,7 @@ export function throttle<T extends (...args: any[]) => void>(
 
   const opt: IThrottleConfig = Object.assign({ leading: true, trailing: false }, options)
 
-  let trailingHandle: NodeJS.Timeout
+  let trailingHandle: number
 
   // @ts-ignore
   return function (this: T, ...params: Parameters<T>) {
@@ -145,7 +145,7 @@ export function debounce<T extends (...args: any[]) => void>(
   time: number,
   options: Partial<IDebounceConfig> = {}
 ): T {
-  let trailingHandle: NodeJS.Timeout
+  let trailingHandle: number
   let firstTimeCalled = false
   let lastRecordTime = 0
 

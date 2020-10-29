@@ -1,6 +1,6 @@
 import { CodeGenerator } from '../CodeGenerator'
-import { Block } from '@/core'
-import { BlockTextField, BlockSlotField } from '@/core/fields'
+import { Block } from '../../core'
+import { BlockTextField, BlockSlotField } from '../../core/fields'
 
 describe('CodeGenerator', () => {
   let generator: CodeGenerator

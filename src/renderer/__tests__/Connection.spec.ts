@@ -1,6 +1,6 @@
 import { Connection, ConnectionType } from '../Connection'
 import { BlockSVG } from '../BlockSVG'
-import { Block, Workspace } from '@/core'
+import { Block, Workspace } from '../../core'
 import { Renderer } from '../Renderer'
 import './jest.setup'
 

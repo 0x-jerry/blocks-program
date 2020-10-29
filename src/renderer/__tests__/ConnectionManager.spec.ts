@@ -1,6 +1,6 @@
 import './jest.setup'
 import { Renderer } from '../Renderer'
-import { Workspace, Block } from '@/core'
+import { Workspace, Block } from '../../core'
 import { BlockSVG } from '..'
 
 describe('ConnectionManager', () => {
