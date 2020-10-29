@@ -3,10 +3,19 @@
 </template>
 
 <script>
-import { Block, Workspace } from '../core'
-import { BlockDropdownField, BlockSlotField, BlockTextField } from '../core/fields'
-import { SVG, Rect, PatternGrid, Area, Renderer } from '../renderer'
-import { uuid } from '../shared'
+import {
+  BlockDropdownField,
+  BlockSlotField,
+  Area,
+  SVG,
+  PatternGrid,
+  Rect,
+  Block,
+  Workspace,
+  BlockTextField,
+  Renderer
+} from '../src'
+import { uuid } from '../src/shared'
 
 export default {
   data() {

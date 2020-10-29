@@ -3,10 +3,20 @@
 </template>
 
 <script>
-import { Block, Workspace } from '../core'
-import { BlockSlotField, BlockTextField } from '../core/fields'
-import { SVG, Rect, PatternGrid, Area, Renderer } from '../renderer'
-import { uuid } from '../shared'
+import {
+  Area,
+  SVG,
+  PatternGrid,
+  Rect,
+  Block,
+  Workspace,
+  BlockSlotField,
+  BlockTextField,
+  BlockInputField,
+  BlockDropdownField,
+  Renderer
+} from '../src'
+import { uuid } from '../src/shared'
 
 export default {
   data() {
@@ -16,10 +26,6 @@ export default {
   },
   mounted() {
     const workspace = new Workspace()
-
-    const block = new Block(null, 'p-n')
-    const field = new BlockTextField('arg', 'hello')
-    block.pushField(field)
 
     workspace.definedBlocks.add(createBlock({}, 'p-n'))
     workspace.definedBlocks.add(createBlock({ previous: false }, 'n'))
@@ -34,22 +40,22 @@ export default {
     renderer.mount(document.getElementById(this.id))
 
     renderer.$w.addBlock('p-n', 100, 50)
-    renderer.$w.addBlock('p-n', 100, 100)
-    renderer.$w.addBlock('p-n', 100, 150)
+    renderer.$w.addBlock('n', 100, 150)
+    renderer.$w.addBlock('p', 100, 250)
 
     renderer.$w.addBlock('slot-p-n', 300, 50)
-    renderer.$w.addBlock('slot-p-n1', 300, 150)
-    renderer.$w.addBlock('slot-p-n2', 300, 250)
+    // renderer.$w.addBlock('slot-p-n1', 300, 150)
+    // renderer.$w.addBlock('slot-p-n2', 300, 250)
 
     function createBlock(opt = {}, id) {
       const block = new Block(opt, id)
 
-      const field = new BlockTextField('arg', 'hello')
-      const field1 = new BlockTextField('arg', 'world')
+      const field = new BlockTextField('text1', 'hello')
+      const field1 = new BlockTextField('text2', 'world')
       const field2 = new BlockTextField('arg', id)
       block.pushField(field)
       block.pushField(field1)
-      block.pushField(field2)
+      block.pushField(field2, 1)
 
       return block
     }
@@ -61,6 +67,8 @@ export default {
 
       block.pushField(field)
       block.pushField(slotField, 1)
+      block.pushField(field.clone(), 2)
+      block.pushField(slotField.clone(), 3)
 
       return block
     }

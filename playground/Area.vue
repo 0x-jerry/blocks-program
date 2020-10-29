@@ -3,8 +3,8 @@
 </template>
 
 <script>
-import { SVG, Rect, PatternGrid, Area } from '../renderer'
-import { uuid } from '../shared'
+import { Area, SVG, PatternGrid, Rect } from '../src'
+import { uuid } from '../src/shared'
 
 export default {
   data() {

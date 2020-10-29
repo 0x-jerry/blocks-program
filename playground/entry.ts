@@ -1,4 +1,4 @@
 import { createApp } from 'vue'
-import { Playground } from './playground/Playground'
+import { Playground } from './Playground'
 
 createApp(Playground).mount('#app')

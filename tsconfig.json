@@ -1,5 +1,5 @@
 {
-  "include": ["src"],
+  "include": ["src", "playground"],
   "compilerOptions": {
     "moduleResolution": "node",
     "esModuleInterop": true,
