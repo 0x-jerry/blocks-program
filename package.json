@@ -5,8 +5,8 @@
   "license": "MIT",
   "types": "dist/src/index.d.ts",
   "scripts": {
-    "build": "rollup -c --environment NODE_ENV:production",
-    "build:dev": "rollup -c -w --environment NODE_ENV:development",
+    "build": "vite build",
+    "start": "vite",
     "test": "jest",
     "docs": "typedoc"
   },
@@ -28,6 +28,10 @@
     "rollup-plugin-typescript2": "^0.27.1",
     "ts-jest": "^26.1.0",
     "typedoc": "^0.17.7",
-    "typescript": "^3.8.3"
+    "typescript": "^3.8.3",
+    "vite": "^1.0.0-rc.8"
+  },
+  "dependencies": {
+    "vue": "^3.0.2"
   }
 }
