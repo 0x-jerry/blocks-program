@@ -1,4 +1,4 @@
-import { BlockField } from '@/core'
+import { BlockField } from '../../core'
 import { SElement } from '../lib'
 import { Connection } from '../Connection'
 import { BlockSVG } from '../BlockSVG'

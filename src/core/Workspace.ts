@@ -1,4 +1,4 @@
-import { uuid, getId } from '@/shared'
+import { uuid, getId } from '../shared'
 import { Block } from './Block'
 
 class DefinedBlocks {

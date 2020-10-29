@@ -3,8 +3,8 @@ import { G } from './G'
 import { SElement } from './SElement'
 import { Sizeable, Dragger } from '../utils'
 import { ScrollPair } from './ScrollBar'
-import { EventEmitter, debounce } from '@/shared'
-import { IVec2 } from '@/typedef'
+import { EventEmitter, debounce } from '../../shared'
+import { IVec2 } from '../../typedef'
 
 export class AreaContent extends G {
   width: number

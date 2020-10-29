@@ -1,4 +1,4 @@
-import { SArray } from '@/shared'
+import { SArray } from '../../shared'
 
 export type AttrTypes = string | number | boolean | null
 

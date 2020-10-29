@@ -1,4 +1,4 @@
-import { Factory } from '@/shared'
+import { Factory } from '../../shared'
 import { BlockFieldCtor } from '../BlockField'
 import { FieldTypes } from './const'
 import { BlockTextField } from './BlockTextField'

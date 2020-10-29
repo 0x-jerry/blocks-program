@@ -1,4 +1,4 @@
-import { Observer } from '@/shared'
+import { Observer } from '../../shared'
 
 export interface ISize {
   width: number

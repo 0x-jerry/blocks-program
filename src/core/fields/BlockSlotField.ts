@@ -1,5 +1,5 @@
 import { BlockField, IBlockFieldOption } from '../BlockField'
-import { ObserverCallbackFunc } from '@/shared'
+import { ObserverCallbackFunc } from '../../shared'
 import { FieldTypes } from './const'
 import { Block } from '../Block'
 

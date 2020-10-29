@@ -1,8 +1,8 @@
 import { Rect } from './Shape'
 import { G } from './G'
 import { Sizeable, Dragger } from '../utils'
-import { EventEmitter, Observer, ObserverCallbackFunc, throttle } from '@/shared'
-import { IVec2 } from '@/typedef'
+import { EventEmitter, Observer, ObserverCallbackFunc, throttle } from '../../shared'
+import { IVec2 } from '../../typedef'
 
 type IScrollBarEventMap = {
   'scroll'(posPercentage: number): void

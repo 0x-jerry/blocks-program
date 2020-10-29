@@ -1,4 +1,4 @@
-import { IVec2 } from '@/typedef'
+import { IVec2 } from '../typedef'
 
 export function uuid() {
   let uuid = ''

@@ -1,8 +1,8 @@
-import { vec2Distance } from '@/shared'
+import { vec2Distance } from '../shared'
 import { BlockSVG } from './BlockSVG'
 import { Renderer } from './Renderer'
 import { Connection, IConnectionOption } from './Connection'
-import { config } from '@/config'
+import { config } from '../config'
 import { DebugDotSVg } from './DebugDotSVG'
 
 export interface IConnectionPair {

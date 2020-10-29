@@ -1,4 +1,4 @@
-import { Observer, uuid, ObserverCallbackFunc, oneOf } from '@/shared'
+import { Observer, uuid, ObserverCallbackFunc, oneOf } from '../shared'
 import { Block } from './Block'
 
 export interface IBlockFieldOption {

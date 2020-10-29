@@ -1,7 +1,7 @@
-import { Block, Workspace } from '@/core'
-import { warn, toArray } from '@/shared'
+import { Block, Workspace } from '../core'
+import { warn, toArray } from '../shared'
 import { Codes } from './Codes'
-import { BlockSlotField, FieldTypes } from '@/core/fields'
+import { BlockSlotField, FieldTypes } from '../core/fields'
 
 export interface GenerateFunc {
   (block: Block, generator: CodeGenerator): string | string[]

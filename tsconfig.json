@@ -1,7 +1,10 @@
 {
   "include": ["src"],
   "compilerOptions": {
+    "moduleResolution": "node",
     "esModuleInterop": true,
+    "downlevelIteration": true,
+    "target": "esnext",
     "jsx": "preserve",
     "lib": ["esnext", "dom"],
     "types": ["jest", "node"]

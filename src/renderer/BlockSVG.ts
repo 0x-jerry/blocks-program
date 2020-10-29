@@ -1,6 +1,6 @@
-import { Block } from '@/core'
-import { FieldTypes } from '@/core/fields'
-import { SArray, EventEmitter } from '@/shared'
+import { Block } from '../core'
+import { FieldTypes } from '../core/fields'
+import { SArray, EventEmitter } from '../shared'
 import { FieldSVG } from './fields/FieldSVG'
 import { G, Path } from './lib'
 import { Renderer } from './Renderer'
@@ -285,10 +285,7 @@ export class BlockSVG extends G {
     this.background.d.h(rendererOptions.joinStartWidth)
 
     if (this.$b.options.previous) {
-      this.background.d
-        .v(-rendererOptions.joinHeight)
-        .h(rendererOptions.joinWidth)
-        .v(rendererOptions.joinHeight)
+      this.background.d.v(-rendererOptions.joinHeight).h(rendererOptions.joinWidth).v(rendererOptions.joinHeight)
     } else {
       this.background.d.h(rendererOptions.joinWidth)
     }
@@ -551,10 +548,7 @@ export class BlockSVG extends G {
 
     // Draw next connection
     if (this.$b.options.next) {
-      this.background.d
-        .v(-joinHeight)
-        .h(-joinWidth)
-        .v(joinHeight)
+      this.background.d.v(-joinHeight).h(-joinWidth).v(joinHeight)
     } else {
       this.background.d.h(-joinWidth)
     }

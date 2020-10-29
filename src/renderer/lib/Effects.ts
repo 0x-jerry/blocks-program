@@ -1,6 +1,6 @@
 import { BasicElement } from './SElement'
 import { createSVGEl } from '../utils'
-import { uuid } from '@/shared'
+import { uuid } from '../../shared'
 
 /**
  * @todo Refactor

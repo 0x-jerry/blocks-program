@@ -1,5 +1,5 @@
 import CSS from 'csstype'
-import { EventEmitter } from '@/shared'
+import { EventEmitter } from '../../shared'
 
 export function createSVGEl<T extends keyof SVGElementTagNameMap>(tag: T): SVGElementTagNameMap[T] {
   const ns = 'http://www.w3.org/2000/svg'

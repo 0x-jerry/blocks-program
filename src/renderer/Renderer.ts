@@ -1,4 +1,4 @@
-import { Workspace } from '@/core'
+import { Workspace } from '../core'
 import { SVG, DropShadowEffect, PatternGrid } from './lib'
 import { WorkspaceSVG } from './WorkspaceSVG'
 import {
@@ -9,13 +9,13 @@ import {
   BlockDropdownFieldSVG,
   FieldSVG
 } from './fields'
-import { FieldTypes } from '@/core/fields'
+import { FieldTypes } from '../core/fields'
 import { ConnectionManager, IConnectionPair } from './ConnectionManager'
 import { BlockSVG, IBlockSVGRenderOption } from './BlockSVG'
 import { Connection } from './Connection'
 import { FloatWeight } from './utils'
-import { config } from '@/config'
-import { Factory } from '@/shared'
+import { config } from '../config'
+import { Factory } from '../shared'
 
 interface IEffect {
   readonly id: string

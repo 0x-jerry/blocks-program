@@ -1,7 +1,7 @@
 import { createSVGEl, Transform } from '../utils'
 import { BasicElement } from './SElement'
 import { Rect } from './Shape'
-import { uuid } from '@/shared'
+import { uuid } from '../../shared'
 
 export class PatternGrid extends BasicElement<SVGPatternElement> {
   readonly id: string

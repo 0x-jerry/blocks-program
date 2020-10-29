@@ -1,6 +1,6 @@
 import { Workspace } from './Workspace'
 import { BlockField } from './BlockField'
-import { Observer, ObserverCallbackFunc, uuid, SArray, warn } from '@/shared'
+import { Observer, ObserverCallbackFunc, uuid, SArray, warn } from '../shared'
 
 export interface BlockConfigOption {
   /**

@@ -1,4 +1,4 @@
-import { config } from '@/config'
+import { config } from '../config'
 import { SElement, Rect } from './lib'
 import { Connection } from './Connection'
 

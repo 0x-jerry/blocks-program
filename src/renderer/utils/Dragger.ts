@@ -1,4 +1,4 @@
-import { EventEmitter } from '@/shared'
+import { EventEmitter } from '../../shared'
 import { globalDomEvent } from './utils'
 
 export type IDraggableEventsMap = {

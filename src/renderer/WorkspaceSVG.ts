@@ -1,7 +1,7 @@
 import { Area, IAreaEventsMap } from './lib'
-import { Workspace } from '@/core'
+import { Workspace } from '../core'
 import { Renderer } from './Renderer'
-import { warn, SArray, EventEmitter } from '@/shared'
+import { warn, SArray, EventEmitter } from '../shared'
 import { BlockSVG } from './BlockSVG'
 import { css } from './utils'
 
