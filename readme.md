@@ -8,15 +8,18 @@
 
 ## 开发
 
-1. 克隆本仓库
-2. `yarn && yarn build:dev` (推荐使用 yarn)
-3. 打开 `example Workspace.html`，如果看到编程积木，则说明编译成功了
+```sh
+git clone https://github.com/cwxyz007/blocks-program.git
+cd blocks-program
+yarn
+yarn start
+```
 
 ## 测试
 
-1. 克隆本仓库
-2. `yarn && yarn test` (推荐使用 yarn)
-
-## 贡献
-
-开一个 ISSUE 说一下想做的功能即可。
+```sh
+git clone https://github.com/cwxyz007/blocks-program.git
+cd blocks-program
+yarn
+yarn test
+```
