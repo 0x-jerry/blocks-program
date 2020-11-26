@@ -33,6 +33,6 @@ jobs:
       with:
         path: |
           **/node_modules
-        key: ${{ runner.os }}-${{ hashFiles('**/lockfiles') }}
+        key: ${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
 
     - run: yarn test
