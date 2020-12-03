@@ -50,7 +50,7 @@ jobs:
 
       - name: Commit and push
         run: |
-          cd ./public
+          cd ./dist
           git add .
           git config user.email "x.li.gem@gmail.com"
           git config user.name "Github CI Bot"

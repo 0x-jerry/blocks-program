@@ -26,7 +26,11 @@ export function uuid() {
   return uuid
 }
 
-export function getId<T extends { id: string }>(instanceOrId: T | string) {
+interface IdAble {
+  id:string
+}
+
+export function getId<T extends IdAble>(instanceOrId: T | string) {
   return typeof instanceOrId === 'string' ? instanceOrId : instanceOrId.id
 }
 
@@ -99,7 +103,7 @@ export function throttle<T extends (...args: any[]) => void>(
 
   const opt: IThrottleConfig = Object.assign({ leading: true, trailing: false }, options)
 
-  let trailingHandle: number
+  let trailingHandle: NodeJS.Timeout
 
   // @ts-ignore
   return function (this: T, ...params: Parameters<T>) {
@@ -145,7 +149,7 @@ export function debounce<T extends (...args: any[]) => void>(
   time: number,
   options: Partial<IDebounceConfig> = {}
 ): T {
-  let trailingHandle: number
+  let trailingHandle: NodeJS.Timeout
   let firstTimeCalled = false
   let lastRecordTime = 0
 
@@ -167,7 +171,8 @@ export function debounce<T extends (...args: any[]) => void>(
     }
 
     clearTimeout(trailingHandle)
-    // exact time interval
+
+    // check exact time interval
     if (now - lastRecordTime >= time) {
       func.apply(this, params)
       lastRecordTime = now
