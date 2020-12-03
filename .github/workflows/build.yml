@@ -41,16 +41,17 @@ jobs:
         uses: actions/checkout@v2
         with:
           ref: docs
-          path: dist
+          path: temp
 
       - name: Build
         run: |
           yarn
           yarn build
+          mv ./dist/* temp
 
       - name: Commit and push
         run: |
-          cd ./dist
+          cd ./temp
           git add .
           git config user.email "x.li.gem@gmail.com"
           git config user.name "Github CI Bot"
