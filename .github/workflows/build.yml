@@ -47,7 +47,7 @@ jobs:
         run: |
           yarn
           yarn build
-          mv ./dist/* temp
+          rsync -a dist/* temp
 
       - name: Commit and push
         run: |

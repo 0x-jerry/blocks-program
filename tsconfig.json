@@ -1,5 +1,4 @@
 {
-  "include": ["src", "playground"],
   "compilerOptions": {
     "moduleResolution": "node",
     "esModuleInterop": true,
@@ -8,5 +7,6 @@
     "jsx": "preserve",
     "lib": ["esnext", "dom"],
     "types": ["jest", "node"]
-  }
+  },
+  "include": ["src", "playground"]
 }
