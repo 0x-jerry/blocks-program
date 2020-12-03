@@ -103,7 +103,7 @@ export function throttle<T extends (...args: any[]) => void>(
 
   const opt: IThrottleConfig = Object.assign({ leading: true, trailing: false }, options)
 
-  let trailingHandle: NodeJS.Timeout
+  let trailingHandle: number
 
   // @ts-ignore
   return function (this: T, ...params: Parameters<T>) {
@@ -130,7 +130,8 @@ export function throttle<T extends (...args: any[]) => void>(
 
     // between time interval, for trailing
     if (opt.trailing) {
-      trailingHandle = setTimeout(() => func.apply(this, params), time)
+      // https://github.com/Microsoft/TypeScript/issues/30128
+      trailingHandle = window.setTimeout(() => func.apply(this, params), time)
     }
   }
 }
@@ -149,7 +150,7 @@ export function debounce<T extends (...args: any[]) => void>(
   time: number,
   options: Partial<IDebounceConfig> = {}
 ): T {
-  let trailingHandle: NodeJS.Timeout
+  let trailingHandle: number
   let firstTimeCalled = false
   let lastRecordTime = 0
 
@@ -182,7 +183,8 @@ export function debounce<T extends (...args: any[]) => void>(
     lastRecordTime = now
 
     if (opt.trailing) {
-      trailingHandle = setTimeout(() => func.apply(this, params), opt.maxWait)
+      // https://github.com/Microsoft/TypeScript/issues/30128
+      trailingHandle = window.setTimeout(() => func.apply(this, params), opt.maxWait)
     }
   }
 }
