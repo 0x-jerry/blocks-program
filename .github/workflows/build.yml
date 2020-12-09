@@ -5,14 +5,13 @@ name: Test & Deploy
 
 on:
   push:
-    branches: 
+    branches:
       - master
     tags-ignore:
       - v*
     paths:
       - src/**/*
       - public/**/*
-    
 
 jobs:
   test:
@@ -47,7 +46,7 @@ jobs:
         run: |
           yarn
           yarn build
-          rsync -a dist/* temp
+          rsync -a dist/ temp
 
       - name: Commit and push
         run: |
@@ -56,4 +55,4 @@ jobs:
           git config user.email "x.li.gem@gmail.com"
           git config user.name "Github CI Bot"
           git commit -m "Site updated - `date '+%Y-%m-%d %H:%M:%S'`"
-          git push 
+          git push
