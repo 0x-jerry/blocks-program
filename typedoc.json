@@ -1,10 +1,7 @@
 {
-  "out": "api",
-  "mode": "file",
+  "out": "dist/api",
   "name": "BlocksProgram",
+  "entryPoints": ["src/index.ts"],
   "exclude": ["**/__tests__/**/*.ts"],
-  "excludeNotExported": true,
-  "externalPattern": [
-    "node_modules/csstype/index.d.ts"
-  ]
+  "externalPattern": ["node_modules/csstype/index.d.ts"]
 }

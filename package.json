@@ -5,7 +5,7 @@
   "license": "MIT",
   "types": "dist/src/index.d.ts",
   "scripts": {
-    "build": "vite build",
+    "build": "vite build && yarn docs",
     "start": "vite",
     "test": "jest",
     "docs": "typedoc"

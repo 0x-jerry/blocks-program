@@ -3,7 +3,7 @@
   "json.schemas": [
     {
       "fileMatch": ["typedoc.json"],
-      "url": "http://json.schemastore.org/typedoc"
+      "url": "https://typedoc.org/schema.json"
     }
   ]
 }
