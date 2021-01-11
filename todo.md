@@ -44,14 +44,14 @@ Modern and easy extends visual programming editor. Inspire by [blockly](https://
 ## Bugs
 
 - [x] Update next block position when block shape changed.
-- [x] Make slot field connection can connect when block move.
+- [x] Make slot field connection connectable when block move.
 - [x] The parent block shape is not update when the next connection of child block connected.
 - [x] The parent block move to wrong position When the slot connection of child block connected.
 
 ## Some Explanation
 
-`core` folder code is only store necessary data.
+`core`: Only store necessary data.
 
-`renderer` is generate svg accord the data that store in `workspace` object.
+`renderer`: Generate svg accord the data that store in `workspace` object.
 
-`renderer` folder code only store ui data.
+`renderer`: Only store ui data.
