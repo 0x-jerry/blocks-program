@@ -12,6 +12,7 @@ on:
     paths:
       - src/**/*
       - public/**/*
+      - playground/**/*
 
 jobs:
   test:
