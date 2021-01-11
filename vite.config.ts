@@ -1,7 +1,9 @@
-import { UserConfig} from 'vite'
+import { defineConfig } from 'vite'
+import vueJsx from '@vitejs/plugin-vue-jsx'
 
-const conf:UserConfig ={
-  base: './'
-}
-
-export default conf
+export default defineConfig({
+  build: {
+    base: './'
+  },
+  plugins: [vueJsx()]
+})

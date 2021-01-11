@@ -1,11 +1,11 @@
 import './styles.less'
-import Area from './Area.vue'
-import Block from './Block.vue'
-import BlockConnection from './BlockConnection.vue'
-import BlockDropdown from './BlockDropdownField.vue'
-import BlockInput from './BlockInputField.vue'
-import BlockMulti from './BlockMultiField.vue'
-import Workspace from './Workspace.vue'
+import Area from './Area'
+import Block from './Block'
+import BlockConnection from './BlockConnection'
+import BlockDropdown from './BlockDropdownField'
+import BlockInput from './BlockInputField'
+import BlockMulti from './BlockMultiField'
+import Workspace from './Workspace'
 
 import { defineComponent, reactive } from 'vue'
 
