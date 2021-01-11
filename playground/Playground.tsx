@@ -36,7 +36,7 @@ export const Playground = defineComponent(() => {
             <a href='./api'> api document </a>
           </button>
         )}
-
+        <span class='title'> Examples: </span>
         {Object.keys(Comp).map((t) => (
           <button onClick={() => switchPlayground(t)}>{t}</button>
         ))}
