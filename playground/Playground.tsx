@@ -31,6 +31,12 @@ export const Playground = defineComponent(() => {
   return () => (
     <div class='playground'>
       <div class='toolbar'>
+        {import.meta.env.PROD && (
+          <button>
+            <a href='./api'> api document </a>
+          </button>
+        )}
+
         {Object.keys(Comp).map((t) => (
           <button onClick={() => switchPlayground(t)}>{t}</button>
         ))}
