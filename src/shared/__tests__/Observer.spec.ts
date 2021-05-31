@@ -1,7 +1,7 @@
 import { Observer, ObserverCallbackFunc } from '../Observer'
 
 describe('Observer', () => {
-  let observer: Observer<number|null>
+  let observer: Observer<number | null>
 
   beforeEach(() => {
     observer = new Observer(null)
@@ -18,7 +18,7 @@ describe('Observer', () => {
     expect(fn).toBeCalledTimes(1)
   })
 
-  it('sub', async (done) => {
+  it('sub', (done) => {
     const fn: ObserverCallbackFunc<number> = (now, pre) => {
       expect(now).toBe(1)
       expect(pre).toBe(null)

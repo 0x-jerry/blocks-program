@@ -5,7 +5,7 @@ import { BlockSVG } from '../BlockSVG'
 import { Connection, ConnectionType, IConnectionAction } from '../Connection'
 
 export class BlockSlotFieldSVG extends FieldSVG<BlockSlotField, G> {
-  connection: Connection
+  declare connection: Connection
 
   constructor(block: BlockSVG, field: BlockSlotField) {
     super(block, field, new G())

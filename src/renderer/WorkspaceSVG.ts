@@ -13,7 +13,9 @@ type WorkspaceSVGEventsMap = IAreaEventsMap & {
 export class WorkspaceSVG extends Area {
   readonly $w: Workspace
   readonly $r: Renderer
-  events: EventEmitter<WorkspaceSVGEventsMap>
+
+  declare events: EventEmitter<WorkspaceSVGEventsMap>
+
   currentSelectedBlock: BlockSVG | null
 
   blocks: SArray<BlockSVG>
