@@ -16,44 +16,61 @@ on:
 
 jobs:
   test:
-    runs-on: ubuntu-latest
-
+    strategy:
+      matrix:
+        os: ['ubuntu-20.04']
+        node: [16]
+    runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v3
 
-      - name: Use Node.js 14.x
-        uses: actions/setup-node@v1
+      - name: Use Node.js ${{ matrix.node }}
+        uses: actions/setup-node@v3
         with:
-          node-version: 14.x
+          node-version: ${{ matrix.node }}
 
-      - name: Cache node_modules
+      - name: Cache .pnpm-store
         uses: actions/cache@v3
         with:
-          path: |
-            **/node_modules
-          key: ${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
+          path: ~/.pnpm-store
+          key: ${{ runner.os }}-node${{ matrix.node }}-${{ hashFiles('**/pnpm-lock.yaml') }}
 
-      - run: |
-          yarn
-          yarn test
+      - name: Install pnpm
+        run: curl -f https://get.pnpm.io/v6.14.js | node - add --global pnpm@6
 
-      - name: Clone docs branch
-        uses: actions/checkout@v3
+      - run: pnpm i
+      - run: pnpm run test
+
+  deploy:
+    strategy:
+      matrix:
+        os: ['ubuntu-20.04']
+        node: [16]
+
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Use Node.js ${{ matrix.node }}
+        uses: actions/setup-node@v3
         with:
-          ref: docs
-          path: temp
+          node-version: ${{ matrix.node }}
 
-      - name: Build
-        run: |
-          yarn
-          yarn build
-          rsync -a dist/ temp
+      - name: Cache .pnpm-store
+        uses: actions/cache@v3
+        with:
+          path: ~/.pnpm-store
+          key: ${{ runner.os }}-node${{ matrix.node }}-${{ hashFiles('**/pnpm-lock.yaml') }}
 
-      - name: Commit and push
-        run: |
-          cd ./temp
-          git add .
-          git config user.email "x.li.gem@gmail.com"
-          git config user.name "Github CI Bot"
-          git commit -m "Site updated - `date '+%Y-%m-%d %H:%M:%S'`"
-          git push
+      - name: Install pnpm
+        run: curl -f https://get.pnpm.io/v6.14.js | node - add --global pnpm@6
+
+      - run: pnpm i
+      - run: pnpm run build
+
+      - name: deploy
+        uses: peaceiris/actions-gh-pages@v3.8.0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
+          force_orphan: true
