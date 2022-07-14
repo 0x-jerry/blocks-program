@@ -2,12 +2,12 @@
   "compilerOptions": {
     "moduleResolution": "node",
     "esModuleInterop": true,
-    "downlevelIteration": true,
     "target": "ESNext",
     "module": "ESNext",
     "jsx": "preserve",
     "lib": ["esnext", "dom"],
-    "types": ["vitest/globals", "node"]
+    "types": ["vitest/globals", "node"],
+    "skipLibCheck": true
   },
   "include": ["src", "playground"]
 }
