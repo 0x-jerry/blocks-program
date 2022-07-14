@@ -6,13 +6,7 @@ name: Test & Deploy
 on:
   push:
     branches:
-      - master
-    tags-ignore:
-      - v*
-    paths:
-      - src/**/*
-      - public/**/*
-      - playground/**/*
+      - main
 
 jobs:
   test:
