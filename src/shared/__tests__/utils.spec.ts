@@ -67,7 +67,7 @@ describe('utils', () => {
 
 describe('debounce', () => {
   it('normal', (done) => {
-    const fn = jest.fn()
+    const fn = vi.fn()
     const wrapper = debounce(fn, 200)
 
     wrapper()
@@ -86,7 +86,7 @@ describe('debounce', () => {
   })
 
   it('leading', (done) => {
-    const fn = jest.fn()
+    const fn = vi.fn()
     const wrapper = debounce(fn, 200, { leading: true })
 
     wrapper()
@@ -105,7 +105,7 @@ describe('debounce', () => {
   })
 
   it('trailing', (done) => {
-    const fn = jest.fn()
+    const fn = vi.fn()
     const wrapper = debounce(fn, 200, { trailing: false })
 
     wrapper()
@@ -136,7 +136,7 @@ describe('debounce', () => {
   })
 
   it('maxWait', (done) => {
-    const fn = jest.fn()
+    const fn = vi.fn()
     const wrapper = debounce(fn, 200, { maxWait: 400 })
 
     wrapper()
@@ -183,7 +183,7 @@ describe('debounce', () => {
 
 describe('throttle', () => {
   it('normal', (done) => {
-    const fn = jest.fn()
+    const fn = vi.fn()
     const wrapper = throttle(fn, 200)
 
     wrapper()
@@ -209,7 +209,7 @@ describe('throttle', () => {
   })
 
   it('leading', (done) => {
-    const fn = jest.fn()
+    const fn = vi.fn()
     const wrapper = throttle(fn, 200, { leading: false })
 
     wrapper()
@@ -237,7 +237,7 @@ describe('throttle', () => {
   })
 
   it('trailing', (done) => {
-    const fn = jest.fn()
+    const fn = vi.fn()
     const wrapper = throttle(fn, 200, { trailing: true })
 
     wrapper()

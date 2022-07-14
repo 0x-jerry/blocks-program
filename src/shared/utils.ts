@@ -27,7 +27,7 @@ export function uuid() {
 }
 
 interface IdAble {
-  id:string
+  id: string
 }
 
 export function getId<T extends IdAble>(instanceOrId: T | string) {

@@ -1,5 +1,5 @@
 import { Text, SVG } from '../../lib'
-import { mockBBoxRect } from '../jest.setup'
+import { mockBBoxRect } from '../vi.setup'
 
 describe('Text', () => {
   let text: Text

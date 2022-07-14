@@ -1,6 +1,6 @@
 import { Renderer } from '../Renderer'
 import { Workspace } from '../../core'
-import './jest.setup'
+import './vi.setup'
 import { FieldSVG } from '../fields'
 
 describe('Renderer', () => {

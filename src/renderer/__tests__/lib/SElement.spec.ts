@@ -1,6 +1,6 @@
 import { SElement, SVG } from '../../lib'
 import { createSVGEl } from '../../utils'
-import { mockBBoxRect } from '../jest.setup'
+import { mockBBoxRect } from '../vi.setup'
 
 describe('SElement', () => {
   let el: SElement<SVGGElement>

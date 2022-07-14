@@ -11,9 +11,9 @@ describe('Dragger', () => {
   })
 
   it('drag events', () => {
-    const fnStart = jest.fn()
-    const fn = jest.fn()
-    const fnEnd = jest.fn()
+    const fnStart = vi.fn()
+    const fn = vi.fn()
+    const fnEnd = vi.fn()
 
     dragger.on('dragging', fn)
     dragger.on('dragstart', fnStart)
@@ -40,7 +40,7 @@ describe('Dragger', () => {
   })
 
   it('destroy', () => {
-    const fnStart = jest.fn()
+    const fnStart = vi.fn()
     dragger.on('dragstart', fnStart)
 
     dragger.destroy()

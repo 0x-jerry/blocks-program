@@ -1,7 +1,7 @@
 import { BlockSVG } from '../BlockSVG'
 import { Block, Workspace } from '../../core'
 import { Renderer } from '../Renderer'
-import './jest.setup'
+import './vi.setup'
 
 describe('BlockSVG', () => {
   let $b: BlockSVG

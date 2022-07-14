@@ -1,3 +1,4 @@
+import { sleep } from '@0x-jerry/utils'
 import { Observer, ObserverCallbackFunc } from '../Observer'
 
 describe('Observer', () => {
@@ -8,7 +9,7 @@ describe('Observer', () => {
   })
 
   it('subscribe duplicate', () => {
-    const fn = jest.fn()
+    const fn = vi.fn()
 
     observer.sub(fn)
     observer.sub(fn)
@@ -18,17 +19,17 @@ describe('Observer', () => {
     expect(fn).toBeCalledTimes(1)
   })
 
-  it('sub', (done) => {
+  it('sub', async () => {
     const fn: ObserverCallbackFunc<number> = (now, pre) => {
       expect(now).toBe(1)
       expect(pre).toBe(null)
       expect(observer.value).toBe(1)
-      done()
     }
 
     observer.sub(fn)
 
     observer.update(1)
+    await sleep(10)
   })
 
   it('update', () => {
@@ -38,7 +39,7 @@ describe('Observer', () => {
     observer.update(null)
     expect(observer.value).toBe(null)
 
-    const fn = jest.fn()
+    const fn = vi.fn()
     observer.sub(fn)
     observer.update(2, true)
 
@@ -46,8 +47,8 @@ describe('Observer', () => {
   })
 
   it('sub multi', () => {
-    const fn1 = jest.fn()
-    const fn2 = jest.fn()
+    const fn1 = vi.fn()
+    const fn2 = vi.fn()
 
     observer.sub(fn1)
     observer.sub(fn2)
@@ -58,7 +59,7 @@ describe('Observer', () => {
   })
 
   it('unSub', () => {
-    const fn = jest.fn()
+    const fn = vi.fn()
 
     observer.sub(fn)
     observer.unSub(fn)

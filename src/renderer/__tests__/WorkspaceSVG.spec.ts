@@ -1,7 +1,7 @@
 import { WorkspaceSVG } from '../WorkspaceSVG'
 import { Workspace, Block } from '../../core'
 import { Renderer } from '../Renderer'
-import './jest.setup'
+import './vi.setup'
 
 describe('WorkspaceSVG', () => {
   let $w: WorkspaceSVG

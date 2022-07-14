@@ -27,7 +27,7 @@ describe('CodeGenerator', () => {
 
     expect(code).toBe(`this is a text`)
 
-    const spyWarn = jest.spyOn(global.console, 'warn')
+    const spyWarn = vi.spyOn(global.console, 'warn')
     spyWarn.mockReset()
     code = generator.getFieldCode(block, 'sfield')
     expect(spyWarn).toBeCalledTimes(1)
@@ -59,7 +59,7 @@ describe('CodeGenerator', () => {
     const field = new BlockTextField('field')
     block.pushField(field)
 
-    const spyWarn = jest.spyOn(global.console, 'warn')
+    const spyWarn = vi.spyOn(global.console, 'warn')
     spyWarn.mockReset()
     code = generator.getSlotFieldCode(block, 'field')
     expect(spyWarn).toBeCalledTimes(1)
@@ -81,7 +81,7 @@ describe('CodeGenerator', () => {
 
     const b = new Block({ name: 'nothing' })
 
-    const spyWarn = jest.spyOn(global.console, 'warn')
+    const spyWarn = vi.spyOn(global.console, 'warn')
     spyWarn.mockReset()
     const bCode = generator.getBlockCode(b)
     expect(bCode).toBe('')

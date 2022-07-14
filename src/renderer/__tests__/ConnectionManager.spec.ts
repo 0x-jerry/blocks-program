@@ -1,4 +1,4 @@
-import './jest.setup'
+import './vi.setup'
 import { Renderer } from '../Renderer'
 import { Workspace, Block } from '../../core'
 import { BlockSVG } from '..'

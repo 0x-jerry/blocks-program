@@ -1,3 +1,4 @@
+import { sleep } from '@0x-jerry/utils'
 import { EventEmitter } from '../EventEmitter'
 
 describe('EventEmitter', () => {
@@ -8,7 +9,7 @@ describe('EventEmitter', () => {
   })
 
   it('on', () => {
-    const fn = jest.fn()
+    const fn = vi.fn()
     e.on('test', fn)
 
     const evts = e.events('test')
@@ -26,8 +27,8 @@ describe('EventEmitter', () => {
     expect(evts.size).toBe(0)
   })
 
-  it('emit', (done) => {
-    const fn = jest.fn()
+  it('emit', async () => {
+    const fn = vi.fn()
     e.on('test', fn)
 
     e.emit('test')
@@ -35,14 +36,15 @@ describe('EventEmitter', () => {
 
     e.on('test1', (p) => {
       expect(p).toBe(1)
-      done()
     })
 
     e.emit('test1', 1)
+
+    await sleep(10)
   })
 
   it('clear', () => {
-    const fn = jest.fn()
+    const fn = vi.fn()
 
     e.on('test', fn)
     e.on('test1', fn)

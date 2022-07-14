@@ -69,7 +69,7 @@ describe('Block', () => {
 
     const field1 = new BlockField('test', '')
 
-    const spyWarn = jest.spyOn(global.console, 'warn')
+    const spyWarn = vi.spyOn(global.console, 'warn')
     spyWarn.mockReset()
 
     block.pushField(field1)

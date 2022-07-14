@@ -1,4 +1,4 @@
-import '../jest.setup'
+import '../vi.setup'
 import { Area, Rect } from '../../lib'
 
 describe('Area', () => {

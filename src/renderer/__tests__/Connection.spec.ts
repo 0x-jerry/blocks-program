@@ -2,7 +2,7 @@ import { Connection, ConnectionType } from '../Connection'
 import { BlockSVG } from '../BlockSVG'
 import { Block, Workspace } from '../../core'
 import { Renderer } from '../Renderer'
-import './jest.setup'
+import './vi.setup'
 
 describe('Connection', () => {
   let conn: Connection
@@ -46,8 +46,8 @@ describe('Connection', () => {
   it('connectTo', () => {
     const b = new BlockSVG(new Block({ next: true }), $r)
 
-    const action1 = jest.spyOn(conn, 'connectAction')
-    const action2 = jest.spyOn(b.nextConnection!, 'connectAction')
+    const action1 = vi.spyOn(conn, 'connectAction')
+    const action2 = vi.spyOn(b.nextConnection!, 'connectAction')
 
     conn.connectTo(b.nextConnection!)
 

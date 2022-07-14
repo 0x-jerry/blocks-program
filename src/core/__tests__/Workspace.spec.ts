@@ -1,4 +1,4 @@
-import { toBeTheSameIds } from '../../__tests__/jest.utils'
+import { toBeTheSameIds } from '../../__tests__/utils'
 import { Workspace } from '../Workspace'
 import { Block } from '../Block'
 

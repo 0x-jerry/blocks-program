@@ -7,7 +7,7 @@
     "module": "ESNext",
     "jsx": "preserve",
     "lib": ["esnext", "dom"],
-    "types": ["jest", "node"]
+    "types": ["vitest/globals", "node"]
   },
   "include": ["src", "playground"]
 }
