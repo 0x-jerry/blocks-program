@@ -10,7 +10,7 @@ export class AreaContent extends G {
   width: number
   height: number
 
-  events: EventEmitter
+  events: EventEmitter<{}>
 
   get bbox() {
     const box = this.dom.getBBox()

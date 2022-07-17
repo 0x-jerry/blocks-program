@@ -1,30 +1,5 @@
 import { IVec2 } from '../typedef'
-
-export function uuid() {
-  let uuid = ''
-
-  for (let i = 0; i < 32; i += 1) {
-    switch (i) {
-      case 8:
-      case 20:
-        uuid += '-'
-        uuid += ((Math.random() * 16) | 0).toString(16)
-        break
-      case 12:
-        uuid += '-'
-        uuid += ((Math.random() * 16) | 0).toString(16)
-        break
-      case 16:
-        uuid += '-'
-        uuid += ((Math.random() * 4) | 8).toString(16)
-        break
-      default:
-        uuid += ((Math.random() * 16) | 0).toString(16)
-    }
-  }
-
-  return uuid
-}
+export { uuid } from '@0x-jerry/utils'
 
 interface IdAble {
   id: string

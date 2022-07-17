@@ -5,8 +5,8 @@
   "license": "MIT",
   "types": "dist/src/index.d.ts",
   "scripts": {
+    "dev": "vite",
     "build": "vite build && npm run docs",
-    "start": "vite",
     "test": "vitest run",
     "docs": "typedoc"
   },

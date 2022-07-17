@@ -1,17 +1,6 @@
-import { uuid, getId, oneOf, toArray, SArray, debounce, throttle, vec2Distance } from '../utils'
+import { getId, oneOf, toArray, SArray, debounce, throttle, vec2Distance } from '../utils'
 
 describe('utils', () => {
-  it('uid', () => {
-    const c = '[0-9a-z]'
-
-    const reg = new RegExp(`${c}{8}-${c}{4}-${c}{4}-${c}{4}-${c}{12}`, 'i')
-
-    expect(reg.test(uuid())).toBe(true)
-    expect(reg.test(uuid())).toBe(true)
-    expect(reg.test(uuid())).toBe(true)
-    expect(reg.test(uuid())).toBe(true)
-  })
-
   it('getId', () => {
     const id = '123'
     const obj = {
