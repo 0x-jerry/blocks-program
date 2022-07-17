@@ -1,4 +1,3 @@
-import { sleep } from '@0x-jerry/utils'
 import { Observer, ObserverCallbackFunc } from '../Observer'
 
 describe('Observer', () => {
@@ -26,10 +25,12 @@ describe('Observer', () => {
       expect(observer.value).toBe(1)
     }
 
-    observer.sub(fn)
+    const fn2 = vi.fn().mockImplementation(fn)
+
+    observer.sub(fn2)
 
     observer.update(1)
-    await sleep(10)
+    expect(fn2).toBeCalledTimes(1)
   })
 
   it('update', () => {
