@@ -1,6 +1,8 @@
-# Block Type
+# Some idea
 
-Category 1: Only have output connection.
+## Category 1
+
+Only have output connection.
 
 ![](./c1.excalidraw.svg)
 
@@ -10,13 +12,18 @@ Category 1: Only have output connection.
 4. Triangle
 5. Diamond
 
-Category 2: Have both output(multiple output) and input(multiple inputs).
+## Category 2
 
 ![](./c2.excalidraw.svg)
 
-1. Rect with multiple slots(Only accept category 1)
+Have both output slots(multiple output) and input slots(multiple inputs).
+
+Output slot is floating on the edge of node, and can be stick to other connections(input slot or connection dot node)
+
+## Category 3
+
+Connection, used to connect nodes that both belongs to category 2.
 
 ![](./c3.excalidraw.svg)
 
-Category 3: Connection, used to connect nodes that both belongs to category 2.
 
