@@ -23,7 +23,7 @@
     "vitest": "^0.18.0"
   },
   "dependencies": {
-    "@0x-jerry/utils": "^1.8.2",
+    "@0x-jerry/utils": "^2.0.0",
     "vue": "^3.2.37"
   }
 }
