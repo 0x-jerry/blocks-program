@@ -1,5 +1,6 @@
 import '../vi.setup'
 import { Area, Rect } from '../../lib'
+import { sleep } from '@0x-jerry/utils'
 
 describe('Area', () => {
   let area: Area
@@ -16,7 +17,7 @@ describe('Area', () => {
     expect(area.content.currentPercentage).toEqual({ x: 0.1, y: 0.2 })
   })
 
-  it('setSize', (done) => {
+  it('setSize', async () => {
     area.setSize(400, 300)
 
     setTimeout(() => {
@@ -28,8 +29,9 @@ describe('Area', () => {
 
       expect(area.content.width).toBe(400)
       expect(area.content.height).toBe(300)
-      done()
     }, 200)
+
+    await sleep(300)
   })
 
   it('appendContent', () => {

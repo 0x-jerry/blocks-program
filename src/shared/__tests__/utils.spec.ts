@@ -1,3 +1,4 @@
+import { sleep } from '@0x-jerry/utils'
 import { getId, oneOf, toArray, SArray, debounce, throttle, vec2Distance } from '../utils'
 
 describe('utils', () => {
@@ -55,7 +56,7 @@ describe('utils', () => {
 })
 
 describe('debounce', () => {
-  it('normal', (done) => {
+  it('normal', async () => {
     const fn = vi.fn()
     const wrapper = debounce(fn, 200)
 
@@ -70,11 +71,12 @@ describe('debounce', () => {
 
     setTimeout(() => {
       expect(fn).toBeCalledTimes(1)
-      done()
     }, 500)
+
+    await sleep(600)
   })
 
-  it('leading', (done) => {
+  it('leading', async () => {
     const fn = vi.fn()
     const wrapper = debounce(fn, 200, { leading: true })
 
@@ -89,11 +91,11 @@ describe('debounce', () => {
 
     setTimeout(() => {
       expect(fn).toBeCalledTimes(2)
-      done()
     }, 500)
+    await sleep(600)
   })
 
-  it('trailing', (done) => {
+  it('trailing', async () => {
     const fn = vi.fn()
     const wrapper = debounce(fn, 200, { trailing: false })
 
@@ -120,11 +122,12 @@ describe('debounce', () => {
 
     setTimeout(() => {
       expect(fn).toBeCalledTimes(1)
-      done()
     }, 600)
+
+    await sleep(700)
   })
 
-  it('maxWait', (done) => {
+  it('maxWait', async () => {
     const fn = vi.fn()
     const wrapper = debounce(fn, 200, { maxWait: 400 })
 
@@ -143,11 +146,12 @@ describe('debounce', () => {
 
     setTimeout(() => {
       expect(fn).toBeCalledTimes(1)
-      done()
     }, 550)
+
+    await sleep(600)
   })
 
-  it('scope', (done) => {
+  it('scope', async () => {
     let c = ''
     class A {
       hi = 'hi'
@@ -165,13 +169,14 @@ describe('debounce', () => {
 
     setTimeout(() => {
       expect(c).toBe('hi')
-      done()
     }, 220)
+
+    await sleep(600)
   })
 })
 
 describe('throttle', () => {
-  it('normal', (done) => {
+  it('normal', async () => {
     const fn = vi.fn()
     const wrapper = throttle(fn, 200)
 
@@ -193,11 +198,12 @@ describe('throttle', () => {
 
     setTimeout(() => {
       expect(fn).toBeCalledTimes(2)
-      done()
     }, 500)
+
+    await sleep(600)
   })
 
-  it('leading', (done) => {
+  it('leading', async () => {
     const fn = vi.fn()
     const wrapper = throttle(fn, 200, { leading: false })
 
@@ -221,11 +227,12 @@ describe('throttle', () => {
 
     setTimeout(() => {
       expect(fn).toBeCalledTimes(1)
-      done()
     }, 500)
+
+    await sleep(600)
   })
 
-  it('trailing', (done) => {
+  it('trailing', async () => {
     const fn = vi.fn()
     const wrapper = throttle(fn, 200, { trailing: true })
 
@@ -252,16 +259,16 @@ describe('throttle', () => {
 
     setTimeout(() => {
       expect(fn).toBeCalledTimes(3)
-      done()
     }, 500)
 
     setTimeout(() => {
       expect(fn).toBeCalledTimes(4)
-      done()
     }, 650)
+
+    await sleep(700)
   })
 
-  it('scope', (done) => {
+  it('scope', async () => {
     let c = ''
     class A {
       hi = 'hi'
@@ -280,8 +287,9 @@ describe('throttle', () => {
 
     setTimeout(() => {
       expect(c).toBe('hi')
-      done()
     }, 220)
+
+    await sleep(300)
   })
 
   it('vec2Distance', () => {
