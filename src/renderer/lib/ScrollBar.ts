@@ -3,6 +3,7 @@ import { G } from './G'
 import { Sizeable, Dragger } from '../utils'
 import { EventEmitter, Observer, ObserverCallbackFunc, throttle } from '../../shared'
 import { IVec2 } from '../../typedef'
+import { clamp } from '@0x-jerry/utils'
 
 type IScrollBarEventMap = {
   scroll: [posPercentage: number]
@@ -141,7 +142,7 @@ export class ScrollBar extends G {
       return
     }
 
-    this.currentPercentage = posPercentage < 0 ? 0 : posPercentage >= 1 ? 1 : posPercentage
+    this.currentPercentage = clamp(posPercentage, 0, 1)
 
     this._updateCurrent()
   }
@@ -209,6 +210,9 @@ export class ScrollPair extends G {
   }
 
   scrollTo(xPercentage: number, yPercentage: number) {
+    xPercentage = clamp(xPercentage, 0, 1)
+    yPercentage = clamp(yPercentage, 0, 1)
+
     this.horizontal.scrollTo(xPercentage)
     this.vertical.scrollTo(yPercentage)
 

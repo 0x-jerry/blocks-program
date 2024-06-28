@@ -26,6 +26,12 @@ export class Transform {
     ]
   }
 
+  getScale() {
+    const [x = 1, y = 1] = this.modifies.find((n) => n.type === 'scale').params
+
+    return [x, y].map((n) => +n)
+  }
+
   // scale -> translate -> rotate
   protected applyTransform() {
     const str = this.modifies

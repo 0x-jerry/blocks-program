@@ -5,6 +5,7 @@ import { Sizeable, Dragger } from '../utils'
 import { ScrollPair } from './ScrollBar'
 import { EventEmitter, debounce } from '../../shared'
 import { IVec2 } from '../../typedef'
+import { clamp } from '@0x-jerry/utils'
 
 export class AreaContent extends G {
   width: number
@@ -91,8 +92,8 @@ export class AreaContent extends G {
   moveTo(xPercentage: number, yPercentage: number) {
     const box = this.moveRange
 
-    const x = box.left + (1 - xPercentage) * box.width
-    const y = box.top + (1 - yPercentage) * box.height
+    const x = box.left + (1 - clamp(xPercentage, 0, 1)) * box.width
+    const y = box.top + (1 - clamp(yPercentage, 0, 1)) * box.height
 
     this.move(x, y)
   }
@@ -148,14 +149,44 @@ export class Area extends G {
     this.content.addClasses('s_area_content')
 
     this.scrolls = new ScrollPair(1, 1, width, height, 5)
-    this.scrolls.events.on('scroll', this._scrollCurrentChanged.bind(this))
+    this.scrolls.events.on('scroll', this._scrollCurrentChanged)
 
     this.append(this.background)
     this.append(this.content)
     this.append(this.scrolls)
+
+    this.background.on('wheel', this._handleWheel)
   }
 
-  private _scrollCurrentChanged(now: IVec2) {
+  _handleWheel = (evt: WheelEvent) => {
+    evt.preventDefault()
+
+    if (evt.ctrlKey) {
+      // scale behavior
+
+      let scale = Math.abs(evt.deltaX) > Math.abs(evt.deltaY) ? evt.deltaX : evt.deltaY
+      scale = clamp(-scale, -0.1, 0.1)
+
+      let [x, y] = this.content.trans.getScale()
+
+      x = clamp(x + scale, 0.01, 3)
+      y = clamp(y + scale, 0.01, 3)
+
+      this.content.trans.scale(x, y)
+      // todo, recalculate position
+    } else {
+      // move behavior
+      const scrolls = this.scrolls
+
+      const speed = 4
+      const x = evt.deltaX / speed / scrolls.size.width
+      const y = evt.deltaY / speed / scrolls.size.height
+
+      this.scrollTo(scrolls.currentPercentage.x + x, scrolls.currentPercentage.y + y)
+    }
+  }
+
+  private _scrollCurrentChanged = (now: IVec2) => {
     const moveableRange = this.content.moveRange
     const currentPercentage = this.content.currentPercentage
 
@@ -231,6 +262,10 @@ export class Area extends G {
 
   destroy() {
     super.destroy()
+    this.background.off('wheel', this._handleWheel)
+    this.scrolls.events.off('scroll', this._scrollCurrentChanged)
+
+    this.scrolls.destroy()
     this.dragger.destroy()
   }
 }
