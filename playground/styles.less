@@ -7,6 +7,10 @@
 html,
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+
+  // Disable overscroll behavior to prevent panning to trigger history back/forward on MacOS Chrome
+  overscroll-behavior-x: none;
+  overflow: hidden;
 }
 
 .toolbar {
