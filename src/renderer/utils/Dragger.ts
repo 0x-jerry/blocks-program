@@ -2,9 +2,9 @@ import { EventEmitter } from '../../shared'
 import { globalDomEvent } from './utils'
 
 export type IDraggableEventsMap = {
-  dragstart(e: MouseEvent): void
-  dragging(dx: number, dy: number, e: MouseEvent): void
-  dragend(e: MouseEvent): void
+  dragstart: [e: MouseEvent]
+  dragging: [dx: number, dy: number, e: MouseEvent]
+  dragend: [e: MouseEvent]
 }
 
 export class Dragger extends EventEmitter<IDraggableEventsMap> {

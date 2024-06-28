@@ -5,7 +5,7 @@ import { EventEmitter, Observer, ObserverCallbackFunc, throttle } from '../../sh
 import { IVec2 } from '../../typedef'
 
 type IScrollBarEventMap = {
-  'scroll'(posPercentage: number): void
+  scroll: [posPercentage: number]
 }
 
 export class ScrollBar extends G {
@@ -153,7 +153,7 @@ export class ScrollBar extends G {
 }
 
 type IScrollPairEventsMap = {
-  'scroll'(current: IVec2): void
+  scroll: [current: IVec2]
 }
 
 export class ScrollPair extends G {

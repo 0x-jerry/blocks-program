@@ -23,8 +23,8 @@ export function css(el: HTMLElement | SVGElement, css: CSS.Properties | string) 
 
 // init global events --- start
 type IGlobalDomEvent = {
-  pointerup(e: MouseEvent): void
-  pointermove(e: MouseEvent): void
+  pointerup: [e: MouseEvent]
+  pointermove: [e: MouseEvent]
 }
 
 export const globalDomEvent = new EventEmitter<IGlobalDomEvent>()

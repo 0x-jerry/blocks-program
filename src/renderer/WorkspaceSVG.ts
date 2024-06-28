@@ -6,8 +6,8 @@ import { BlockSVG } from './BlockSVG'
 import { css } from './utils'
 
 type WorkspaceSVGEventsMap = IAreaEventsMap & {
-  'select-block'(block: BlockSVG): void
-  'block-move'(block: BlockSVG): void
+  'select-block': [block: BlockSVG]
+  'block-move': [block: BlockSVG]
 }
 
 export class WorkspaceSVG extends Area {

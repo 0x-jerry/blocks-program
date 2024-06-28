@@ -9,7 +9,7 @@ import { Connection, ConnectionType, IConnectionAction } from './Connection'
 import { BlockSlotFieldSVG } from './fields'
 
 export type IBlockSVGEventMap = {
-  beforeDestroy(): void
+  beforeDestroy: []
 }
 
 export interface IBlockSVGOption {
