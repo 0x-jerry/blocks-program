@@ -6,8 +6,8 @@ settings:
 
 dependencies:
   '@0x-jerry/utils':
-    specifier: ^2.3.0
-    version: 2.3.0
+    specifier: ^5.0.0
+    version: 5.0.0
   vue:
     specifier: ^3.4.31
     version: 3.4.31(typescript@5.5.2)
@@ -46,12 +46,12 @@ devDependencies:
 
 packages:
 
-  /@0x-jerry/utils@2.3.0:
-    resolution: {integrity: sha512-rHxU8lWGSpUS8n1uvqBeoiIPdMr7vMLPnFHGwl43ko+q1cUFkWBocuGJeLhAVCuA+t7e3ZaW1OVXN4T6dwAeRw==}
+  /@0x-jerry/utils@5.0.0:
+    resolution: {integrity: sha512-F3TnKTJrCRCKe9FG0eWEVlgYDFusC6p0hePjyR7mKAgGj61/4lScng7Dj/ss2Fo2zJvH8qWv2G7fSvW45n7fQQ==}
     dependencies:
       fflate: 0.8.2
-      nanoid: 5.0.7
-      picocolors: 1.0.1
+      nanoid: 5.1.5
+      picocolors: 1.1.1
     dev: false
 
   /@ampproject/remapping@2.3.0:
@@ -1143,6 +1143,7 @@ packages:
     resolution: {integrity: sha512-mg3OPMV4hXywwpoDxu3Qda5xCKQi+vCTZq8S9J/EpkhB2HzKXq4SNFZE3+NK93JYxc8VMSep+lOUSC/RVKaBqw==}
     engines: {node: '>=12'}
     hasBin: true
+    requiresBuild: true
     optionalDependencies:
       '@esbuild/aix-ppc64': 0.21.5
       '@esbuild/android-arm': 0.21.5
@@ -1521,8 +1522,8 @@ packages:
     engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
     hasBin: true
 
-  /nanoid@5.0.7:
-    resolution: {integrity: sha512-oLxFY2gd2IqnjcYyOXD8XGCftpGtZP2AbHbOkthDkvRywH5ayNtPVy9YlOPcHckXzbLTCHpkb7FB+yuxKV13pQ==}
+  /nanoid@5.1.5:
+    resolution: {integrity: sha512-Ir/+ZpE9fDsNH0hQ3C68uyThDXzYcim2EqcZ8zn8Chtt1iylPT9xXJB0kPCnqzgcEGikO9RxSrh63MsmVCU7Fw==}
     engines: {node: ^18 || >=20}
     hasBin: true
     dev: false
@@ -1598,6 +1599,10 @@ packages:
 
   /picocolors@1.0.1:
     resolution: {integrity: sha512-anP1Z8qwhkbmu7MFP5iTt+wQKXgwzf7zTyGlcdzabySa9vd0Xt392U0rVmz9poOaBj0uHJKyyo9/upk0HrEQew==}
+
+  /picocolors@1.1.1:
+    resolution: {integrity: sha512-xceH2snhtb5M9liqDsmEw56le376mTZkEX/jEb/RxNFyegNul7eNslCXP9FDj/Lcu0X8KEyMceP2ntpaHrDEVA==}
+    dev: false
 
   /pify@4.0.1:
     resolution: {integrity: sha512-uB80kBFb/tfd68bVleG9T5GGsGPjJrLAUpR5PZIrhBnIaRTQRjqdJSsIKkOP6OAIFbj7GOrcudc5pNjZ+geV2g==}
